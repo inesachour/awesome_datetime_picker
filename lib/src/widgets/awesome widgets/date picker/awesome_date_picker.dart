@@ -3,7 +3,7 @@ import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/date%20pic
 import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/date%20picker/awesome_month_picker.dart';
 import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/date%20picker/awesome_year_picker_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/custom%20pickers/custom_number_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom%20pickers/custom_number_picker_widget.dart';
 
 class AwesomeDatePicker extends StatefulWidget {
   AwesomeDatePicker({super.key, this.minDate, this.maxDate, this.initialDate});
