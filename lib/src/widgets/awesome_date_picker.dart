@@ -1,6 +1,9 @@
-import 'package:awesome_datetime_picker/src/widgets/custom_number_picker_widget.dart';
+import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+import 'package:awesome_datetime_picker/src/widgets/awesome_day_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/awesome_month_picker.dart';
+import 'package:awesome_datetime_picker/src/widgets/awesome_year_picker_widget.dart';
 import 'package:flutter/material.dart';
-export 'package:awesome_datetime_picker/src/widgets/awesome_date_picker.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom_number_picker_widget.dart';
 
 class AwesomeDatePicker extends StatefulWidget {
   AwesomeDatePicker({super.key, this.minDate, this.maxDate, this.initialDate});
@@ -33,23 +36,20 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomNumberPicker(
-          initialValue: selectedDate.day,
-          maxValue:
+        AwesomeDayPicker(
+          selectedDay: selectedDate.day,
+          maxDay:
               DateUtils.getDaysInMonth(selectedDate.year, selectedDate.month),
-          minValue: 1,
-          onSelectedItemChanged: (value) {
+          onSelectedDayChanged: (value) {
             setState(() {
               selectedDate =
                   DateTime(selectedDate.year, selectedDate.month, value);
             });
           },
         ),
-        CustomNumberPicker(
-          initialValue: selectedDate.month,
-          maxValue: 12,
-          minValue: 1,
-          onSelectedItemChanged: (value) {
+        AwesomeMonthPicker(
+          selectedMonth: selectedDate.month,
+          onSelectedMonthChanged: (value) {
             setState(() {
               int day = selectedDate.day;
               int daysInMonth =
@@ -61,11 +61,11 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             });
           },
         ),
-        CustomNumberPicker(
-          initialValue: selectedDate.year,
-          maxValue: maxDate.year,
-          minValue: minDate.year,
-          onSelectedItemChanged: (value) {
+        AwesomeYearPicker(
+          selectedYear: selectedDate.year,
+          maxYear: maxDate.year,
+          minYear: minDate.year,
+          onSelectedYearChanged: (value) {
             setState(() {
               int day = selectedDate.day;
               int daysInMonth =
@@ -76,7 +76,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
               selectedDate = DateTime(value, selectedDate.month, day);
             });
           },
-        )
+        ),
       ],
     );
   }
