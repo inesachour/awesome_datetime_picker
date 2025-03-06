@@ -39,7 +39,10 @@ class _CalendarState extends State<Calendar> {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
             padding: const EdgeInsets.all(5),
-            child: AwesomeDatePicker(),
+            child: AwesomeDatePicker(
+              dateFormat: AwesomeDateFormat.dMMy,
+              locale: LocaleType.fr,
+            ),
           ),
         ],
       ),
