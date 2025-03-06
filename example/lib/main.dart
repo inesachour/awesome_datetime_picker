@@ -43,9 +43,11 @@ class _CalendarState extends State<Calendar> {
             child: AwesomeDatePicker(
               dateFormat: AwesomeDateFormat.dMMy,
               locale: LocaleType.fr,
+              minDate: DateTime(2023),
+              maxDate: DateTime(2026),
             ),
           ),
-          Container(
+          /*Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeTimePicker(
@@ -56,7 +58,7 @@ class _CalendarState extends State<Calendar> {
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeDateTimePicker(dateFormat: AwesomeDateFormat.yMMd,),
-          ),
+          ),*/
         ],
       ),
     );

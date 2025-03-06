@@ -22,9 +22,7 @@ class CustomNumberPicker extends StatefulWidget {
     this.selectedTextStyle,
     this.unselectedTextStyle,
     this.width,
-  })  : assert(minValue <= maxValue),
-        assert(initialValue >= minValue && initialValue <= maxValue),
-        assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
+  }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
   State<CustomNumberPicker> createState() => _CustomNumberPickerState();

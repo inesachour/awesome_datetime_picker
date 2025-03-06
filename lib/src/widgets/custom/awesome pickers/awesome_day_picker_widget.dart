@@ -25,12 +25,12 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
   Widget build(BuildContext context) {
     return CustomNumberPicker(
       initialValue: widget.selectedDate.day,
-      maxValue: widget.selectedDate.year <= widget.maxDate.year &&
+      maxValue: widget.selectedDate.year < widget.maxDate.year ||
               widget.selectedDate.month < widget.maxDate.month
           ? DateUtils.getDaysInMonth(
               widget.selectedDate.year, widget.selectedDate.month)
           : widget.maxDate.day,
-      minValue: widget.selectedDate.year >= widget.maxDate.year &&
+      minValue: widget.selectedDate.year > widget.maxDate.year ||
               widget.selectedDate.month > widget.maxDate.month
           ? DateUtils.getDaysInMonth(
               widget.selectedDate.year, widget.selectedDate.month)
