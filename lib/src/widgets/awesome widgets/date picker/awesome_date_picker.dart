@@ -6,10 +6,18 @@ import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/timer%20pi
 import 'package:flutter/material.dart';
 
 class AwesomeDatePicker extends StatefulWidget {
-  AwesomeDatePicker({super.key, this.minDate, this.maxDate, this.initialDate});
+  AwesomeDatePicker({
+    super.key,
+    this.minDate,
+    this.maxDate,
+    this.initialDate,
+    this.locale,
+  });
+  
   DateTime? minDate;
   DateTime? maxDate;
   DateTime? initialDate;
+  String? locale;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
