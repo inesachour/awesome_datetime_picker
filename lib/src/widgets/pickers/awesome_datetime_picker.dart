@@ -12,6 +12,9 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.minDate,
     this.maxDate,
     this.initialDate,
+    this.minTime,
+    this.maxTime,
+    this.initialTime,
     this.locale = LocaleType.en,
     this.dayWidth,
     this.monthWidth,
@@ -25,6 +28,9 @@ class AwesomeDateTimePicker extends StatefulWidget {
   DateTime? minDate;
   DateTime? maxDate;
   DateTime? initialDate;
+  TimeOfDay? minTime;
+  TimeOfDay? maxTime;
+  TimeOfDay? initialTime;
   LocaleType locale;
   AwesomeDateFormat dateFormat;
   AwesomeTimeFormat timeFormat;
@@ -39,17 +45,22 @@ class AwesomeDateTimePicker extends StatefulWidget {
 }
 
 class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
-  late DateTime selectedDate;
   late DateTime minDate;
   late DateTime maxDate;
   late DateTime initialDate;
 
+  late TimeOfDay minTime;
+  late TimeOfDay maxTime;
+  late TimeOfDay initialTime;
+
   @override
   void initState() {
-    minDate = widget.minDate ?? DateTime(1990);
-    maxDate = widget.maxDate ?? DateTime(2100);
+    minDate = widget.minDate ?? DateTime(1990, 1, 1);
+    maxDate = widget.maxDate ?? DateTime(2100, 12, 31);
     initialDate = widget.initialDate ?? DateTime.now();
-    selectedDate = initialDate;
+    minTime = widget.minTime ?? TimeOfDay(hour: 00, minute: 00);
+    maxTime = widget.maxTime ?? TimeOfDay(hour: 23, minute: 59);
+    initialTime = widget.initialTime ?? TimeOfDay.now();
 
     super.initState();
   }
@@ -83,9 +94,9 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           minuteWidth:
               widget.minuteWidth ?? MediaQuery.of(context).size.width * 0.16,
           timeFormat: widget.timeFormat,
-          maxTime: widget.maxDate,
-          minTime: widget.minDate,
-          initialTime: widget.initialDate,
+          maxTime: widget.minTime,
+          minTime: widget.maxTime,
+          initialTime: widget.initialTime,
         ),
       ],
     );

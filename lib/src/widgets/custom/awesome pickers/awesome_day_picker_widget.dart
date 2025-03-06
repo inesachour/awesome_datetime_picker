@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 class AwesomeDayPicker extends StatefulWidget {
   AwesomeDayPicker({
     super.key,
-    required this.selectedDay,
-    required this.maxDay,
+    required this.selectedDate,
+    required this.maxDate,
+    required this.minDate,
     required this.onSelectedDayChanged,
     this.width,
   });
-  int selectedDay;
-  int maxDay;
+  DateTime selectedDate;
+  DateTime maxDate;
+  DateTime minDate;
   Function(int) onSelectedDayChanged;
   double? width;
 
@@ -22,9 +24,17 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
   @override
   Widget build(BuildContext context) {
     return CustomNumberPicker(
-      initialValue: widget.selectedDay,
-      maxValue: widget.maxDay,
-      minValue: 1,
+      initialValue: widget.selectedDate.day,
+      maxValue: widget.selectedDate.year <= widget.maxDate.year &&
+              widget.selectedDate.month < widget.maxDate.month
+          ? DateUtils.getDaysInMonth(
+              widget.selectedDate.year, widget.selectedDate.month)
+          : widget.maxDate.day,
+      minValue: widget.selectedDate.year >= widget.maxDate.year &&
+              widget.selectedDate.month > widget.maxDate.month
+          ? DateUtils.getDaysInMonth(
+              widget.selectedDate.year, widget.selectedDate.month)
+          : widget.minDate.day,
       onSelectedItemChanged: widget.onSelectedDayChanged,
       width: widget.width,
     );

@@ -39,8 +39,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
 
   @override
   void initState() {
-    minDate = widget.minDate ?? DateTime(1990);
-    maxDate = widget.maxDate ?? DateTime(2100);
+    minDate = widget.minDate ?? DateTime(1990, 1, 1);
+    maxDate = widget.maxDate ?? DateTime(2100, 12, 31);
     initialDate = widget.initialDate ?? DateTime.now();
     selectedDate = initialDate;
 
@@ -54,10 +54,10 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
       children: List.generate(3, (index) {
         if (widget.dateFormat.value[index] == PickerType.day) {
           return AwesomeDayPicker(
-            selectedDay: selectedDate.day,
+            selectedDate: selectedDate,
+            maxDate: maxDate,
+            minDate: minDate,
             width: widget.dayWidth,
-            maxDay:
-                DateUtils.getDaysInMonth(selectedDate.year, selectedDate.month),
             onSelectedDayChanged: (value) {
               setState(() {
                 selectedDate =
@@ -67,10 +67,10 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           );
         } else if (widget.dateFormat.value[index] == PickerType.year) {
           return AwesomeYearPicker(
-            selectedYear: selectedDate.year,
+            selectedDate: selectedDate,
+            maxDate: maxDate,
+            minDate: minDate,
             width: widget.yearWidth,
-            maxYear: maxDate.year,
-            minYear: minDate.year,
             onSelectedYearChanged: (value) {
               setState(() {
                 int day = selectedDate.day;
@@ -85,7 +85,9 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_text) {
           return AwesomeMonthPicker(
-            selectedMonth: selectedDate.month,
+            selectedDate: selectedDate,
+            maxDate: maxDate,
+            minDate: minDate,
             width: widget.monthWidth,
             isNumber: false,
             locale: widget.locale,
@@ -103,7 +105,9 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_number) {
           return AwesomeMonthPicker(
-            selectedMonth: selectedDate.month,
+            selectedDate: selectedDate,
+            maxDate: maxDate,
+            minDate: minDate,
             width: widget.monthWidth,
             locale: widget.locale,
             onSelectedMonthChanged: (value) {

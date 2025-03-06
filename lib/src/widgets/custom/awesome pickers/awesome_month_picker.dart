@@ -7,14 +7,18 @@ import 'package:flutter/material.dart';
 class AwesomeMonthPicker extends StatefulWidget {
   AwesomeMonthPicker({
     super.key,
-    required this.selectedMonth,
+    required this.selectedDate,
+    required this.maxDate,
+    required this.minDate,
     required this.onSelectedMonthChanged,
     required this.locale,
     this.isNumber = true,
     this.width,
   });
 
-  int selectedMonth;
+  DateTime selectedDate;
+  DateTime maxDate;
+  DateTime minDate;
   Function(int) onSelectedMonthChanged;
   bool isNumber;
   LocaleType locale;
@@ -37,15 +41,19 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
   Widget build(BuildContext context) {
     return widget.isNumber
         ? CustomNumberPicker(
-            initialValue: widget.selectedMonth,
-            maxValue: 12,
-            minValue: 1,
+            initialValue: widget.selectedDate.month,
+            maxValue: widget.selectedDate.year < widget.maxDate.year
+                ? 12
+                : widget.maxDate.month,
+            minValue: widget.selectedDate.year > widget.maxDate.year
+                ? 1
+                : widget.minDate.month,
             onSelectedItemChanged: widget.onSelectedMonthChanged,
             width: widget.width,
           )
         : CustomTextPicker(
             items: months,
-            initialValue: months[widget.selectedMonth - 1],
+            initialValue: months[widget.selectedDate.month - 1],
             onSelectedItemChanged: widget.onSelectedMonthChanged,
             width: widget.width,
           );

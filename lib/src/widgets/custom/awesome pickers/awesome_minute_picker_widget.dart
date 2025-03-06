@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 class AwesomeMinutePicker extends StatefulWidget {
   AwesomeMinutePicker({
     super.key,
-    required this.selectedMinute,
+    required this.selectedTime,
+    required this.maxTime,
+    required this.minTime,
     required this.onSelectedMinuteChanged,
     this.width,
   });
 
-  int selectedMinute;
+  TimeOfDay selectedTime;
+  TimeOfDay maxTime;
+  TimeOfDay minTime;
   Function(int) onSelectedMinuteChanged;
   double? width;
 
@@ -21,9 +25,9 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
   @override
   Widget build(BuildContext context) {
     return CustomNumberPicker(
-      initialValue: widget.selectedMinute,
-      maxValue: 59,
-      minValue: 00,
+      initialValue: widget.selectedTime.minute,
+      maxValue: widget.maxTime.minute,
+      minValue: widget.minTime.minute,
       onSelectedItemChanged: widget.onSelectedMinuteChanged,
       width: widget.width,
     );

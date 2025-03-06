@@ -14,9 +14,9 @@ class AwesomeTimePicker extends StatefulWidget {
     this.minuteWidth,
   });
 
-  DateTime? minTime;
-  DateTime? maxTime;
-  DateTime? initialTime;
+  TimeOfDay? minTime;
+  TimeOfDay? maxTime;
+  TimeOfDay? initialTime;
   AwesomeTimeFormat timeFormat;
   double? hourWidth;
   double? minuteWidth;
@@ -26,16 +26,16 @@ class AwesomeTimePicker extends StatefulWidget {
 }
 
 class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
-  late DateTime selectedTime;
-  late DateTime minTime;
-  late DateTime maxTime;
-  late DateTime initialTime;
+  late TimeOfDay selectedTime;
+  late TimeOfDay minTime;
+  late TimeOfDay maxTime;
+  late TimeOfDay initialTime;
 
   @override
   void initState() {
-    minTime = widget.minTime ?? DateTime(1990);
-    maxTime = widget.maxTime ?? DateTime(2100);
-    initialTime = widget.initialTime ?? DateTime.now();
+    minTime = widget.minTime ?? TimeOfDay(hour: 00, minute: 00);
+    maxTime = widget.maxTime ?? TimeOfDay(hour: 23, minute: 59);
+    initialTime = widget.initialTime ?? TimeOfDay.now();
     selectedTime = initialTime;
 
     super.initState();
@@ -51,23 +51,27 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           return Container();
         } else if (widget.timeFormat.value[index] == PickerType.hour_24) {
           return AwesomeHourPicker(
-            selectedHour: selectedTime.hour,
+            selectedTime: initialTime,
+            maxTime: maxTime,
+            minTime: minTime,
             width: widget.hourWidth,
             onSelectedHourChanged: (value) {
               setState(() {
-                selectedTime = DateTime(selectedTime.year, selectedTime.month,
-                    selectedTime.day, value, selectedTime.minute);
+                selectedTime =
+                    TimeOfDay(hour: value, minute: selectedTime.minute);
               });
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
           return AwesomeMinutePicker(
-            selectedMinute: selectedTime.minute,
+            selectedTime: initialTime,
+            maxTime: maxTime,
+            minTime: minTime,
             width: widget.minuteWidth,
             onSelectedMinuteChanged: (value) {
               setState(() {
-                selectedTime = DateTime(selectedTime.year, selectedTime.month,
-                    selectedTime.day, selectedTime.hour, value);
+                selectedTime =
+                    TimeOfDay(hour: selectedTime.hour, minute: value);
               });
             },
           );

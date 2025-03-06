@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 class AwesomeYearPicker extends StatefulWidget {
   AwesomeYearPicker({
     super.key,
-    required this.selectedYear,
-    required this.maxYear,
-    required this.minYear,
+    required this.selectedDate,
+    required this.maxDate,
+    required this.minDate,
     required this.onSelectedYearChanged,
     this.width,
   });
-  int selectedYear;
-  int maxYear;
-  int minYear;
+  DateTime selectedDate;
+  DateTime maxDate;
+  DateTime minDate;
   Function(int) onSelectedYearChanged;
   double? width;
 
@@ -24,9 +24,9 @@ class _AwesomeYearPickerState extends State<AwesomeYearPicker> {
   @override
   Widget build(BuildContext context) {
     return CustomNumberPicker(
-      initialValue: widget.selectedYear,
-      maxValue: widget.maxYear,
-      minValue: widget.minYear,
+      initialValue: widget.selectedDate.year,
+      maxValue: widget.maxDate.year,
+      minValue: widget.minDate.year,
       onSelectedItemChanged: widget.onSelectedYearChanged,
       width: widget.width,
     );
