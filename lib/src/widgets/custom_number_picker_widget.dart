@@ -11,7 +11,7 @@ class CustomNumberPicker extends StatefulWidget {
   final TextStyle? unselectedTextStyle;
 
   const CustomNumberPicker({
-    Key? key,
+    super.key,
     required this.minValue,
     required this.maxValue,
     required this.initialValue,
@@ -22,8 +22,7 @@ class CustomNumberPicker extends StatefulWidget {
     this.unselectedTextStyle,
   })  : assert(minValue <= maxValue),
         assert(initialValue >= minValue && initialValue <= maxValue),
-        assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1),
-        super(key: key);
+        assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
   State<CustomNumberPicker> createState() => _CustomNumberPickerState();
@@ -67,6 +66,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
 
     return Container(
       height: pickerHeight,
+      width: MediaQuery.sizeOf(context).width * 0.25,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
