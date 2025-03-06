@@ -1,7 +1,8 @@
-import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/date%20picker/awesome_day_picker_widget.dart';
-import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/date%20picker/awesome_month_picker.dart';
-import 'package:awesome_datetime_picker/src/widgets/awesome%20widgets/date%20picker/awesome_year_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/data/format.dart';
+import 'package:awesome_datetime_picker/src/data/locale.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_day_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_month_picker.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_year_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDatePicker extends StatefulWidget {
@@ -33,7 +34,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
   @override
   void initState() {
     minDate = widget.minDate ?? DateTime(1990);
-    maxDate = widget.minDate ?? DateTime(2100);
+    maxDate = widget.maxDate ?? DateTime(2100);
     initialDate = widget.initialDate ?? DateTime.now();
     selectedDate = initialDate;
 

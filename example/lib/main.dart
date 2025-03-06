@@ -44,6 +44,13 @@ class _CalendarState extends State<Calendar> {
               locale: LocaleType.fr,
             ),
           ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            padding: const EdgeInsets.all(5),
+            child: AwesomeTimePicker(
+              timeFormat: AwesomeTimeFormat.Hm,
+            ),
+          ),
         ],
       ),
     );

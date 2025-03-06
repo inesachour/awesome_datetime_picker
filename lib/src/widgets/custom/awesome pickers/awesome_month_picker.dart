@@ -1,7 +1,7 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom%20pickers/custom_number_picker_widget.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom%20pickers/custom_text_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_text_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeMonthPicker extends StatefulWidget {

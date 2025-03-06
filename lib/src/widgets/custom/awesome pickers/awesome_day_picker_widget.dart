@@ -1,4 +1,4 @@
-import 'package:awesome_datetime_picker/src/widgets/custom%20pickers/custom_number_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDayPicker extends StatefulWidget {
