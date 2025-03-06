@@ -8,11 +8,13 @@ class AwesomeYearPicker extends StatefulWidget {
     required this.maxYear,
     required this.minYear,
     required this.onSelectedYearChanged,
+    this.width,
   });
   int selectedYear;
   int maxYear;
   int minYear;
   Function(int) onSelectedYearChanged;
+  double? width;
 
   @override
   State<AwesomeYearPicker> createState() => _AwesomeYearPickerState();
@@ -26,6 +28,7 @@ class _AwesomeYearPickerState extends State<AwesomeYearPicker> {
       maxValue: widget.maxYear,
       minValue: widget.minYear,
       onSelectedItemChanged: widget.onSelectedYearChanged,
+      width: widget.width,
     );
   }
 }

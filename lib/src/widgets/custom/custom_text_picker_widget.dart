@@ -8,6 +8,7 @@ class CustomTextPicker extends StatefulWidget {
   final int visibleItemCount;
   final TextStyle? selectedTextStyle;
   final TextStyle? unselectedTextStyle;
+  final double? width;
 
   const CustomTextPicker({
     super.key,
@@ -18,6 +19,7 @@ class CustomTextPicker extends StatefulWidget {
     this.visibleItemCount = 5,
     this.selectedTextStyle,
     this.unselectedTextStyle,
+    this.width,
   }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
@@ -60,7 +62,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
 
     return Container(
       height: pickerHeight,
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: widget.width ?? MediaQuery.of(context).size.width * 0.25,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),

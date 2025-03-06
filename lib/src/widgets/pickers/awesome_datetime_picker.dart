@@ -13,7 +13,13 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.maxDate,
     this.initialDate,
     this.locale = LocaleType.en,
+    this.dayWidth,
+    this.monthWidth,
+    this.yearWidth,
+    this.hourWidth,
+    this.minuteWidth,
     this.dateFormat = AwesomeDateFormat.dMy,
+    this.timeFormat = AwesomeTimeFormat.Hm,
   });
 
   DateTime? minDate;
@@ -21,6 +27,12 @@ class AwesomeDateTimePicker extends StatefulWidget {
   DateTime? initialDate;
   LocaleType locale;
   AwesomeDateFormat dateFormat;
+  AwesomeTimeFormat timeFormat;
+  double? dayWidth;
+  double? monthWidth;
+  double? yearWidth;
+  double? hourWidth;
+  double? minuteWidth;
 
   @override
   State<AwesomeDateTimePicker> createState() => _AwesomeDateTimePickerState();
@@ -44,9 +56,38 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      AwesomeDatePicker(),
-      AwesomeTimePicker(),
-    ],);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AwesomeDatePicker(
+          dayWidth: widget.dayWidth ?? MediaQuery.of(context).size.width * 0.16,
+          monthWidth: widget.monthWidth ??
+              (widget.dateFormat ==
+                      AwesomeDateFormat.values.contains(PickerType.month_text)
+                  ? MediaQuery.of(context).size.width * 0.18
+                  : MediaQuery.of(context).size.width * 0.16),
+          yearWidth:
+              widget.yearWidth ?? MediaQuery.of(context).size.width * 0.16,
+          dateFormat: widget.dateFormat,
+          locale: widget.locale,
+          maxDate: widget.maxDate,
+          minDate: widget.minDate,
+          initialDate: widget.initialDate,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        AwesomeTimePicker(
+          hourWidth:
+              widget.hourWidth ?? MediaQuery.of(context).size.width * 0.16,
+          minuteWidth:
+              widget.minuteWidth ?? MediaQuery.of(context).size.width * 0.16,
+          timeFormat: widget.timeFormat,
+          maxTime: widget.maxDate,
+          minTime: widget.minDate,
+          initialTime: widget.initialDate,
+        ),
+      ],
+    );
   }
 }

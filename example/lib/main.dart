@@ -35,9 +35,10 @@ class _CalendarState extends State<Calendar> {
         backgroundColor: Colors.blue,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeDatePicker(
               dateFormat: AwesomeDateFormat.dMMy,
@@ -45,16 +46,16 @@ class _CalendarState extends State<Calendar> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeTimePicker(
               timeFormat: AwesomeTimeFormat.Hm,
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
-            child: AwesomeDateTimePicker(),
+            child: AwesomeDateTimePicker(dateFormat: AwesomeDateFormat.yMMd,),
           ),
         ],
       ),

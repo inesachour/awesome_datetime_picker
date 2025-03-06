@@ -10,12 +10,16 @@ class AwesomeTimePicker extends StatefulWidget {
     this.maxTime,
     this.initialTime,
     this.timeFormat = AwesomeTimeFormat.Hm,
+    this.hourWidth,
+    this.minuteWidth,
   });
 
   DateTime? minTime;
   DateTime? maxTime;
   DateTime? initialTime;
   AwesomeTimeFormat timeFormat;
+  double? hourWidth;
+  double? minuteWidth;
 
   @override
   State<AwesomeTimePicker> createState() => _AwesomeTimePickerState();
@@ -40,6 +44,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(2, (index) {
         if (widget.timeFormat.value[index] == PickerType.hour_12) {
           //TODO
@@ -47,6 +52,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
         } else if (widget.timeFormat.value[index] == PickerType.hour_24) {
           return AwesomeHourPicker(
             selectedHour: selectedTime.hour,
+            width: widget.hourWidth,
             onSelectedHourChanged: (value) {
               setState(() {
                 selectedTime = DateTime(selectedTime.year, selectedTime.month,
@@ -57,6 +63,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
           return AwesomeMinutePicker(
             selectedMinute: selectedTime.minute,
+            width: widget.minuteWidth,
             onSelectedMinuteChanged: (value) {
               setState(() {
                 selectedTime = DateTime(selectedTime.year, selectedTime.month,

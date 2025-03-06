@@ -6,10 +6,12 @@ class AwesomeMinutePicker extends StatefulWidget {
     super.key,
     required this.selectedMinute,
     required this.onSelectedMinuteChanged,
+    this.width,
   });
 
   int selectedMinute;
   Function(int) onSelectedMinuteChanged;
+  double? width;
 
   @override
   State<AwesomeMinutePicker> createState() => _AwesomeMinutePickerState();
@@ -23,6 +25,7 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
       maxValue: 59,
       minValue: 00,
       onSelectedItemChanged: widget.onSelectedMinuteChanged,
+      width: widget.width,
     );
   }
 }

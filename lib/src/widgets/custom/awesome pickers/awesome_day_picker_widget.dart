@@ -7,10 +7,12 @@ class AwesomeDayPicker extends StatefulWidget {
     required this.selectedDay,
     required this.maxDay,
     required this.onSelectedDayChanged,
+    this.width,
   });
   int selectedDay;
   int maxDay;
   Function(int) onSelectedDayChanged;
+  double? width;
 
   @override
   State<AwesomeDayPicker> createState() => _AwesomeDayPickerState();
@@ -24,6 +26,7 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
       maxValue: widget.maxDay,
       minValue: 1,
       onSelectedItemChanged: widget.onSelectedDayChanged,
+      width: widget.width,
     );
   }
 }

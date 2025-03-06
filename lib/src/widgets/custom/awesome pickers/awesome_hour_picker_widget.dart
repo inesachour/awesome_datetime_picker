@@ -6,10 +6,12 @@ class AwesomeHourPicker extends StatefulWidget {
     super.key,
     required this.selectedHour,
     required this.onSelectedHourChanged,
+    this.width,
   });
 
   int selectedHour;
   Function(int) onSelectedHourChanged;
+  double? width;
 
   @override
   State<AwesomeHourPicker> createState() => _AwesomeHourPickerState();
@@ -23,6 +25,7 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
       maxValue: 23,
       minValue: 00,
       onSelectedItemChanged: widget.onSelectedHourChanged,
+      width: widget.width,
     );
   }
 }
