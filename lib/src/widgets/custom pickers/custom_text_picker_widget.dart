@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTextPicker extends StatefulWidget {
   final List<String> items;
   final String initialValue;
-  final ValueChanged<String> onSelectedItemChanged;
+  final ValueChanged<int> onSelectedItemChanged;
   final double itemExtent;
   final int visibleItemCount;
   final TextStyle? selectedTextStyle;
@@ -60,7 +60,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
 
     return Container(
       height: pickerHeight,
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.25,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -89,7 +89,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
               setState(() {
                 _selectedItem = selectedValue;
               });
-              widget.onSelectedItemChanged(selectedValue);
+              widget.onSelectedItemChanged(index + 1);
             },
             childDelegate: ListWheelChildBuilderDelegate(
               childCount: widget.items.length,
