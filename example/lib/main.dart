@@ -51,6 +51,11 @@ class _CalendarState extends State<Calendar> {
               timeFormat: AwesomeTimeFormat.Hm,
             ),
           ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            padding: const EdgeInsets.all(5),
+            child: AwesomeDateTimePicker(),
+          ),
         ],
       ),
     );
