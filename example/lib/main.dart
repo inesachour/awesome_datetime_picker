@@ -112,7 +112,7 @@ class _CalendarState extends State<Calendar> {
                   print(
                       "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
                 },
-                /*theme: AwesomeDateTimePickerTheme(
+                theme: AwesomeDateTimePickerTheme(
                   datePickerTheme: AwesomeDatePickerTheme(
                     dayTheme: ItemTheme(
                         width: 50,
@@ -142,7 +142,7 @@ class _CalendarState extends State<Calendar> {
                       unselectedTextStyle: TextStyle(color: Colors.white),
                     ),
                   ),
-                ),*/
+                ),
               ),
             ),
           ],

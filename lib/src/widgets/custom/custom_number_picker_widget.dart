@@ -80,121 +80,128 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
       fontSize: 18,
     );
 
-    return Container(
-      height: pickerHeight,
-      width: widget.theme?.width ??
-          widget.itemWidth ??
-          MediaQuery.sizeOf(context).width * 0.16,
-      margin: widget.theme?.margin,
-      padding: widget.theme?.padding,
-      decoration: BoxDecoration(
-        color: widget.theme?.backgroundColor ??
-            widget.backgroundColor ??
-            Colors.white,
-        borderRadius: BorderRadius.circular(0),
-      ),
-      child: Stack(
-        children: [
-          // The selection highlight
-          Positioned.fill(
-            child: Center(
-              child: Container(
-                height: widget.theme?.height ??
+    return Column(
+      children: [
+        widget.theme?.title ?? Container(),
+        Container(
+          height: pickerHeight,
+          width: widget.theme?.width ??
+              widget.itemWidth ??
+              MediaQuery.sizeOf(context).width * 0.16,
+          margin: widget.theme?.margin,
+          padding: widget.theme?.padding,
+          decoration: BoxDecoration(
+            color: widget.theme?.backgroundColor ??
+                widget.backgroundColor ??
+                Colors.white,
+            borderRadius: BorderRadius.circular(0),
+          ),
+          child: Stack(
+            children: [
+              // The selection highlight
+              Positioned.fill(
+                child: Center(
+                  child: Container(
+                    height: widget.theme?.height ??
+                        widget.itemHeight ??
+                        defaultItemHeight,
+                    decoration: BoxDecoration(
+                      color:
+                          widget.selectorColor ?? Colors.grey.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                  ),
+                ),
+              ),
+
+              // The picker wheel
+              ListWheelScrollView.useDelegate(
+                controller: _scrollController,
+                itemExtent: widget.theme?.height ??
                     widget.itemHeight ??
                     defaultItemHeight,
-                decoration: BoxDecoration(
-                  color: widget.selectorColor ?? Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(0),
+                perspective: 0.01, // iOS-like perspective
+                physics: const FixedExtentScrollPhysics(),
+                diameterRatio: 1.5, // iOS-like diameter
+                onSelectedItemChanged: (index) {
+                  final selectedValue = widget.minValue + index;
+                  setState(() {
+                    _selectedItem = selectedValue > widget.maxValue
+                        ? widget.maxValue
+                        : selectedValue;
+                  });
+                  widget.onSelectedItemChanged(selectedValue);
+                },
+                childDelegate: ListWheelChildBuilderDelegate(
+                  childCount: itemCount,
+                  builder: (context, index) {
+                    final value = widget.minValue + index;
+                    final isSelected = value == _selectedItem;
+
+                    return Center(
+                      child: Text(
+                        value.toString(),
+                        style: isSelected
+                            ? (widget.theme?.selectedTextStyle ??
+                                widget.selectedTextStyle ??
+                                defaultSelectedStyle)
+                            : (widget.theme?.unselectedTextStyle ??
+                                widget.unselectedTextStyle ??
+                                defaultUnselectedStyle),
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
+              if (widget.fadeEffect == null || widget.fadeEffect!) ...[
+                // Top fade out gradient
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: widget.theme?.height ??
+                      widget.itemHeight ??
+                      defaultItemHeight,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white,
+                          Colors.white.withOpacity(0.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Bottom fade out gradient
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: widget.theme?.height ??
+                      widget.itemHeight ??
+                      defaultItemHeight,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.white,
+                          Colors.white.withOpacity(0.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
-
-          // The picker wheel
-          ListWheelScrollView.useDelegate(
-            controller: _scrollController,
-            itemExtent:
-                widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight,
-            perspective: 0.01, // iOS-like perspective
-            physics: const FixedExtentScrollPhysics(),
-            diameterRatio: 1.5, // iOS-like diameter
-            onSelectedItemChanged: (index) {
-              final selectedValue = widget.minValue + index;
-              setState(() {
-                _selectedItem = selectedValue > widget.maxValue
-                    ? widget.maxValue
-                    : selectedValue;
-              });
-              widget.onSelectedItemChanged(selectedValue);
-            },
-            childDelegate: ListWheelChildBuilderDelegate(
-              childCount: itemCount,
-              builder: (context, index) {
-                final value = widget.minValue + index;
-                final isSelected = value == _selectedItem;
-
-                return Center(
-                  child: Text(
-                    value.toString(),
-                    style: isSelected
-                        ? (widget.theme?.selectedTextStyle ??
-                            widget.selectedTextStyle ??
-                            defaultSelectedStyle)
-                        : (widget.theme?.unselectedTextStyle ??
-                            widget.unselectedTextStyle ??
-                            defaultUnselectedStyle),
-                  ),
-                );
-              },
-            ),
-          ),
-          if (widget.fadeEffect == null || widget.fadeEffect!) ...[
-            // Top fade out gradient
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: widget.theme?.height ??
-                  widget.itemHeight ??
-                  defaultItemHeight,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white,
-                      Colors.white.withOpacity(0.0),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // Bottom fade out gradient
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: widget.theme?.height ??
-                  widget.itemHeight ??
-                  defaultItemHeight,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.white,
-                      Colors.white.withOpacity(0.0),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
