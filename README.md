@@ -16,6 +16,26 @@ AwesomeDatePicker(
     <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/images/date_picker.jpg?raw=true" height="200">
 </p>
 
+```dart
+AwesomeDatePicker(
+    AwesomeDate? minDate;
+    AwesomeDate? maxDate;
+    AwesomeDate? initialDate;
+    LocaleType locale;
+    AwesomeDateFormat dateFormat;
+    AwesomeDatePickerTheme? theme;
+    final ValueChanged<AwesomeDate>? onChanged;
+    Color? backgroundColor;
+    Color? selectorColor;
+    bool? fadeEffect;
+    TextStyle? selectedTextStyle;
+    TextStyle? unselectedTextStyle;
+    int? visibleItemCount;
+    double? itemHeight;
+    double? itemWidth;
+)
+```
+
 
 ### Time Picker
 ```dart
@@ -27,6 +47,25 @@ AwesomeTimePicker(
 <p align="center" width="100%">
     <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/images/time_picker.jpg?raw=true" height="200">
 </p>
+
+```dart
+AwesomeTimePicker(
+    AwesomeTime? minTime;
+    AwesomeTime? maxTime;
+    AwesomeTime? initialTime;
+    AwesomeTimeFormat timeFormat;
+    AwesomeTimePickerTheme? theme;
+    final ValueChanged<AwesomeTime>? onChanged;
+    Color? backgroundColor;
+    Color? selectorColor;
+    bool? fadeEffect;
+    TextStyle? selectedTextStyle;
+    TextStyle? unselectedTextStyle;
+    int? visibleItemCount;
+    double? itemHeight;
+    double? itemWidth;
+)
+```
 
 
 ### DateTime Picker
@@ -40,4 +79,26 @@ AwesomeDateTimePicker(
     <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/images/datetime_picker.jpg?raw=true" height="200">
 </p>
 
+```dart
+AwesomeDateTimePicker(
+    AwesomeDateTime? minDateTime; // this is min datetime
+    AwesomeDateTime? maxDateTime;
+    AwesomeDateTime? initialDateTime;
+    LocaleType locale;
+    AwesomeDateFormat dateFormat;
+    AwesomeTimeFormat timeFormat;
+    AwesomeDateTimePickerTheme? theme;
+    final ValueChanged<AwesomeDateTime>? onChanged;
+    Color? backgroundColor;
+    Color? selectorColor;
+    bool? fadeEffect;
+    TextStyle? selectedTextStyle;
+    TextStyle? unselectedTextStyle;
+    int? visibleItemCount;
+    double? itemHeight;
+    double? itemWidth;
+)
+```
+
 ## Customization
+###
