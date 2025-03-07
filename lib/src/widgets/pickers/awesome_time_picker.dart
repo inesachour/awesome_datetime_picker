@@ -53,7 +53,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           return Container();
         } else if (widget.timeFormat.value[index] == PickerType.hour_24) {
           return AwesomeHourPicker(
-            selectedTime: initialTime,
+            selectedTime: selectedTime,
             maxTime: maxTime,
             minTime: minTime,
             width: widget.hourWidth,
@@ -66,7 +66,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
           return AwesomeMinutePicker(
-            selectedTime: initialTime,
+            selectedTime: selectedTime,
             maxTime: maxTime,
             minTime: minTime,
             width: widget.minuteWidth,

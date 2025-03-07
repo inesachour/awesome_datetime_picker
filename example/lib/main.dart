@@ -47,18 +47,20 @@ class _CalendarState extends State<Calendar> {
               minDate: AwesomeDate(year: 2025, month: 2, day: 2),
             ),
           ),
-          /*Container(
+          Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeTimePicker(
               timeFormat: AwesomeTimeFormat.Hm,
+              maxTime: AwesomeTime(hour: 10, minute: 15),
+              minTime: AwesomeTime(hour: 01, minute: 54),
             ),
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeDateTimePicker(dateFormat: AwesomeDateFormat.yMMd,),
-          ),*/
+          ),
         ],
       ),
     );
