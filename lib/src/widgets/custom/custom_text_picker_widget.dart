@@ -81,6 +81,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
               ),
             ),
           ),
+
           ListWheelScrollView.useDelegate(
             controller: _scrollController,
             itemExtent: widget.itemExtent,
@@ -110,6 +111,46 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
                   ),
                 );
               },
+            ),
+          ),
+         
+          // Top fade out gradient
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: widget.itemExtent,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white,
+                    Colors.white.withOpacity(0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Bottom fade out gradient
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: widget.itemExtent,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.white,
+                    Colors.white.withOpacity(0.0),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
