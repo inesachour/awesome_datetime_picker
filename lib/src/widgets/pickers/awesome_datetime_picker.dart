@@ -77,9 +77,6 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
                 AwesomeDateTime(date: date, time: selectedDateTime.time));
           },
         ),
-        const SizedBox(
-          width: 10,
-        ),
         AwesomeTimePicker(
           theme: widget.theme?.timePickerTheme,
           timeFormat: widget.timeFormat,
