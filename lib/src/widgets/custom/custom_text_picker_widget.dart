@@ -76,7 +76,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
 
     return Container(
       height: pickerHeight,
-      width: widget.theme?.width ?? MediaQuery.of(context).size.width * 0.16,
+      width: widget.theme?.width ?? MediaQuery.of(context).size.width * 0.25,
       decoration: BoxDecoration(
         color: widget.theme?.backgroundColor ??
             widget.backgroundColor ??

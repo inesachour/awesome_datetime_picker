@@ -99,7 +99,7 @@ class _CalendarState extends State<Calendar> {
               padding: const EdgeInsets.all(5),
               child: AwesomeDateTimePicker(
                 // backgroundColor: Colors.red,
-                visibleItemCount: 7,
+                visibleItemCount: 3,
                 fadeEffect: false,
                 dateFormat: AwesomeDateFormat.yMMd,
                 minDateTime: AwesomeDateTime(
