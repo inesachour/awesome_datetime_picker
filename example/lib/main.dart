@@ -72,7 +72,6 @@ class _CalendarState extends State<Calendar> {
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeTimePicker(
-              backgroundColor: Colors.red,
               //fadeEffect: true,
               timeFormat: AwesomeTimeFormat.Hm,
               maxTime: AwesomeTime(hour: 10, minute: 15),
@@ -98,7 +97,7 @@ class _CalendarState extends State<Calendar> {
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeDateTimePicker(
-              backgroundColor: Colors.red,
+              // backgroundColor: Colors.red,
               fadeEffect: false,
               dateFormat: AwesomeDateFormat.yMMd,
               minDateTime: AwesomeDateTime(
