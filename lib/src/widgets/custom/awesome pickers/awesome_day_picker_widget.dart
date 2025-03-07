@@ -24,18 +24,33 @@ class AwesomeDayPicker extends StatefulWidget {
 class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
   @override
   Widget build(BuildContext context) {
+    int maxValue = DateUtils.getDaysInMonth(
+            widget.selectedDate.year, widget.selectedDate.month),
+        minValue = 1;
+    if ((widget.selectedDate.year < widget.maxDate.year &&
+            widget.selectedDate.year > widget.minDate.year) ||
+        (widget.selectedDate.year == widget.maxDate.year &&
+            widget.selectedDate.month < widget.maxDate.month) ||
+        (widget.selectedDate.year == widget.minDate.year &&
+            widget.selectedDate.month > widget.minDate.month)) {
+      maxValue = DateUtils.getDaysInMonth(
+          widget.selectedDate.year, widget.selectedDate.month);
+      minValue = 1;
+    } else if (widget.selectedDate.year == widget.maxDate.year &&
+        widget.selectedDate.month == widget.maxDate.month) {
+      minValue = 1;
+      maxValue = widget.maxDate.day;
+    } else if (widget.selectedDate.year == widget.minDate.year &&
+        widget.selectedDate.month == widget.minDate.month) {
+      minValue = widget.minDate.day;
+      maxValue = DateUtils.getDaysInMonth(
+          widget.selectedDate.year, widget.selectedDate.month);
+    }
+
     return CustomNumberPicker(
       initialValue: widget.selectedDate.day,
-      maxValue: widget.selectedDate.year < widget.maxDate.year ||
-              widget.selectedDate.month < widget.maxDate.month
-          ? DateUtils.getDaysInMonth(
-              widget.selectedDate.year, widget.selectedDate.month)
-          : widget.maxDate.day,
-      minValue: widget.selectedDate.year > widget.minDate.year ||
-              widget.selectedDate.month > widget.minDate.month
-          ? DateUtils.getDaysInMonth(
-              widget.selectedDate.year, widget.selectedDate.month)
-          : widget.minDate.day,
+      maxValue: maxValue,
+      minValue: minValue,
       onSelectedItemChanged: widget.onSelectedDayChanged,
       width: widget.width,
     );
