@@ -4,22 +4,29 @@ import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_
 import 'package:flutter/material.dart';
 
 class AwesomeYearPicker extends StatefulWidget {
-  AwesomeYearPicker(
-      {super.key,
-      required this.selectedDate,
-      required this.maxDate,
-      required this.minDate,
-      required this.onSelectedYearChanged,
-      this.theme,
-      this.backgroundColor,
-      this.fadeEffect});
+  AwesomeYearPicker({
+    super.key,
+    required this.selectedDate,
+    required this.maxDate,
+    required this.minDate,
+    required this.onSelectedYearChanged,
+    this.theme,
+    this.backgroundColor,
+    this.fadeEffect,
+    this.selectedTextStyle,
+    this.unselectedTextStyle,
+    this.selectorColor,
+  });
   AwesomeDate selectedDate;
   AwesomeDate maxDate;
   AwesomeDate minDate;
   Function(int) onSelectedYearChanged;
   ItemTheme? theme;
   Color? backgroundColor;
+  Color? selectorColor;
   bool? fadeEffect;
+  TextStyle? selectedTextStyle;
+  TextStyle? unselectedTextStyle;
 
   @override
   State<AwesomeYearPicker> createState() => _AwesomeYearPickerState();
@@ -36,6 +43,9 @@ class _AwesomeYearPickerState extends State<AwesomeYearPicker> {
       theme: widget.theme,
       backgroundColor: widget.backgroundColor,
       fadeEffect: widget.fadeEffect,
+      selectedTextStyle: widget.selectedTextStyle,
+      unselectedTextStyle: widget.unselectedTextStyle,
+      selectorColor: widget.selectorColor,
     );
   }
 }

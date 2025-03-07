@@ -15,6 +15,9 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.onChanged,
     this.backgroundColor,
     this.fadeEffect,
+    this.selectedTextStyle,
+    this.unselectedTextStyle,
+    this.selectorColor,
   });
 
   AwesomeDateTime? minDateTime;
@@ -26,7 +29,10 @@ class AwesomeDateTimePicker extends StatefulWidget {
   AwesomeDateTimePickerTheme? theme;
   final ValueChanged<AwesomeDateTime>? onChanged;
   Color? backgroundColor;
+  Color? selectorColor;
   bool? fadeEffect;
+  TextStyle? selectedTextStyle;
+  TextStyle? unselectedTextStyle;
 
   @override
   State<AwesomeDateTimePicker> createState() => _AwesomeDateTimePickerState();
@@ -74,7 +80,10 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           maxDate: maxDateTime.date,
           minDate: minDateTime.date,
           initialDate: initialDateTime.date,
+          selectorColor: widget.selectorColor,
           fadeEffect: widget.fadeEffect,
+          selectedTextStyle: widget.selectedTextStyle,
+          unselectedTextStyle: widget.unselectedTextStyle,
           onChanged: (AwesomeDate date) {
             setState(() {
               selectedDateTime.date = date;
@@ -90,7 +99,10 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           maxTime: maxDateTime.time,
           minTime: minDateTime.time,
           initialTime: initialDateTime.time,
+          selectorColor: widget.selectorColor,
           fadeEffect: widget.fadeEffect,
+          selectedTextStyle: widget.selectedTextStyle,
+          unselectedTextStyle: widget.unselectedTextStyle,
           onChanged: (AwesomeTime time) {
             setState(() {
               selectedDateTime.time = time;

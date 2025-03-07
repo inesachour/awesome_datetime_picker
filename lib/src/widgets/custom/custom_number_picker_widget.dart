@@ -10,7 +10,10 @@ class CustomNumberPicker extends StatefulWidget {
   final int visibleItemCount;
   final ItemTheme? theme;
   Color? backgroundColor;
+  Color? selectorColor;
   bool? fadeEffect;
+  TextStyle? selectedTextStyle;
+  TextStyle? unselectedTextStyle;
 
   CustomNumberPicker({
     super.key,
@@ -21,7 +24,10 @@ class CustomNumberPicker extends StatefulWidget {
     this.itemExtent = 40.0,
     this.visibleItemCount = 5,
     this.theme,
+    this.selectedTextStyle,
+    this.unselectedTextStyle,
     this.backgroundColor,
+    this.selectorColor,
     this.fadeEffect = true,
   }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
@@ -82,7 +88,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
               child: Container(
                 height: widget.itemExtent,
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: widget.selectorColor ?? Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(0),
                 ),
               ),
@@ -116,8 +122,10 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
                     value.toString(),
                     style: isSelected
                         ? (widget.theme?.selectedTextStyle ??
+                            widget.selectedTextStyle ??
                             defaultSelectedStyle)
                         : (widget.theme?.unselectedTextStyle ??
+                            widget.unselectedTextStyle ??
                             defaultUnselectedStyle),
                   ),
                 );

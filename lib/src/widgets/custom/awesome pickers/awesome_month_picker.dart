@@ -6,17 +6,21 @@ import 'package:awesome_datetime_picker/src/widgets/custom/custom_text_picker_wi
 import 'package:flutter/material.dart';
 
 class AwesomeMonthPicker extends StatefulWidget {
-  AwesomeMonthPicker(
-      {super.key,
-      required this.selectedDate,
-      required this.maxDate,
-      required this.minDate,
-      required this.onSelectedMonthChanged,
-      required this.locale,
-      this.isNumber = true,
-      this.theme,
-      this.backgroundColor,
-      this.fadeEffect});
+  AwesomeMonthPicker({
+    super.key,
+    required this.selectedDate,
+    required this.maxDate,
+    required this.minDate,
+    required this.onSelectedMonthChanged,
+    required this.locale,
+    this.isNumber = true,
+    this.theme,
+    this.backgroundColor,
+    this.fadeEffect,
+    this.selectedTextStyle,
+    this.unselectedTextStyle,
+    this.selectorColor,
+  });
 
   AwesomeDate selectedDate;
   AwesomeDate maxDate;
@@ -26,7 +30,10 @@ class AwesomeMonthPicker extends StatefulWidget {
   LocaleType locale;
   ItemTheme? theme;
   Color? backgroundColor;
+  Color? selectorColor;
   bool? fadeEffect;
+  TextStyle? selectedTextStyle;
+  TextStyle? unselectedTextStyle;
 
   @override
   State<AwesomeMonthPicker> createState() => _AwesomeMonthPickerState();
@@ -60,6 +67,9 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             theme: widget.theme,
             backgroundColor: widget.backgroundColor,
             fadeEffect: widget.fadeEffect,
+            selectedTextStyle: widget.selectedTextStyle,
+            unselectedTextStyle: widget.unselectedTextStyle,
+            selectorColor: widget.selectorColor,
           )
         : CustomTextPicker(
             items: months,
@@ -70,6 +80,9 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             theme: widget.theme,
             backgroundColor: widget.backgroundColor,
             fadeEffect: widget.fadeEffect,
+            selectedTextStyle: widget.selectedTextStyle,
+            unselectedTextStyle: widget.unselectedTextStyle,
+            selectorColor: widget.selectorColor,
           );
   }
 }
