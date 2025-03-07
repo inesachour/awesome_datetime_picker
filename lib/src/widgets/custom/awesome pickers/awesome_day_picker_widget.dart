@@ -1,3 +1,4 @@
+import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -10,9 +11,9 @@ class AwesomeDayPicker extends StatefulWidget {
     required this.onSelectedDayChanged,
     this.width,
   });
-  DateTime selectedDate;
-  DateTime maxDate;
-  DateTime minDate;
+  AwesomeDate selectedDate;
+  AwesomeDate maxDate;
+  AwesomeDate minDate;
   Function(int) onSelectedDayChanged;
   double? width;
 

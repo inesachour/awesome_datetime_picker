@@ -1,9 +1,4 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/data/format.dart';
-import 'package:awesome_datetime_picker/src/data/locale.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_day_picker_widget.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_month_picker.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_year_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDateTimePicker extends StatefulWidget {
@@ -25,12 +20,12 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.timeFormat = AwesomeTimeFormat.Hm,
   });
 
-  DateTime? minDate;
-  DateTime? maxDate;
-  DateTime? initialDate;
-  TimeOfDay? minTime;
-  TimeOfDay? maxTime;
-  TimeOfDay? initialTime;
+  AwesomeDate? minDate;
+  AwesomeDate? maxDate;
+  AwesomeDate? initialDate;
+  AwesomeTime? minTime;
+  AwesomeTime? maxTime;
+  AwesomeTime? initialTime;
   LocaleType locale;
   AwesomeDateFormat dateFormat;
   AwesomeTimeFormat timeFormat;
@@ -45,22 +40,27 @@ class AwesomeDateTimePicker extends StatefulWidget {
 }
 
 class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
-  late DateTime minDate;
-  late DateTime maxDate;
-  late DateTime initialDate;
+  late AwesomeDate minDate;
+  late AwesomeDate maxDate;
+  late AwesomeDate initialDate;
 
-  late TimeOfDay minTime;
-  late TimeOfDay maxTime;
-  late TimeOfDay initialTime;
+  late AwesomeTime minTime;
+  late AwesomeTime maxTime;
+  late AwesomeTime initialTime;
 
   @override
   void initState() {
-    minDate = widget.minDate ?? DateTime(1990, 1, 1);
-    maxDate = widget.maxDate ?? DateTime(2100, 12, 31);
-    initialDate = widget.initialDate ?? DateTime.now();
-    minTime = widget.minTime ?? TimeOfDay(hour: 00, minute: 00);
-    maxTime = widget.maxTime ?? TimeOfDay(hour: 23, minute: 59);
-    initialTime = widget.initialTime ?? TimeOfDay.now();
+    minDate = widget.minDate ?? AwesomeDate(year: 1990, month: 1, day: 1);
+    maxDate = widget.maxDate ?? AwesomeDate(year: 2100, month: 12, day: 31);
+    initialDate = widget.initialDate ??
+        AwesomeDate(
+            year: DateTime.now().year,
+            month: DateTime.now().month,
+            day: DateTime.now().day);
+    minTime = widget.minTime ?? AwesomeTime(hour: 00, minute: 00);
+    maxTime = widget.maxTime ?? AwesomeTime(hour: 23, minute: 59);
+    initialTime = widget.initialTime ??
+        AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
 
     super.initState();
   }

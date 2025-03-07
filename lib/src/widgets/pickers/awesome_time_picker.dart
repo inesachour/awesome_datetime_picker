@@ -1,4 +1,5 @@
 import 'package:awesome_datetime_picker/src/data/format.dart';
+import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_hour_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_minute_picker_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,9 @@ class AwesomeTimePicker extends StatefulWidget {
     this.minuteWidth,
   });
 
-  TimeOfDay? minTime;
-  TimeOfDay? maxTime;
-  TimeOfDay? initialTime;
+  AwesomeTime? minTime;
+  AwesomeTime? maxTime;
+  AwesomeTime? initialTime;
   AwesomeTimeFormat timeFormat;
   double? hourWidth;
   double? minuteWidth;
@@ -26,16 +27,17 @@ class AwesomeTimePicker extends StatefulWidget {
 }
 
 class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
-  late TimeOfDay selectedTime;
-  late TimeOfDay minTime;
-  late TimeOfDay maxTime;
-  late TimeOfDay initialTime;
+  late AwesomeTime selectedTime;
+  late AwesomeTime minTime;
+  late AwesomeTime maxTime;
+  late AwesomeTime initialTime;
 
   @override
   void initState() {
-    minTime = widget.minTime ?? TimeOfDay(hour: 00, minute: 00);
-    maxTime = widget.maxTime ?? TimeOfDay(hour: 23, minute: 59);
-    initialTime = widget.initialTime ?? TimeOfDay.now();
+    minTime = widget.minTime ?? AwesomeTime(hour: 00, minute: 00);
+    maxTime = widget.maxTime ?? AwesomeTime(hour: 23, minute: 59);
+    initialTime = widget.initialTime ??
+        AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
     selectedTime = initialTime;
 
     super.initState();
@@ -58,7 +60,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             onSelectedHourChanged: (value) {
               setState(() {
                 selectedTime =
-                    TimeOfDay(hour: value, minute: selectedTime.minute);
+                    AwesomeTime(hour: value, minute: selectedTime.minute);
               });
             },
           );
@@ -71,7 +73,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             onSelectedMinuteChanged: (value) {
               setState(() {
                 selectedTime =
-                    TimeOfDay(hour: selectedTime.hour, minute: value);
+                    AwesomeTime(hour: selectedTime.hour, minute: value);
               });
             },
           );

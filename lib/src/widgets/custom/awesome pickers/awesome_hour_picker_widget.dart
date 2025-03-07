@@ -1,3 +1,4 @@
+import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +12,9 @@ class AwesomeHourPicker extends StatefulWidget {
     this.width,
   });
 
-  TimeOfDay selectedTime;
-  TimeOfDay maxTime;
-  TimeOfDay minTime;
+  AwesomeTime selectedTime;
+  AwesomeTime maxTime;
+  AwesomeTime minTime;
   Function(int) onSelectedHourChanged;
   double? width;
 

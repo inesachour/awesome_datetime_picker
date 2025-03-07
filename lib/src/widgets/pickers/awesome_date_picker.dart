@@ -1,5 +1,6 @@
 import 'package:awesome_datetime_picker/src/data/format.dart';
 import 'package:awesome_datetime_picker/src/data/locale.dart';
+import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_day_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_month_picker.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_year_picker_widget.dart';
@@ -18,9 +19,9 @@ class AwesomeDatePicker extends StatefulWidget {
     this.yearWidth,
   });
 
-  DateTime? minDate;
-  DateTime? maxDate;
-  DateTime? initialDate;
+  AwesomeDate? minDate;
+  AwesomeDate? maxDate;
+  AwesomeDate? initialDate;
   LocaleType locale;
   AwesomeDateFormat dateFormat;
   double? dayWidth;
@@ -32,16 +33,20 @@ class AwesomeDatePicker extends StatefulWidget {
 }
 
 class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
-  late DateTime selectedDate;
-  late DateTime minDate;
-  late DateTime maxDate;
-  late DateTime initialDate;
+  late AwesomeDate selectedDate;
+  late AwesomeDate minDate;
+  late AwesomeDate maxDate;
+  late AwesomeDate initialDate;
 
   @override
   void initState() {
-    minDate = widget.minDate ?? DateTime(1990, 1, 1);
-    maxDate = widget.maxDate ?? DateTime(2100, 12, 31);
-    initialDate = widget.initialDate ?? DateTime.now();
+    minDate = widget.minDate ?? AwesomeDate(year: 1990, month: 1, day: 1);
+    maxDate = widget.maxDate ?? AwesomeDate(year: 2100, month: 12, day: 31);
+    initialDate = widget.initialDate ??
+        AwesomeDate(
+            year: DateTime.now().year,
+            month: DateTime.now().month,
+            day: DateTime.now().day);
     selectedDate = initialDate;
 
     super.initState();
@@ -60,8 +65,10 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             width: widget.dayWidth,
             onSelectedDayChanged: (value) {
               setState(() {
-                selectedDate =
-                    DateTime(selectedDate.year, selectedDate.month, value);
+                selectedDate = AwesomeDate(
+                    year: selectedDate.year,
+                    month: selectedDate.month,
+                    day: value);
               });
             },
           );
@@ -79,7 +86,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                 if (selectedDate.day > daysInMonth) {
                   day = daysInMonth;
                 }
-                selectedDate = DateTime(value, selectedDate.month, day);
+                selectedDate = AwesomeDate(
+                    year: value, month: selectedDate.month, day: day);
               });
             },
           );
@@ -99,7 +107,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                 if (selectedDate.day > daysInMonth) {
                   day = daysInMonth;
                 }
-                selectedDate = DateTime(selectedDate.year, value, day);
+                selectedDate = AwesomeDate(
+                    year: selectedDate.year, month: value, day: day);
               });
             },
           );
@@ -118,7 +127,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                 if (selectedDate.day > daysInMonth) {
                   day = daysInMonth;
                 }
-                selectedDate = DateTime(selectedDate.year, value, day);
+                selectedDate = AwesomeDate(
+                    year: selectedDate.year, month: value, day: day);
               });
             },
           );

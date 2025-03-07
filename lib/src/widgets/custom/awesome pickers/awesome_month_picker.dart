@@ -16,9 +16,9 @@ class AwesomeMonthPicker extends StatefulWidget {
     this.width,
   });
 
-  DateTime selectedDate;
-  DateTime maxDate;
-  DateTime minDate;
+  AwesomeDate selectedDate;
+  AwesomeDate maxDate;
+  AwesomeDate minDate;
   Function(int) onSelectedMonthChanged;
   bool isNumber;
   LocaleType locale;
