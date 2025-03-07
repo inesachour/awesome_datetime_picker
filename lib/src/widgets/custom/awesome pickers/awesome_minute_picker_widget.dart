@@ -27,8 +27,12 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
   Widget build(BuildContext context) {
     return CustomNumberPicker(
       initialValue: widget.selectedTime.minute,
-      maxValue: widget.maxTime.minute,
-      minValue: widget.minTime.minute,
+      maxValue: widget.selectedTime.hour < widget.selectedTime.hour
+          ? 59
+          : widget.maxTime.minute,
+      minValue: widget.selectedTime.hour > widget.minTime.hour
+          ? 59
+          : widget.minTime.minute,
       onSelectedItemChanged: widget.onSelectedMinuteChanged,
       width: widget.width,
     );

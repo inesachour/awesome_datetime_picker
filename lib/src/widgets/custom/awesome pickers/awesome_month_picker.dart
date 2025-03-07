@@ -45,7 +45,7 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             maxValue: widget.selectedDate.year < widget.maxDate.year
                 ? 12
                 : widget.maxDate.month,
-            minValue: widget.selectedDate.year > widget.maxDate.year
+            minValue: widget.selectedDate.year > widget.minDate.year
                 ? 1
                 : widget.minDate.month,
             onSelectedItemChanged: widget.onSelectedMonthChanged,

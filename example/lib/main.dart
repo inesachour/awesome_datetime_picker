@@ -43,7 +43,7 @@ class _CalendarState extends State<Calendar> {
             child: AwesomeDatePicker(
               dateFormat: AwesomeDateFormat.dMMy,
               locale: LocaleType.fr,
-              maxDate: AwesomeDate(year: 2026, month: 12, day: 20),
+              maxDate: AwesomeDate(year: 2026, month: 11, day: 31),
             ),
           ),
           /*Container(

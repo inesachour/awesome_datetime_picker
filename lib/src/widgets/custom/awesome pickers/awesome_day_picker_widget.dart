@@ -31,8 +31,8 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
           ? DateUtils.getDaysInMonth(
               widget.selectedDate.year, widget.selectedDate.month)
           : widget.maxDate.day,
-      minValue: widget.selectedDate.year > widget.maxDate.year ||
-              widget.selectedDate.month > widget.maxDate.month
+      minValue: widget.selectedDate.year > widget.minDate.year ||
+              widget.selectedDate.month > widget.minDate.month
           ? DateUtils.getDaysInMonth(
               widget.selectedDate.year, widget.selectedDate.month)
           : widget.minDate.day,
