@@ -83,4 +83,10 @@ AwesomeDateTimePicker(
 ```
 
 ## Customization
-###
+### LocaleType
+
+### AwesomeDateFormat
+
+### AwesomeTimeFormat
+
+### AwesomeDateTimePickerTheme
