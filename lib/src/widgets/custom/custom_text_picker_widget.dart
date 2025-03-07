@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class CustomTextPicker extends StatefulWidget {
   final List<String> items;
   final String initialValue;
+  final int maxIndex;
+  final int minIndex;
   final ValueChanged<int> onSelectedItemChanged;
   final double itemExtent;
   final int visibleItemCount;
@@ -14,6 +16,8 @@ class CustomTextPicker extends StatefulWidget {
     super.key,
     required this.items,
     required this.initialValue,
+    required this.maxIndex,
+    required this.minIndex,
     required this.onSelectedItemChanged,
     this.itemExtent = 40.0,
     this.visibleItemCount = 5,
@@ -87,16 +91,16 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
             physics: const FixedExtentScrollPhysics(),
             diameterRatio: 1.5,
             onSelectedItemChanged: (index) {
-              final selectedValue = widget.items[index];
+              final selectedValue = widget.items[index + widget.minIndex];
               setState(() {
                 _selectedItem = selectedValue;
               });
-              widget.onSelectedItemChanged(index + 1);
+              widget.onSelectedItemChanged(index + widget.minIndex + 1);
             },
             childDelegate: ListWheelChildBuilderDelegate(
-              childCount: widget.items.length,
+              childCount: widget.maxIndex - widget.minIndex + 1,
               builder: (context, index) {
-                final value = widget.items[index];
+                final value = widget.items[index + widget.minIndex];
                 final isSelected = value == _selectedItem;
                 return Center(
                   child: Text(

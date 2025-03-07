@@ -58,6 +58,8 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
         : CustomTextPicker(
             items: months,
             initialValue: months[widget.selectedDate.month - 1],
+            minIndex: minValue - 1,
+            maxIndex: maxValue - 1,
             onSelectedItemChanged: widget.onSelectedMonthChanged,
             width: widget.width,
           );
