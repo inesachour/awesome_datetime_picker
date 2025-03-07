@@ -100,7 +100,7 @@ class _CalendarState extends State<Calendar> {
                   date: AwesomeDate(year: 2025, month: 3, day: 2),
                   time: AwesomeTime(hour: 9, minute: 10)),
               maxDateTime: AwesomeDateTime(
-                  date: AwesomeDate(year: 2025, month: 3, day: 22),
+                  date: AwesomeDate(year: 2026, month: 3, day: 22),
                   time: AwesomeTime(hour: 19, minute: 20)),
               onChanged: (AwesomeDateTime dateTime) {
                 print("----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
