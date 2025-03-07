@@ -45,6 +45,9 @@ class _CalendarState extends State<Calendar> {
               locale: LocaleType.fr,
               maxDate: AwesomeDate(year: 2026, month: 11, day: 25),
               minDate: AwesomeDate(year: 2025, month: 2, day: 2),
+              onChanged: (AwesomeDate date) {
+                print("----Date changed : ${date.day}/${date.month}/${date.year}\n");
+              },
               /*theme: AwesomeDatePickerTheme(
                 dayTheme: ItemTheme(
                     width: 50,
@@ -71,6 +74,9 @@ class _CalendarState extends State<Calendar> {
               timeFormat: AwesomeTimeFormat.Hm,
               maxTime: AwesomeTime(hour: 10, minute: 15),
               minTime: AwesomeTime(hour: 01, minute: 54),
+              onChanged: (AwesomeTime time) {
+                print("----Time changed : ${time.hour}:${time.minute}\n");
+              },
               /*theme: AwesomeTimePickerTheme(
                 hourTheme: ItemTheme(
                   backgroundColor: Colors.grey,
@@ -90,10 +96,15 @@ class _CalendarState extends State<Calendar> {
             padding: const EdgeInsets.all(5),
             child: AwesomeDateTimePicker(
               dateFormat: AwesomeDateFormat.yMMd,
-              minDate: AwesomeDate(year: 2025, month: 3, day: 2),
-              maxDate: AwesomeDate(year: 2025, month: 3, day: 22),
-              minTime: AwesomeTime(hour: 9, minute: 10),
-              maxTime: AwesomeTime(hour: 19, minute: 20),
+              minDateTime: AwesomeDateTime(
+                  date: AwesomeDate(year: 2025, month: 3, day: 2),
+                  time: AwesomeTime(hour: 9, minute: 10)),
+              maxDateTime: AwesomeDateTime(
+                  date: AwesomeDate(year: 2025, month: 3, day: 22),
+                  time: AwesomeTime(hour: 19, minute: 20)),
+              onChanged: (AwesomeDateTime dateTime) {
+                print("----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
+              },
               /*theme: AwesomeDateTimePickerTheme(
                 datePickerTheme: AwesomeDatePickerTheme(
                   dayTheme: ItemTheme(

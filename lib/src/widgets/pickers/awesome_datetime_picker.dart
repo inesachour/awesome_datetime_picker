@@ -5,55 +5,54 @@ import 'package:flutter/material.dart';
 class AwesomeDateTimePicker extends StatefulWidget {
   AwesomeDateTimePicker({
     super.key,
-    this.minDate,
-    this.maxDate,
-    this.initialDate,
-    this.minTime,
-    this.maxTime,
-    this.initialTime,
+    this.minDateTime,
+    this.maxDateTime,
+    this.initialDateTime,
     this.locale = LocaleType.en,
     this.dateFormat = AwesomeDateFormat.dMy,
     this.timeFormat = AwesomeTimeFormat.Hm,
     this.theme,
+    this.onChanged,
   });
 
-  AwesomeDate? minDate;
-  AwesomeDate? maxDate;
-  AwesomeDate? initialDate;
-  AwesomeTime? minTime;
-  AwesomeTime? maxTime;
-  AwesomeTime? initialTime;
+  AwesomeDateTime? minDateTime;
+  AwesomeDateTime? maxDateTime;
+  AwesomeDateTime? initialDateTime;
   LocaleType locale;
   AwesomeDateFormat dateFormat;
   AwesomeTimeFormat timeFormat;
   AwesomeDateTimePickerTheme? theme;
+  final ValueChanged<AwesomeDateTime>? onChanged;
 
   @override
   State<AwesomeDateTimePicker> createState() => _AwesomeDateTimePickerState();
 }
 
 class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
-  late AwesomeDate minDate;
-  late AwesomeDate maxDate;
-  late AwesomeDate initialDate;
-
-  late AwesomeTime minTime;
-  late AwesomeTime maxTime;
-  late AwesomeTime initialTime;
+  late AwesomeDateTime minDateTime;
+  late AwesomeDateTime maxDateTime;
+  late AwesomeDateTime initialDateTime;
+  late AwesomeDateTime selectedDateTime;
 
   @override
   void initState() {
-    minDate = widget.minDate ?? AwesomeDate(year: 1990, month: 1, day: 1);
-    maxDate = widget.maxDate ?? AwesomeDate(year: 2100, month: 12, day: 31);
-    initialDate = widget.initialDate ??
-        AwesomeDate(
-            year: DateTime.now().year,
-            month: DateTime.now().month,
-            day: DateTime.now().day);
-    minTime = widget.minTime ?? AwesomeTime(hour: 00, minute: 00);
-    maxTime = widget.maxTime ?? AwesomeTime(hour: 23, minute: 59);
-    initialTime = widget.initialTime ??
-        AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
+    minDateTime = widget.minDateTime ??
+        AwesomeDateTime(
+            date: AwesomeDate(year: 1990, month: 1, day: 1),
+            time: AwesomeTime(hour: 00, minute: 00));
+    maxDateTime = widget.maxDateTime ??
+        AwesomeDateTime(
+            date: AwesomeDate(year: 2100, month: 12, day: 31),
+            time: AwesomeTime(hour: 23, minute: 59));
+    initialDateTime = widget.initialDateTime ??
+        AwesomeDateTime(
+            date: AwesomeDate(
+                year: DateTime.now().year,
+                month: DateTime.now().month,
+                day: DateTime.now().day),
+            time: AwesomeTime(
+                hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute));
+    selectedDateTime = initialDateTime;
 
     super.initState();
   }
@@ -67,9 +66,16 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           theme: widget.theme?.datePickerTheme,
           dateFormat: widget.dateFormat,
           locale: widget.locale,
-          maxDate: widget.maxDate,
-          minDate: widget.minDate,
-          initialDate: widget.initialDate,
+          maxDate: maxDateTime.date,
+          minDate: minDateTime.date,
+          initialDate: initialDateTime.date,
+          onChanged: (AwesomeDate date) {
+            setState(() {
+              selectedDateTime.date = date;
+            });
+            widget.onChanged?.call(
+                AwesomeDateTime(date: date, time: selectedDateTime.time));
+          },
         ),
         const SizedBox(
           width: 10,
@@ -77,9 +83,16 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
         AwesomeTimePicker(
           theme: widget.theme?.timePickerTheme,
           timeFormat: widget.timeFormat,
-          maxTime: widget.maxTime,
-          minTime: widget.minTime,
-          initialTime: widget.initialTime,
+          maxTime: maxDateTime.time,
+          minTime: minDateTime.time,
+          initialTime: initialDateTime.time,
+          onChanged: (AwesomeTime time) {
+            setState(() {
+              selectedDateTime.time = time;
+            });
+            widget.onChanged?.call(
+                AwesomeDateTime(date: selectedDateTime.date, time: time));
+          },
         ),
       ],
     );

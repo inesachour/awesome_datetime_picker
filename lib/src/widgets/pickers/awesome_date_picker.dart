@@ -16,6 +16,7 @@ class AwesomeDatePicker extends StatefulWidget {
     this.locale = LocaleType.en,
     this.dateFormat = AwesomeDateFormat.dMy,
     this.theme,
+    this.onChanged,
   });
 
   AwesomeDate? minDate;
@@ -24,6 +25,7 @@ class AwesomeDatePicker extends StatefulWidget {
   LocaleType locale;
   AwesomeDateFormat dateFormat;
   AwesomeDatePickerTheme? theme;
+  final ValueChanged<AwesomeDate>? onChanged;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
@@ -67,6 +69,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                     month: selectedDate.month,
                     day: value);
               });
+              widget.onChanged?.call(selectedDate);
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.year) {
@@ -86,6 +89,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                 selectedDate = AwesomeDate(
                     year: value, month: selectedDate.month, day: day);
               });
+              widget.onChanged?.call(selectedDate);
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_text) {
@@ -107,6 +111,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                 selectedDate = AwesomeDate(
                     year: selectedDate.year, month: value, day: day);
               });
+              widget.onChanged?.call(selectedDate);
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_number) {
@@ -127,6 +132,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                 selectedDate = AwesomeDate(
                     year: selectedDate.year, month: value, day: day);
               });
+              widget.onChanged?.call(selectedDate);
             },
           );
         } else {

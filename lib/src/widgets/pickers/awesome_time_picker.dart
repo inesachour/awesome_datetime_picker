@@ -13,6 +13,7 @@ class AwesomeTimePicker extends StatefulWidget {
     this.initialTime,
     this.timeFormat = AwesomeTimeFormat.Hm,
     this.theme,
+    this.onChanged,
   });
 
   AwesomeTime? minTime;
@@ -20,6 +21,7 @@ class AwesomeTimePicker extends StatefulWidget {
   AwesomeTime? initialTime;
   AwesomeTimeFormat timeFormat;
   AwesomeTimePickerTheme? theme;
+  final ValueChanged<AwesomeTime>? onChanged;
 
   @override
   State<AwesomeTimePicker> createState() => _AwesomeTimePickerState();
@@ -61,6 +63,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
                 selectedTime =
                     AwesomeTime(hour: value, minute: selectedTime.minute);
               });
+              widget.onChanged?.call(selectedTime);
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
@@ -74,6 +77,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
                 selectedTime =
                     AwesomeTime(hour: selectedTime.hour, minute: value);
               });
+              widget.onChanged?.call(selectedTime);
             },
           );
         } else {
