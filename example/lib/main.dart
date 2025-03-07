@@ -46,7 +46,8 @@ class _CalendarState extends State<Calendar> {
               maxDate: AwesomeDate(year: 2026, month: 11, day: 25),
               minDate: AwesomeDate(year: 2025, month: 2, day: 2),
               onChanged: (AwesomeDate date) {
-                print("----Date changed : ${date.day}/${date.month}/${date.year}\n");
+                print(
+                    "----Date changed : ${date.day}/${date.month}/${date.year}\n");
               },
               /*theme: AwesomeDatePickerTheme(
                 dayTheme: ItemTheme(
@@ -103,7 +104,8 @@ class _CalendarState extends State<Calendar> {
                   date: AwesomeDate(year: 2026, month: 3, day: 22),
                   time: AwesomeTime(hour: 19, minute: 20)),
               onChanged: (AwesomeDateTime dateTime) {
-                print("----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
+                print(
+                    "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
               },
               /*theme: AwesomeDateTimePickerTheme(
                 datePickerTheme: AwesomeDatePickerTheme(

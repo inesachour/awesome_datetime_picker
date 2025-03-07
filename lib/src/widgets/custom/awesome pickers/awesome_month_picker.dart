@@ -15,6 +15,7 @@ class AwesomeMonthPicker extends StatefulWidget {
     required this.locale,
     this.isNumber = true,
     this.theme,
+    this.backgroundColor,
   });
 
   AwesomeDate selectedDate;
@@ -24,6 +25,7 @@ class AwesomeMonthPicker extends StatefulWidget {
   bool isNumber;
   LocaleType locale;
   ItemTheme? theme;
+  Color? backgroundColor;
 
   @override
   State<AwesomeMonthPicker> createState() => _AwesomeMonthPickerState();
@@ -55,6 +57,7 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             minValue: minValue,
             onSelectedItemChanged: widget.onSelectedMonthChanged,
             theme: widget.theme,
+            backgroundColor: widget.backgroundColor,
           )
         : CustomTextPicker(
             items: months,
@@ -63,6 +66,7 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             maxIndex: maxValue - 1,
             onSelectedItemChanged: widget.onSelectedMonthChanged,
             theme: widget.theme,
+            backgroundColor: widget.backgroundColor,
           );
   }
 }

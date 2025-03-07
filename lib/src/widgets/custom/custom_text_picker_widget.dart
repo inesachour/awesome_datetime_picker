@@ -10,8 +10,9 @@ class CustomTextPicker extends StatefulWidget {
   final double itemExtent;
   final int visibleItemCount;
   final ItemTheme? theme;
+  Color? backgroundColor;
 
-  const CustomTextPicker({
+  CustomTextPicker({
     super.key,
     required this.items,
     required this.initialValue,
@@ -21,6 +22,7 @@ class CustomTextPicker extends StatefulWidget {
     this.itemExtent = 40.0,
     this.visibleItemCount = 5,
     this.theme,
+    this.backgroundColor,
   }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
@@ -65,7 +67,9 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
       height: pickerHeight,
       width: widget.theme?.width ?? MediaQuery.of(context).size.width * 0.16,
       decoration: BoxDecoration(
-        color: widget.theme?.backgroundColor ?? Colors.white,
+        color: widget.theme?.backgroundColor ??
+            widget.backgroundColor ??
+            Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Stack(

@@ -11,12 +11,14 @@ class AwesomeDayPicker extends StatefulWidget {
     required this.minDate,
     required this.onSelectedDayChanged,
     this.theme,
+    this.backgroundColor,
   });
   AwesomeDate selectedDate;
   AwesomeDate maxDate;
   AwesomeDate minDate;
   Function(int) onSelectedDayChanged;
   ItemTheme? theme;
+  Color? backgroundColor;
 
   @override
   State<AwesomeDayPicker> createState() => _AwesomeDayPickerState();
@@ -43,6 +45,7 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
       minValue: minValue,
       onSelectedItemChanged: widget.onSelectedDayChanged,
       theme: widget.theme,
+      backgroundColor: widget.backgroundColor,
     );
   }
 }

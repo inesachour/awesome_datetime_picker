@@ -13,6 +13,7 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.timeFormat = AwesomeTimeFormat.Hm,
     this.theme,
     this.onChanged,
+    this.backgroundColor,
   });
 
   AwesomeDateTime? minDateTime;
@@ -23,6 +24,7 @@ class AwesomeDateTimePicker extends StatefulWidget {
   AwesomeTimeFormat timeFormat;
   AwesomeDateTimePickerTheme? theme;
   final ValueChanged<AwesomeDateTime>? onChanged;
+  Color? backgroundColor;
 
   @override
   State<AwesomeDateTimePicker> createState() => _AwesomeDateTimePickerState();
@@ -64,6 +66,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
       children: [
         AwesomeDatePicker(
           theme: widget.theme?.datePickerTheme,
+          backgroundColor: widget.backgroundColor,
           dateFormat: widget.dateFormat,
           locale: widget.locale,
           maxDate: maxDateTime.date,
@@ -79,6 +82,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
         ),
         AwesomeTimePicker(
           theme: widget.theme?.timePickerTheme,
+          backgroundColor: widget.backgroundColor,
           timeFormat: widget.timeFormat,
           maxTime: maxDateTime.time,
           minTime: minDateTime.time,

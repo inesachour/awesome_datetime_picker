@@ -11,6 +11,7 @@ class AwesomeMinutePicker extends StatefulWidget {
     required this.minTime,
     required this.onSelectedMinuteChanged,
     this.theme,
+    this.backgroundColor,
   });
 
   AwesomeTime selectedTime;
@@ -18,6 +19,7 @@ class AwesomeMinutePicker extends StatefulWidget {
   AwesomeTime minTime;
   Function(int) onSelectedMinuteChanged;
   ItemTheme? theme;
+  Color? backgroundColor;
 
   @override
   State<AwesomeMinutePicker> createState() => _AwesomeMinutePickerState();
@@ -40,6 +42,7 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
       minValue: minValue,
       onSelectedItemChanged: widget.onSelectedMinuteChanged,
       theme: widget.theme,
+      backgroundColor: widget.backgroundColor,
     );
   }
 }

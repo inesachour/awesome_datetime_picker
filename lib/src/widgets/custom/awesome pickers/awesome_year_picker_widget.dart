@@ -11,12 +11,14 @@ class AwesomeYearPicker extends StatefulWidget {
     required this.minDate,
     required this.onSelectedYearChanged,
     this.theme,
+    this.backgroundColor,
   });
   AwesomeDate selectedDate;
   AwesomeDate maxDate;
   AwesomeDate minDate;
   Function(int) onSelectedYearChanged;
   ItemTheme? theme;
+  Color? backgroundColor;
 
   @override
   State<AwesomeYearPicker> createState() => _AwesomeYearPickerState();
@@ -31,6 +33,7 @@ class _AwesomeYearPickerState extends State<AwesomeYearPicker> {
       minValue: widget.minDate.year,
       onSelectedItemChanged: widget.onSelectedYearChanged,
       theme: widget.theme,
+      backgroundColor: widget.backgroundColor,
     );
   }
 }

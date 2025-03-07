@@ -4,20 +4,21 @@ import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_
 import 'package:flutter/material.dart';
 
 class AwesomeHourPicker extends StatefulWidget {
-  AwesomeHourPicker({
-    super.key,
-    required this.selectedTime,
-    required this.maxTime,
-    required this.minTime,
-    required this.onSelectedHourChanged,
-    this.theme,
-  });
+  AwesomeHourPicker(
+      {super.key,
+      required this.selectedTime,
+      required this.maxTime,
+      required this.minTime,
+      required this.onSelectedHourChanged,
+      this.theme,
+      this.backgroundColor});
 
   AwesomeTime selectedTime;
   AwesomeTime maxTime;
   AwesomeTime minTime;
   Function(int) onSelectedHourChanged;
   ItemTheme? theme;
+  Color? backgroundColor;
 
   @override
   State<AwesomeHourPicker> createState() => _AwesomeHourPickerState();
@@ -32,6 +33,7 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
       minValue: widget.minTime.hour,
       onSelectedItemChanged: widget.onSelectedHourChanged,
       theme: widget.theme,
+      backgroundColor: widget.backgroundColor,
     );
   }
 }

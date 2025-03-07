@@ -17,6 +17,7 @@ class AwesomeDatePicker extends StatefulWidget {
     this.dateFormat = AwesomeDateFormat.dMy,
     this.theme,
     this.onChanged,
+    this.backgroundColor,
   });
 
   AwesomeDate? minDate;
@@ -26,6 +27,7 @@ class AwesomeDatePicker extends StatefulWidget {
   AwesomeDateFormat dateFormat;
   AwesomeDatePickerTheme? theme;
   final ValueChanged<AwesomeDate>? onChanged;
+  Color? backgroundColor;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
@@ -62,6 +64,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             maxDate: maxDate,
             minDate: minDate,
             theme: widget.theme?.dayTheme,
+            backgroundColor: widget.backgroundColor,
             onSelectedDayChanged: (value) {
               selectedDate = AwesomeDate(
                   year: selectedDate.year,
@@ -88,6 +91,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             maxDate: maxDate,
             minDate: minDate,
             theme: widget.theme?.yearTheme,
+            backgroundColor: widget.backgroundColor,
             onSelectedYearChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
@@ -118,6 +122,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             maxDate: maxDate,
             minDate: minDate,
             theme: widget.theme?.monthTheme,
+            backgroundColor: widget.backgroundColor,
             isNumber: false,
             locale: widget.locale,
             onSelectedMonthChanged: (value) {
@@ -150,6 +155,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             maxDate: maxDate,
             minDate: minDate,
             theme: widget.theme?.monthTheme,
+            backgroundColor: widget.backgroundColor,
             locale: widget.locale,
             onSelectedMonthChanged: (value) {
               int day = selectedDate.day;

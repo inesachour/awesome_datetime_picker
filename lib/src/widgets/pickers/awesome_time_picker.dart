@@ -14,6 +14,7 @@ class AwesomeTimePicker extends StatefulWidget {
     this.timeFormat = AwesomeTimeFormat.Hm,
     this.theme,
     this.onChanged,
+    this.backgroundColor,
   });
 
   AwesomeTime? minTime;
@@ -22,6 +23,7 @@ class AwesomeTimePicker extends StatefulWidget {
   AwesomeTimeFormat timeFormat;
   AwesomeTimePickerTheme? theme;
   final ValueChanged<AwesomeTime>? onChanged;
+  Color? backgroundColor;
 
   @override
   State<AwesomeTimePicker> createState() => _AwesomeTimePickerState();
@@ -58,6 +60,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             maxTime: maxTime,
             minTime: minTime,
             theme: widget.theme?.hourTheme,
+            backgroundColor: widget.backgroundColor,
             onSelectedHourChanged: (value) {
               selectedTime =
                   AwesomeTime(hour: value, minute: selectedTime.minute);
@@ -82,6 +85,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             maxTime: maxTime,
             minTime: minTime,
             theme: widget.theme?.minuteTheme,
+            backgroundColor: widget.backgroundColor,
             onSelectedMinuteChanged: (value) {
               selectedTime =
                   AwesomeTime(hour: selectedTime.hour, minute: value);
