@@ -72,7 +72,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
         color: widget.theme?.backgroundColor ??
             widget.backgroundColor ??
             Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0),
       ),
       child: Stack(
         children: [

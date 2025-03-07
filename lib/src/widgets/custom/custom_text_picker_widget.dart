@@ -72,7 +72,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
         color: widget.theme?.backgroundColor ??
             widget.backgroundColor ??
             Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0),
       ),
       child: Stack(
         children: [
