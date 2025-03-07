@@ -21,6 +21,8 @@ class AwesomeMonthPicker extends StatefulWidget {
     this.unselectedTextStyle,
     this.selectorColor,
     this.visibleItemCount,
+    this.itemHeight,
+    this.itemWidth,
   });
 
   AwesomeDate selectedDate;
@@ -36,6 +38,8 @@ class AwesomeMonthPicker extends StatefulWidget {
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
   int? visibleItemCount;
+  double? itemHeight;
+  double? itemWidth;
 
   @override
   State<AwesomeMonthPicker> createState() => _AwesomeMonthPickerState();
@@ -73,6 +77,8 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             unselectedTextStyle: widget.unselectedTextStyle,
             selectorColor: widget.selectorColor,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
           )
         : CustomTextPicker(
             items: months,
@@ -87,6 +93,8 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             unselectedTextStyle: widget.unselectedTextStyle,
             selectorColor: widget.selectorColor,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
           );
   }
 }

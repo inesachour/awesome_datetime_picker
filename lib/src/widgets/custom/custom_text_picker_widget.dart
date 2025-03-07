@@ -7,7 +7,7 @@ class CustomTextPicker extends StatefulWidget {
   final int maxIndex;
   final int minIndex;
   final ValueChanged<int> onSelectedItemChanged;
-  final double itemExtent;
+  //final double itemExtent;
   final int? visibleItemCount;
   final ItemTheme? theme;
   Color? backgroundColor;
@@ -15,6 +15,8 @@ class CustomTextPicker extends StatefulWidget {
   bool? fadeEffect;
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
+  double? itemHeight;
+  double? itemWidth;
 
   CustomTextPicker({
     super.key,
@@ -23,7 +25,7 @@ class CustomTextPicker extends StatefulWidget {
     required this.maxIndex,
     required this.minIndex,
     required this.onSelectedItemChanged,
-    this.itemExtent = 40.0,
+    // this.itemExtent = 40.0,
     required this.visibleItemCount,
     this.theme,
     this.selectedTextStyle,
@@ -31,6 +33,8 @@ class CustomTextPicker extends StatefulWidget {
     this.backgroundColor,
     this.selectorColor,
     this.fadeEffect = true,
+    this.itemHeight,
+    this.itemWidth,
   }) : assert(visibleItemCount == null ||
             visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
@@ -42,6 +46,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
   late FixedExtentScrollController _scrollController;
   late String _selectedItem;
   int defaultVisibleItemCount = 5;
+  double defaultItemHeight = 40.0;
 
   @override
   void initState() {
@@ -60,8 +65,9 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final double pickerHeight = widget.itemExtent *
-        (widget.visibleItemCount ?? defaultVisibleItemCount);
+    final double pickerHeight = widget.itemHeight ??
+        defaultItemHeight *
+            (widget.visibleItemCount ?? defaultVisibleItemCount);
 
     const TextStyle defaultSelectedStyle = TextStyle(
       color: Colors.black,
@@ -76,7 +82,9 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
 
     return Container(
       height: pickerHeight,
-      width: widget.theme?.width ?? MediaQuery.of(context).size.width * 0.25,
+      width: widget.theme?.width ??
+          widget.itemWidth ??
+          MediaQuery.of(context).size.width * 0.25,
       decoration: BoxDecoration(
         color: widget.theme?.backgroundColor ??
             widget.backgroundColor ??
@@ -88,7 +96,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
           Positioned.fill(
             child: Center(
               child: Container(
-                height: widget.itemExtent,
+                height: widget.itemHeight ?? defaultItemHeight,
                 decoration: BoxDecoration(
                   color: widget.selectorColor ?? Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(0),
@@ -98,7 +106,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
           ),
           ListWheelScrollView.useDelegate(
             controller: _scrollController,
-            itemExtent: widget.itemExtent,
+            itemExtent: widget.itemHeight ?? defaultItemHeight,
             perspective: 0.01,
             physics: const FixedExtentScrollPhysics(),
             diameterRatio: 1.5,
@@ -138,7 +146,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
               top: 0,
               left: 0,
               right: 0,
-              height: widget.itemExtent,
+              height: widget.itemHeight ?? defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -158,7 +166,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
               bottom: 0,
               left: 0,
               right: 0,
-              height: widget.itemExtent,
+              height: widget.itemHeight ?? defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(

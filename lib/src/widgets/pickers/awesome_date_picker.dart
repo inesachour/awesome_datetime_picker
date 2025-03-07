@@ -23,6 +23,8 @@ class AwesomeDatePicker extends StatefulWidget {
     this.unselectedTextStyle,
     this.selectorColor,
     this.visibleItemCount,
+    this.itemHeight,
+    this.itemWidth,
   });
 
   AwesomeDate? minDate;
@@ -38,6 +40,8 @@ class AwesomeDatePicker extends StatefulWidget {
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
   int? visibleItemCount;
+  double? itemHeight;
+  double? itemWidth;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
@@ -80,6 +84,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
             onSelectedDayChanged: (value) {
               selectedDate = AwesomeDate(
                   year: selectedDate.year,
@@ -112,6 +118,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
             onSelectedYearChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
@@ -150,6 +158,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
             onSelectedMonthChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
@@ -187,6 +197,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
             onSelectedMonthChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =

@@ -6,7 +6,7 @@ class CustomNumberPicker extends StatefulWidget {
   final int maxValue;
   final int initialValue;
   final ValueChanged<int> onSelectedItemChanged;
-  final double itemExtent;
+  //final double itemExtent;
   final int? visibleItemCount;
   final ItemTheme? theme;
   Color? backgroundColor;
@@ -14,6 +14,8 @@ class CustomNumberPicker extends StatefulWidget {
   bool? fadeEffect;
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
+  double? itemHeight;
+  double? itemWidth;
 
   CustomNumberPicker({
     super.key,
@@ -21,7 +23,7 @@ class CustomNumberPicker extends StatefulWidget {
     required this.maxValue,
     required this.initialValue,
     required this.onSelectedItemChanged,
-    this.itemExtent = 40.0,
+    //this.itemExtent = 40.0,
     required this.visibleItemCount,
     this.theme,
     this.selectedTextStyle,
@@ -29,6 +31,8 @@ class CustomNumberPicker extends StatefulWidget {
     this.backgroundColor,
     this.selectorColor,
     this.fadeEffect = true,
+    this.itemHeight,
+    this.itemWidth,
   }) : assert(visibleItemCount == null ||
             visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
@@ -40,6 +44,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
   late FixedExtentScrollController _scrollController;
   late int _selectedItem;
   int defaultVisibleItemCount = 5;
+  double defaultItemHeight = 40.0;
 
   @override
   void initState() {
@@ -59,7 +64,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
   @override
   Widget build(BuildContext context) {
     final int itemCount = widget.maxValue - widget.minValue + 1;
-    final double pickerHeight = widget.itemExtent *
+    final double pickerHeight = (widget.itemHeight ?? defaultItemHeight) *
         (widget.visibleItemCount ?? defaultVisibleItemCount);
 
     // Default text styles
@@ -76,7 +81,9 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
 
     return Container(
       height: pickerHeight,
-      width: widget.theme?.width ?? MediaQuery.sizeOf(context).width * 0.16,
+      width: widget.theme?.width ??
+          widget.itemWidth ??
+          MediaQuery.sizeOf(context).width * 0.16,
       decoration: BoxDecoration(
         color: widget.theme?.backgroundColor ??
             widget.backgroundColor ??
@@ -89,7 +96,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
           Positioned.fill(
             child: Center(
               child: Container(
-                height: widget.itemExtent,
+                height: widget.itemHeight ?? defaultItemHeight,
                 decoration: BoxDecoration(
                   color: widget.selectorColor ?? Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(0),
@@ -101,7 +108,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
           // The picker wheel
           ListWheelScrollView.useDelegate(
             controller: _scrollController,
-            itemExtent: widget.itemExtent,
+            itemExtent: widget.itemHeight ?? defaultItemHeight,
             perspective: 0.01, // iOS-like perspective
             physics: const FixedExtentScrollPhysics(),
             diameterRatio: 1.5, // iOS-like diameter
@@ -141,7 +148,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
               top: 0,
               left: 0,
               right: 0,
-              height: widget.itemExtent,
+              height: widget.itemHeight ?? defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -161,7 +168,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
               bottom: 0,
               left: 0,
               right: 0,
-              height: widget.itemExtent,
+              height: widget.itemHeight ?? defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(

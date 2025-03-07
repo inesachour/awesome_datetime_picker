@@ -17,6 +17,8 @@ class AwesomeHourPicker extends StatefulWidget {
     this.unselectedTextStyle,
     this.selectorColor,
     this.visibleItemCount,
+    this.itemHeight,
+    this.itemWidth,
   });
 
   AwesomeTime selectedTime;
@@ -30,6 +32,8 @@ class AwesomeHourPicker extends StatefulWidget {
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
   int? visibleItemCount;
+  double? itemHeight;
+  double? itemWidth;
 
   @override
   State<AwesomeHourPicker> createState() => _AwesomeHourPickerState();
@@ -50,6 +54,8 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
       unselectedTextStyle: widget.unselectedTextStyle,
       selectorColor: widget.selectorColor,
       visibleItemCount: widget.visibleItemCount,
+      itemHeight: widget.itemHeight,
+      itemWidth: widget.itemWidth,
     );
   }
 }

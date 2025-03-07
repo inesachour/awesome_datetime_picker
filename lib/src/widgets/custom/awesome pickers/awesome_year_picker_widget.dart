@@ -17,7 +17,10 @@ class AwesomeYearPicker extends StatefulWidget {
     this.unselectedTextStyle,
     this.selectorColor,
     this.visibleItemCount,
+    this.itemHeight,
+    this.itemWidth,
   });
+
   AwesomeDate selectedDate;
   AwesomeDate maxDate;
   AwesomeDate minDate;
@@ -29,6 +32,8 @@ class AwesomeYearPicker extends StatefulWidget {
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
   int? visibleItemCount;
+  double? itemHeight;
+  double? itemWidth;
 
   @override
   State<AwesomeYearPicker> createState() => _AwesomeYearPickerState();
@@ -49,6 +54,8 @@ class _AwesomeYearPickerState extends State<AwesomeYearPicker> {
       unselectedTextStyle: widget.unselectedTextStyle,
       selectorColor: widget.selectorColor,
       visibleItemCount: widget.visibleItemCount,
+      itemHeight: widget.itemHeight,
+      itemWidth: widget.itemWidth,
     );
   }
 }

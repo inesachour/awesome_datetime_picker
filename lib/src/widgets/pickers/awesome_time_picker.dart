@@ -20,6 +20,8 @@ class AwesomeTimePicker extends StatefulWidget {
     this.unselectedTextStyle,
     this.selectorColor,
     this.visibleItemCount,
+    this.itemHeight,
+    this.itemWidth,
   });
 
   AwesomeTime? minTime;
@@ -34,6 +36,8 @@ class AwesomeTimePicker extends StatefulWidget {
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
   int? visibleItemCount;
+  double? itemHeight;
+  double? itemWidth;
 
   @override
   State<AwesomeTimePicker> createState() => _AwesomeTimePickerState();
@@ -76,6 +80,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
             onSelectedHourChanged: (value) {
               selectedTime =
                   AwesomeTime(hour: value, minute: selectedTime.minute);
@@ -106,6 +112,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
             visibleItemCount: widget.visibleItemCount,
+            itemHeight: widget.itemHeight,
+            itemWidth: widget.itemWidth,
             onSelectedMinuteChanged: (value) {
               selectedTime =
                   AwesomeTime(hour: selectedTime.hour, minute: value);
