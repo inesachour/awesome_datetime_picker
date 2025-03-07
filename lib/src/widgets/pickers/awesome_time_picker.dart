@@ -59,10 +59,20 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             minTime: minTime,
             theme: widget.theme?.hourTheme,
             onSelectedHourChanged: (value) {
-              setState(() {
-                selectedTime =
-                    AwesomeTime(hour: value, minute: selectedTime.minute);
-              });
+              selectedTime =
+                  AwesomeTime(hour: value, minute: selectedTime.minute);
+
+              DateTime nativeSelectedTime =
+                  DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
+              if (nativeSelectedTime.isBefore(
+                  DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
+                selectedTime = minTime;
+              } else if (nativeSelectedTime.isAfter(
+                  DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
+                selectedTime = maxTime;
+              }
+              setState(() {});
+
               widget.onChanged?.call(selectedTime);
             },
           );
@@ -73,10 +83,20 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             minTime: minTime,
             theme: widget.theme?.minuteTheme,
             onSelectedMinuteChanged: (value) {
-              setState(() {
-                selectedTime =
-                    AwesomeTime(hour: selectedTime.hour, minute: value);
-              });
+              selectedTime =
+                  AwesomeTime(hour: selectedTime.hour, minute: value);
+
+              DateTime nativeSelectedTime =
+                  DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
+              if (nativeSelectedTime.isBefore(
+                  DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
+                selectedTime = minTime;
+              } else if (nativeSelectedTime.isAfter(
+                  DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
+                selectedTime = maxTime;
+              }
+              setState(() {});
+
               widget.onChanged?.call(selectedTime);
             },
           );

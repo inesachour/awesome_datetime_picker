@@ -63,12 +63,22 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             minDate: minDate,
             theme: widget.theme?.dayTheme,
             onSelectedDayChanged: (value) {
-              setState(() {
-                selectedDate = AwesomeDate(
-                    year: selectedDate.year,
-                    month: selectedDate.month,
-                    day: value);
-              });
+              selectedDate = AwesomeDate(
+                  year: selectedDate.year,
+                  month: selectedDate.month,
+                  day: value);
+
+              DateTime nativeSelectedDate = DateTime(
+                  selectedDate.year, selectedDate.month, selectedDate.day);
+              if (nativeSelectedDate.isBefore(
+                  DateTime(minDate.year, minDate.month, minDate.day))) {
+                selectedDate = minDate;
+              } else if (nativeSelectedDate.isAfter(
+                  DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+                selectedDate = maxDate;
+              }
+              setState(() {});
+
               widget.onChanged?.call(selectedDate);
             },
           );
@@ -79,16 +89,26 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             minDate: minDate,
             theme: widget.theme?.yearTheme,
             onSelectedYearChanged: (value) {
-              setState(() {
-                int day = selectedDate.day;
-                int daysInMonth =
-                    DateUtils.getDaysInMonth(value, selectedDate.month);
-                if (selectedDate.day > daysInMonth) {
-                  day = daysInMonth;
-                }
-                selectedDate = AwesomeDate(
-                    year: value, month: selectedDate.month, day: day);
-              });
+              int day = selectedDate.day;
+              int daysInMonth =
+                  DateUtils.getDaysInMonth(value, selectedDate.month);
+              if (selectedDate.day > daysInMonth) {
+                day = daysInMonth;
+              }
+              selectedDate =
+                  AwesomeDate(year: value, month: selectedDate.month, day: day);
+
+              DateTime nativeSelectedDate = DateTime(
+                  selectedDate.year, selectedDate.month, selectedDate.day);
+              if (nativeSelectedDate.isBefore(
+                  DateTime(minDate.year, minDate.month, minDate.day))) {
+                selectedDate = minDate;
+              } else if (nativeSelectedDate.isAfter(
+                  DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+                selectedDate = maxDate;
+              }
+              setState(() {});
+
               widget.onChanged?.call(selectedDate);
             },
           );
@@ -101,16 +121,26 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             isNumber: false,
             locale: widget.locale,
             onSelectedMonthChanged: (value) {
-              setState(() {
-                int day = selectedDate.day;
-                int daysInMonth =
-                    DateUtils.getDaysInMonth(selectedDate.year, value);
-                if (selectedDate.day > daysInMonth) {
-                  day = daysInMonth;
-                }
-                selectedDate = AwesomeDate(
-                    year: selectedDate.year, month: value, day: day);
-              });
+              int day = selectedDate.day;
+              int daysInMonth =
+                  DateUtils.getDaysInMonth(selectedDate.year, value);
+              if (selectedDate.day > daysInMonth) {
+                day = daysInMonth;
+              }
+              selectedDate =
+                  AwesomeDate(year: selectedDate.year, month: value, day: day);
+
+              DateTime nativeSelectedDate = DateTime(
+                  selectedDate.year, selectedDate.month, selectedDate.day);
+              if (nativeSelectedDate.isBefore(
+                  DateTime(minDate.year, minDate.month, minDate.day))) {
+                selectedDate = minDate;
+              } else if (nativeSelectedDate.isAfter(
+                  DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+                selectedDate = maxDate;
+              }
+              setState(() {});
+
               widget.onChanged?.call(selectedDate);
             },
           );
@@ -122,16 +152,26 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             theme: widget.theme?.monthTheme,
             locale: widget.locale,
             onSelectedMonthChanged: (value) {
-              setState(() {
-                int day = selectedDate.day;
-                int daysInMonth =
-                    DateUtils.getDaysInMonth(selectedDate.year, value);
-                if (selectedDate.day > daysInMonth) {
-                  day = daysInMonth;
-                }
-                selectedDate = AwesomeDate(
-                    year: selectedDate.year, month: value, day: day);
-              });
+              int day = selectedDate.day;
+              int daysInMonth =
+                  DateUtils.getDaysInMonth(selectedDate.year, value);
+              if (selectedDate.day > daysInMonth) {
+                day = daysInMonth;
+              }
+              selectedDate =
+                  AwesomeDate(year: selectedDate.year, month: value, day: day);
+
+              DateTime nativeSelectedDate = DateTime(
+                  selectedDate.year, selectedDate.month, selectedDate.day);
+              if (nativeSelectedDate.isBefore(
+                  DateTime(minDate.year, minDate.month, minDate.day))) {
+                selectedDate = minDate;
+              } else if (nativeSelectedDate.isAfter(
+                  DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+                selectedDate = maxDate;
+              }
+              setState(() {});
+
               widget.onChanged?.call(selectedDate);
             },
           );
