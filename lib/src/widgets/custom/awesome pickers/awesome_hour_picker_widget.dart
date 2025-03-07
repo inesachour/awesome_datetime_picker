@@ -1,4 +1,5 @@
 import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
+import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -9,14 +10,14 @@ class AwesomeHourPicker extends StatefulWidget {
     required this.maxTime,
     required this.minTime,
     required this.onSelectedHourChanged,
-    this.width,
+    this.theme,
   });
 
   AwesomeTime selectedTime;
   AwesomeTime maxTime;
   AwesomeTime minTime;
   Function(int) onSelectedHourChanged;
-  double? width;
+  ItemTheme? theme;
 
   @override
   State<AwesomeHourPicker> createState() => _AwesomeHourPickerState();
@@ -30,7 +31,7 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
       maxValue: widget.maxTime.hour,
       minValue: widget.minTime.hour,
       onSelectedItemChanged: widget.onSelectedHourChanged,
-      width: widget.width,
+      theme: widget.theme,
     );
   }
 }

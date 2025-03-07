@@ -1,4 +1,5 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+import 'package:awesome_datetime_picker/src/theme/awesome_datetime_picker_theme.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDateTimePicker extends StatefulWidget {
@@ -11,13 +12,9 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.maxTime,
     this.initialTime,
     this.locale = LocaleType.en,
-    this.dayWidth,
-    this.monthWidth,
-    this.yearWidth,
-    this.hourWidth,
-    this.minuteWidth,
     this.dateFormat = AwesomeDateFormat.dMy,
     this.timeFormat = AwesomeTimeFormat.Hm,
+    this.theme,
   });
 
   AwesomeDate? minDate;
@@ -29,11 +26,7 @@ class AwesomeDateTimePicker extends StatefulWidget {
   LocaleType locale;
   AwesomeDateFormat dateFormat;
   AwesomeTimeFormat timeFormat;
-  double? dayWidth;
-  double? monthWidth;
-  double? yearWidth;
-  double? hourWidth;
-  double? minuteWidth;
+  AwesomeDateTimePickerTheme? theme;
 
   @override
   State<AwesomeDateTimePicker> createState() => _AwesomeDateTimePickerState();
@@ -71,27 +64,18 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AwesomeDatePicker(
-          dayWidth: widget.dayWidth ?? MediaQuery.of(context).size.width * 0.16,
-          monthWidth: widget.monthWidth ??
-              (AwesomeDateFormat.values.contains(PickerType.month_text)
-                  ? MediaQuery.of(context).size.width * 0.18
-                  : MediaQuery.of(context).size.width * 0.16),
-          yearWidth:
-              widget.yearWidth ?? MediaQuery.of(context).size.width * 0.16,
+          theme: widget.theme?.datePickerTheme,
           dateFormat: widget.dateFormat,
           locale: widget.locale,
           maxDate: widget.maxDate,
           minDate: widget.minDate,
           initialDate: widget.initialDate,
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         AwesomeTimePicker(
-          hourWidth:
-              widget.hourWidth ?? MediaQuery.of(context).size.width * 0.16,
-          minuteWidth:
-              widget.minuteWidth ?? MediaQuery.of(context).size.width * 0.16,
+          theme: widget.theme?.timePickerTheme,
           timeFormat: widget.timeFormat,
           maxTime: widget.maxTime,
           minTime: widget.minTime,

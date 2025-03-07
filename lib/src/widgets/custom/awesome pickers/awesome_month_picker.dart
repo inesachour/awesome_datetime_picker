@@ -1,4 +1,5 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_text_picker_widget.dart';
@@ -13,7 +14,7 @@ class AwesomeMonthPicker extends StatefulWidget {
     required this.onSelectedMonthChanged,
     required this.locale,
     this.isNumber = true,
-    this.width,
+    this.theme,
   });
 
   AwesomeDate selectedDate;
@@ -22,7 +23,7 @@ class AwesomeMonthPicker extends StatefulWidget {
   Function(int) onSelectedMonthChanged;
   bool isNumber;
   LocaleType locale;
-  double? width;
+  ItemTheme? theme;
 
   @override
   State<AwesomeMonthPicker> createState() => _AwesomeMonthPickerState();
@@ -53,7 +54,7 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             maxValue: maxValue,
             minValue: minValue,
             onSelectedItemChanged: widget.onSelectedMonthChanged,
-            width: widget.width,
+            theme: widget.theme,
           )
         : CustomTextPicker(
             items: months,
@@ -61,7 +62,7 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
             minIndex: minValue - 1,
             maxIndex: maxValue - 1,
             onSelectedItemChanged: widget.onSelectedMonthChanged,
-            width: widget.width,
+            theme: widget.theme,
           );
   }
 }

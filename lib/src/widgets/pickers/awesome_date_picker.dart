@@ -1,6 +1,7 @@
 import 'package:awesome_datetime_picker/src/data/format.dart';
 import 'package:awesome_datetime_picker/src/data/locale.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
+import 'package:awesome_datetime_picker/src/theme/awesome_date_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_day_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_month_picker.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_year_picker_widget.dart';
@@ -14,9 +15,7 @@ class AwesomeDatePicker extends StatefulWidget {
     this.initialDate,
     this.locale = LocaleType.en,
     this.dateFormat = AwesomeDateFormat.dMy,
-    this.dayWidth,
-    this.monthWidth,
-    this.yearWidth,
+    this.theme,
   });
 
   AwesomeDate? minDate;
@@ -24,9 +23,7 @@ class AwesomeDatePicker extends StatefulWidget {
   AwesomeDate? initialDate;
   LocaleType locale;
   AwesomeDateFormat dateFormat;
-  double? dayWidth;
-  double? monthWidth;
-  double? yearWidth;
+  AwesomeDatePickerTheme? theme;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
@@ -62,7 +59,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedDate: selectedDate,
             maxDate: maxDate,
             minDate: minDate,
-            width: widget.dayWidth,
+            theme: widget.theme?.dayTheme,
             onSelectedDayChanged: (value) {
               setState(() {
                 selectedDate = AwesomeDate(
@@ -77,7 +74,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedDate: selectedDate,
             maxDate: maxDate,
             minDate: minDate,
-            width: widget.yearWidth,
+            theme: widget.theme?.yearTheme,
             onSelectedYearChanged: (value) {
               setState(() {
                 int day = selectedDate.day;
@@ -96,7 +93,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedDate: selectedDate,
             maxDate: maxDate,
             minDate: minDate,
-            width: widget.monthWidth,
+            theme: widget.theme?.monthTheme,
             isNumber: false,
             locale: widget.locale,
             onSelectedMonthChanged: (value) {
@@ -117,7 +114,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             selectedDate: selectedDate,
             maxDate: maxDate,
             minDate: minDate,
-            width: widget.monthWidth,
+            theme: widget.theme?.monthTheme,
             locale: widget.locale,
             onSelectedMonthChanged: (value) {
               setState(() {

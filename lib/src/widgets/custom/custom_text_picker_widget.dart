@@ -1,3 +1,4 @@
+import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextPicker extends StatefulWidget {
@@ -8,9 +9,7 @@ class CustomTextPicker extends StatefulWidget {
   final ValueChanged<int> onSelectedItemChanged;
   final double itemExtent;
   final int visibleItemCount;
-  final TextStyle? selectedTextStyle;
-  final TextStyle? unselectedTextStyle;
-  final double? width;
+  final ItemTheme? theme;
 
   const CustomTextPicker({
     super.key,
@@ -21,9 +20,7 @@ class CustomTextPicker extends StatefulWidget {
     required this.onSelectedItemChanged,
     this.itemExtent = 40.0,
     this.visibleItemCount = 5,
-    this.selectedTextStyle,
-    this.unselectedTextStyle,
-    this.width,
+    this.theme,
   }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
@@ -53,22 +50,22 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
   Widget build(BuildContext context) {
     final double pickerHeight = widget.itemExtent * widget.visibleItemCount;
 
-    final TextStyle defaultSelectedStyle = const TextStyle(
+    const TextStyle defaultSelectedStyle = TextStyle(
       color: Colors.black,
       fontSize: 20,
       fontWeight: FontWeight.w500,
     );
 
-    final TextStyle defaultUnselectedStyle = const TextStyle(
+    const TextStyle defaultUnselectedStyle = TextStyle(
       color: Colors.black54,
       fontSize: 18,
     );
 
     return Container(
       height: pickerHeight,
-      width: widget.width ?? MediaQuery.of(context).size.width * 0.25,
+      width: widget.theme?.width ?? MediaQuery.of(context).size.width * 0.16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: widget.theme?.backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Stack(
@@ -106,8 +103,9 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
                   child: Text(
                     value,
                     style: isSelected
-                        ? (widget.selectedTextStyle ?? defaultSelectedStyle)
-                        : (widget.unselectedTextStyle ??
+                        ? (widget.theme?.selectedTextStyle ??
+                            defaultSelectedStyle)
+                        : (widget.theme?.unselectedTextStyle ??
                             defaultUnselectedStyle),
                   ),
                 );
