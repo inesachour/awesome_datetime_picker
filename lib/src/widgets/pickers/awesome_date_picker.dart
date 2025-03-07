@@ -18,6 +18,7 @@ class AwesomeDatePicker extends StatefulWidget {
     this.theme,
     this.onChanged,
     this.backgroundColor,
+    this.fadeEffect,
   });
 
   AwesomeDate? minDate;
@@ -28,6 +29,7 @@ class AwesomeDatePicker extends StatefulWidget {
   AwesomeDatePickerTheme? theme;
   final ValueChanged<AwesomeDate>? onChanged;
   Color? backgroundColor;
+  bool? fadeEffect;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
@@ -65,6 +67,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             minDate: minDate,
             theme: widget.theme?.dayTheme,
             backgroundColor: widget.backgroundColor,
+            fadeEffect: widget.fadeEffect,
             onSelectedDayChanged: (value) {
               selectedDate = AwesomeDate(
                   year: selectedDate.year,
@@ -92,6 +95,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             minDate: minDate,
             theme: widget.theme?.yearTheme,
             backgroundColor: widget.backgroundColor,
+            fadeEffect: widget.fadeEffect,
             onSelectedYearChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
@@ -125,6 +129,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             backgroundColor: widget.backgroundColor,
             isNumber: false,
             locale: widget.locale,
+            fadeEffect: widget.fadeEffect,
             onSelectedMonthChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
@@ -157,6 +162,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             theme: widget.theme?.monthTheme,
             backgroundColor: widget.backgroundColor,
             locale: widget.locale,
+            fadeEffect: widget.fadeEffect,
             onSelectedMonthChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =

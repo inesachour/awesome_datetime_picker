@@ -10,6 +10,7 @@ class CustomNumberPicker extends StatefulWidget {
   final int visibleItemCount;
   final ItemTheme? theme;
   Color? backgroundColor;
+  bool? fadeEffect;
 
   CustomNumberPicker({
     super.key,
@@ -21,6 +22,7 @@ class CustomNumberPicker extends StatefulWidget {
     this.visibleItemCount = 5,
     this.theme,
     this.backgroundColor,
+    this.fadeEffect = true,
   }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
@@ -122,46 +124,47 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
               },
             ),
           ),
-
-          // Top fade out gradient
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: widget.itemExtent,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.white,
-                    Colors.white.withOpacity(0.0),
-                  ],
+          if (widget.fadeEffect == null || widget.fadeEffect!) ...[
+            // Top fade out gradient
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: widget.itemExtent,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white,
+                      Colors.white.withOpacity(0.0),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // Bottom fade out gradient
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: widget.itemExtent,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Colors.white,
-                    Colors.white.withOpacity(0.0),
-                  ],
+            // Bottom fade out gradient
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: widget.itemExtent,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.white,
+                      Colors.white.withOpacity(0.0),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ],
       ),
     );
