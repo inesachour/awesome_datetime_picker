@@ -18,21 +18,21 @@ AwesomeDatePicker(
 
 ```dart
 AwesomeDatePicker(
-    AwesomeDate? minDate;
-    AwesomeDate? maxDate;
-    AwesomeDate? initialDate;
-    LocaleType locale;
-    AwesomeDateFormat dateFormat;
-    AwesomeDatePickerTheme? theme;
-    final ValueChanged<AwesomeDate>? onChanged;
-    Color? backgroundColor;
-    Color? selectorColor;
-    bool? fadeEffect;
-    TextStyle? selectedTextStyle;
-    TextStyle? unselectedTextStyle;
-    int? visibleItemCount;
-    double? itemHeight;
-    double? itemWidth;
+    AwesomeDate? minDate; // The minimum selectable date.
+    AwesomeDate? maxDate; // The maximum selectable date.
+    AwesomeDate? initialDate; // The initially selected date.
+    LocaleType locale; // The locale used for date formatting.
+    AwesomeDateFormat dateFormat; // The format for displaying the date.
+    AwesomeDatePickerTheme? theme; // Custom theme for the date picker.
+    final ValueChanged<AwesomeDate>? onChanged; // Callback triggered when the date is changed.
+    Color? backgroundColor; // Background color of the picker.
+    Color? selectorColor; // Color of the selected item indicator.
+    bool? fadeEffect; // Whether to apply a fade effect on non-selected items.
+    TextStyle? selectedTextStyle; // Text style for the selected item.
+    TextStyle? unselectedTextStyle; // Text style for unselected items.
+    int? visibleItemCount; // Number of items visible at a time in the picker.
+    double? itemHeight; // Height of each item in the picker.
+    double? itemWidth; // Width of each item in the picker.
 )
 ```
 
@@ -50,20 +50,20 @@ AwesomeTimePicker(
 
 ```dart
 AwesomeTimePicker(
-    AwesomeTime? minTime;
-    AwesomeTime? maxTime;
-    AwesomeTime? initialTime;
-    AwesomeTimeFormat timeFormat;
-    AwesomeTimePickerTheme? theme;
-    final ValueChanged<AwesomeTime>? onChanged;
-    Color? backgroundColor;
-    Color? selectorColor;
-    bool? fadeEffect;
-    TextStyle? selectedTextStyle;
-    TextStyle? unselectedTextStyle;
-    int? visibleItemCount;
-    double? itemHeight;
-    double? itemWidth;
+    AwesomeTime? minTime; // The minimum selectable time.
+    AwesomeTime? maxTime; // The maximum selectable time.
+    AwesomeTime? initialTime; // The initially selected time.
+    AwesomeTimeFormat timeFormat; // The format for displaying the time (12-hour or 24-hour).
+    AwesomeTimePickerTheme? theme; // Custom theme for the time picker.
+    final ValueChanged<AwesomeTime>? onChanged; // Callback triggered when the time is changed.
+    Color? backgroundColor; // Background color of the picker.
+    Color? selectorColor; // Color of the selected item indicator.
+    bool? fadeEffect; // Whether to apply a fade effect on non-selected items.
+    TextStyle? selectedTextStyle; // Text style for the selected item.
+    TextStyle? unselectedTextStyle; // Text style for unselected items.
+    int? visibleItemCount; // Number of items visible at a time in the picker.
+    double? itemHeight; // Height of each item in the picker.
+    double? itemWidth; // Width of each item in the picker.
 )
 ```
 
@@ -81,22 +81,22 @@ AwesomeDateTimePicker(
 
 ```dart
 AwesomeDateTimePicker(
-    AwesomeDateTime? minDateTime; // this is min datetime
-    AwesomeDateTime? maxDateTime;
-    AwesomeDateTime? initialDateTime;
-    LocaleType locale;
-    AwesomeDateFormat dateFormat;
-    AwesomeTimeFormat timeFormat;
-    AwesomeDateTimePickerTheme? theme;
-    final ValueChanged<AwesomeDateTime>? onChanged;
-    Color? backgroundColor;
-    Color? selectorColor;
-    bool? fadeEffect;
-    TextStyle? selectedTextStyle;
-    TextStyle? unselectedTextStyle;
-    int? visibleItemCount;
-    double? itemHeight;
-    double? itemWidth;
+    AwesomeDateTime? minDateTime; // The minimum selectable date and time.
+    AwesomeDateTime? maxDateTime; // The maximum selectable date and time.
+    AwesomeDateTime? initialDateTime; // The initially selected date and time.
+    LocaleType locale; // The locale used for date and time formatting.
+    AwesomeDateFormat dateFormat; // The format for displaying the date.
+    AwesomeTimeFormat timeFormat; // The format for displaying the time.
+    AwesomeDateTimePickerTheme? theme; // Custom theme for the picker.
+    final ValueChanged<AwesomeDateTime>? onChanged; // Callback triggered when the date/time is changed.
+    Color? backgroundColor; // Background color of the picker.
+    Color? selectorColor; // Color of the selected item indicator.
+    bool? fadeEffect; // Whether to apply a fade effect on non-selected items.
+    TextStyle? selectedTextStyle; // Text style for the selected item.
+    TextStyle? unselectedTextStyle; // Text style for unselected items.
+    int? visibleItemCount; // Number of items visible at a time in the picker.
+    double? itemHeight; // Height of each item in the picker.
+    double? itemWidth; // Width of each item in the picker.
 )
 ```
 
