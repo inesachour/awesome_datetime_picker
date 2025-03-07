@@ -89,7 +89,10 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
             physics: const FixedExtentScrollPhysics(),
             diameterRatio: 1.5,
             onSelectedItemChanged: (index) {
-              final selectedValue = widget.items[index + widget.minIndex];
+              final selectedValue = widget.items[
+                  index + widget.minIndex > widget.maxIndex
+                      ? widget.maxIndex
+                      : index + widget.minIndex];
               setState(() {
                 _selectedItem = selectedValue;
               });
@@ -113,7 +116,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
               },
             ),
           ),
-         
+
           // Top fade out gradient
           Positioned(
             top: 0,

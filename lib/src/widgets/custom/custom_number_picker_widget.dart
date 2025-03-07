@@ -93,7 +93,9 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
             onSelectedItemChanged: (index) {
               final selectedValue = widget.minValue + index;
               setState(() {
-                _selectedItem = selectedValue;
+                _selectedItem = selectedValue > widget.maxValue
+                    ? widget.maxValue
+                    : selectedValue;
               });
               widget.onSelectedItemChanged(selectedValue);
             },
