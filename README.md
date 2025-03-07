@@ -84,6 +84,16 @@ AwesomeDateTimePicker(
 
 ## Customization
 ### LocaleType
+The following table lists the supported locales for the date picker:
+
+| Locale Code | Language          |
+|------------|------------------|
+| en         | English          |
+| fr         | French           |
+| es         | Spanish          |
+| de         | German           |
+| it         | Italian          |
+| ar         | Arabic           |
 
 ### AwesomeDateFormat
 
