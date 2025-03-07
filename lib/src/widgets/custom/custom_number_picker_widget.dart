@@ -85,6 +85,8 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
       width: widget.theme?.width ??
           widget.itemWidth ??
           MediaQuery.sizeOf(context).width * 0.16,
+      margin: widget.theme?.margin,
+      padding: widget.theme?.padding,
       decoration: BoxDecoration(
         color: widget.theme?.backgroundColor ??
             widget.backgroundColor ??
