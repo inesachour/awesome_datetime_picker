@@ -64,8 +64,9 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
   @override
   Widget build(BuildContext context) {
     final int itemCount = widget.maxValue - widget.minValue + 1;
-    final double pickerHeight = (widget.itemHeight ?? defaultItemHeight) *
-        (widget.visibleItemCount ?? defaultVisibleItemCount);
+    final double pickerHeight =
+        (widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight) *
+            (widget.visibleItemCount ?? defaultVisibleItemCount);
 
     // Default text styles
     const TextStyle defaultSelectedStyle = TextStyle(
@@ -96,7 +97,9 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
           Positioned.fill(
             child: Center(
               child: Container(
-                height: widget.itemHeight ?? defaultItemHeight,
+                height: widget.theme?.height ??
+                    widget.itemHeight ??
+                    defaultItemHeight,
                 decoration: BoxDecoration(
                   color: widget.selectorColor ?? Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(0),
@@ -108,7 +111,8 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
           // The picker wheel
           ListWheelScrollView.useDelegate(
             controller: _scrollController,
-            itemExtent: widget.itemHeight ?? defaultItemHeight,
+            itemExtent:
+                widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight,
             perspective: 0.01, // iOS-like perspective
             physics: const FixedExtentScrollPhysics(),
             diameterRatio: 1.5, // iOS-like diameter
@@ -148,7 +152,9 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
               top: 0,
               left: 0,
               right: 0,
-              height: widget.itemHeight ?? defaultItemHeight,
+              height: widget.theme?.height ??
+                  widget.itemHeight ??
+                  defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -168,7 +174,9 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
               bottom: 0,
               left: 0,
               right: 0,
-              height: widget.itemHeight ?? defaultItemHeight,
+              height: widget.theme?.height ??
+                  widget.itemHeight ??
+                  defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(

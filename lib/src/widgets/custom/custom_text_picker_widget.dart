@@ -65,8 +65,8 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final double pickerHeight = widget.itemHeight ??
-        defaultItemHeight *
+    final double pickerHeight =
+        (widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight) *
             (widget.visibleItemCount ?? defaultVisibleItemCount);
 
     const TextStyle defaultSelectedStyle = TextStyle(
@@ -96,7 +96,9 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
           Positioned.fill(
             child: Center(
               child: Container(
-                height: widget.itemHeight ?? defaultItemHeight,
+                height: widget.theme?.height ??
+                    widget.itemHeight ??
+                    defaultItemHeight,
                 decoration: BoxDecoration(
                   color: widget.selectorColor ?? Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(0),
@@ -106,7 +108,8 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
           ),
           ListWheelScrollView.useDelegate(
             controller: _scrollController,
-            itemExtent: widget.itemHeight ?? defaultItemHeight,
+            itemExtent:
+                widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight,
             perspective: 0.01,
             physics: const FixedExtentScrollPhysics(),
             diameterRatio: 1.5,
@@ -146,7 +149,9 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
               top: 0,
               left: 0,
               right: 0,
-              height: widget.itemHeight ?? defaultItemHeight,
+              height: widget.theme?.height ??
+                  widget.itemHeight ??
+                  defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -166,7 +171,9 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
               bottom: 0,
               left: 0,
               right: 0,
-              height: widget.itemHeight ?? defaultItemHeight,
+              height: widget.theme?.height ??
+                  widget.itemHeight ??
+                  defaultItemHeight,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
