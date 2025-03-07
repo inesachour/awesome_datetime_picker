@@ -41,7 +41,7 @@ class _CalendarState extends State<Calendar> {
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeDatePicker(
-              dateFormat: AwesomeDateFormat.dMMy,
+              dateFormat: AwesomeDateFormat.dMy,
               locale: LocaleType.fr,
               maxDate: AwesomeDate(year: 2026, month: 11, day: 31),
             ),
