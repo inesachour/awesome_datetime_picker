@@ -8,7 +8,7 @@ class CustomTextPicker extends StatefulWidget {
   final int minIndex;
   final ValueChanged<int> onSelectedItemChanged;
   final double itemExtent;
-  final int visibleItemCount;
+  final int? visibleItemCount;
   final ItemTheme? theme;
   Color? backgroundColor;
   Color? selectorColor;
@@ -24,14 +24,15 @@ class CustomTextPicker extends StatefulWidget {
     required this.minIndex,
     required this.onSelectedItemChanged,
     this.itemExtent = 40.0,
-    this.visibleItemCount = 5,
+    required this.visibleItemCount,
     this.theme,
     this.selectedTextStyle,
     this.unselectedTextStyle,
     this.backgroundColor,
     this.selectorColor,
     this.fadeEffect = true,
-  }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
+  }) : assert(visibleItemCount == null ||
+            visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
   State<CustomTextPicker> createState() => _CustomTextPickerState();
@@ -40,6 +41,7 @@ class CustomTextPicker extends StatefulWidget {
 class _CustomTextPickerState extends State<CustomTextPicker> {
   late FixedExtentScrollController _scrollController;
   late String _selectedItem;
+  int defaultVisibleItemCount = 5;
 
   @override
   void initState() {
@@ -58,7 +60,8 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final double pickerHeight = widget.itemExtent * widget.visibleItemCount;
+    final double pickerHeight = widget.itemExtent *
+        (widget.visibleItemCount ?? defaultVisibleItemCount);
 
     const TextStyle defaultSelectedStyle = TextStyle(
       color: Colors.black,

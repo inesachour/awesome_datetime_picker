@@ -16,6 +16,7 @@ class AwesomeMinutePicker extends StatefulWidget {
     this.selectedTextStyle,
     this.unselectedTextStyle,
     this.selectorColor,
+    this.visibleItemCount,
   });
 
   AwesomeTime selectedTime;
@@ -28,6 +29,7 @@ class AwesomeMinutePicker extends StatefulWidget {
   bool? fadeEffect;
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
+  int? visibleItemCount;
 
   @override
   State<AwesomeMinutePicker> createState() => _AwesomeMinutePickerState();
@@ -55,6 +57,7 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
       selectedTextStyle: widget.selectedTextStyle,
       unselectedTextStyle: widget.unselectedTextStyle,
       selectorColor: widget.selectorColor,
+      visibleItemCount: widget.visibleItemCount,
     );
   }
 }

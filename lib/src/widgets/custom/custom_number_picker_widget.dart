@@ -7,7 +7,7 @@ class CustomNumberPicker extends StatefulWidget {
   final int initialValue;
   final ValueChanged<int> onSelectedItemChanged;
   final double itemExtent;
-  final int visibleItemCount;
+  final int? visibleItemCount;
   final ItemTheme? theme;
   Color? backgroundColor;
   Color? selectorColor;
@@ -22,14 +22,15 @@ class CustomNumberPicker extends StatefulWidget {
     required this.initialValue,
     required this.onSelectedItemChanged,
     this.itemExtent = 40.0,
-    this.visibleItemCount = 5,
+    required this.visibleItemCount,
     this.theme,
     this.selectedTextStyle,
     this.unselectedTextStyle,
     this.backgroundColor,
     this.selectorColor,
     this.fadeEffect = true,
-  }) : assert(visibleItemCount >= 3 && visibleItemCount % 2 == 1);
+  }) : assert(visibleItemCount == null ||
+            visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
   State<CustomNumberPicker> createState() => _CustomNumberPickerState();
@@ -38,6 +39,7 @@ class CustomNumberPicker extends StatefulWidget {
 class _CustomNumberPickerState extends State<CustomNumberPicker> {
   late FixedExtentScrollController _scrollController;
   late int _selectedItem;
+  int defaultVisibleItemCount = 5;
 
   @override
   void initState() {
@@ -57,7 +59,8 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
   @override
   Widget build(BuildContext context) {
     final int itemCount = widget.maxValue - widget.minValue + 1;
-    final double pickerHeight = widget.itemExtent * widget.visibleItemCount;
+    final double pickerHeight = widget.itemExtent *
+        (widget.visibleItemCount ?? defaultVisibleItemCount);
 
     // Default text styles
     const TextStyle defaultSelectedStyle = TextStyle(

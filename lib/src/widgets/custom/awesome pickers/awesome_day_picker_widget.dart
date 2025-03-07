@@ -16,6 +16,7 @@ class AwesomeDayPicker extends StatefulWidget {
     this.selectedTextStyle,
     this.unselectedTextStyle,
     this.selectorColor,
+    this.visibleItemCount,
   });
   AwesomeDate selectedDate;
   AwesomeDate maxDate;
@@ -27,6 +28,7 @@ class AwesomeDayPicker extends StatefulWidget {
   bool? fadeEffect;
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
+  int? visibleItemCount;
 
   @override
   State<AwesomeDayPicker> createState() => _AwesomeDayPickerState();
@@ -58,6 +60,7 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
       selectedTextStyle: widget.selectedTextStyle,
       unselectedTextStyle: widget.unselectedTextStyle,
       selectorColor: widget.selectorColor,
+      visibleItemCount: widget.visibleItemCount,
     );
   }
 }

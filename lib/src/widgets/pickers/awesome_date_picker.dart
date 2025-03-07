@@ -22,6 +22,7 @@ class AwesomeDatePicker extends StatefulWidget {
     this.selectedTextStyle,
     this.unselectedTextStyle,
     this.selectorColor,
+    this.visibleItemCount,
   });
 
   AwesomeDate? minDate;
@@ -36,6 +37,7 @@ class AwesomeDatePicker extends StatefulWidget {
   bool? fadeEffect;
   TextStyle? selectedTextStyle;
   TextStyle? unselectedTextStyle;
+  int? visibleItemCount;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
@@ -77,6 +79,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             fadeEffect: widget.fadeEffect,
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
+            visibleItemCount: widget.visibleItemCount,
             onSelectedDayChanged: (value) {
               selectedDate = AwesomeDate(
                   year: selectedDate.year,
@@ -108,6 +111,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             fadeEffect: widget.fadeEffect,
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
+            visibleItemCount: widget.visibleItemCount,
             onSelectedYearChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
@@ -145,6 +149,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             fadeEffect: widget.fadeEffect,
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
+            visibleItemCount: widget.visibleItemCount,
             onSelectedMonthChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
@@ -181,6 +186,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             fadeEffect: widget.fadeEffect,
             selectedTextStyle: widget.selectedTextStyle,
             unselectedTextStyle: widget.unselectedTextStyle,
+            visibleItemCount: widget.visibleItemCount,
             onSelectedMonthChanged: (value) {
               int day = selectedDate.day;
               int daysInMonth =
