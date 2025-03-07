@@ -73,8 +73,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
         AwesomeDatePicker(
           dayWidth: widget.dayWidth ?? MediaQuery.of(context).size.width * 0.16,
           monthWidth: widget.monthWidth ??
-              (widget.dateFormat ==
-                      AwesomeDateFormat.values.contains(PickerType.month_text)
+              (AwesomeDateFormat.values.contains(PickerType.month_text)
                   ? MediaQuery.of(context).size.width * 0.18
                   : MediaQuery.of(context).size.width * 0.16),
           yearWidth:
@@ -94,8 +93,8 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           minuteWidth:
               widget.minuteWidth ?? MediaQuery.of(context).size.width * 0.16,
           timeFormat: widget.timeFormat,
-          maxTime: widget.minTime,
-          minTime: widget.maxTime,
+          maxTime: widget.maxTime,
+          minTime: widget.minTime,
           initialTime: widget.initialTime,
         ),
       ],

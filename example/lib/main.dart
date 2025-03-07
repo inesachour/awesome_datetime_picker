@@ -37,7 +37,7 @@ class _CalendarState extends State<Calendar> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
+          /*Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
             child: AwesomeDatePicker(
@@ -55,11 +55,17 @@ class _CalendarState extends State<Calendar> {
               maxTime: AwesomeTime(hour: 10, minute: 15),
               minTime: AwesomeTime(hour: 01, minute: 54),
             ),
-          ),
+          ),*/
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             padding: const EdgeInsets.all(5),
-            child: AwesomeDateTimePicker(dateFormat: AwesomeDateFormat.yMMd,),
+            child: AwesomeDateTimePicker(
+              dateFormat: AwesomeDateFormat.yMMd,
+              minDate: AwesomeDate(year: 2025, month: 3, day: 2),
+              maxDate: AwesomeDate(year: 2025, month: 3, day: 22),
+              minTime: AwesomeTime(hour: 9, minute: 10),
+              maxTime: AwesomeTime(hour: 19, minute: 20),
+            ),
           ),
         ],
       ),
