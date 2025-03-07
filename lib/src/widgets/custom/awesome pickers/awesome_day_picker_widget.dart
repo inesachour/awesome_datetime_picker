@@ -27,24 +27,13 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
     int maxValue = DateUtils.getDaysInMonth(
             widget.selectedDate.year, widget.selectedDate.month),
         minValue = 1;
-    if ((widget.selectedDate.year < widget.maxDate.year &&
-            widget.selectedDate.year > widget.minDate.year) ||
-        (widget.selectedDate.year == widget.maxDate.year &&
-            widget.selectedDate.month < widget.maxDate.month) ||
-        (widget.selectedDate.year == widget.minDate.year &&
-            widget.selectedDate.month > widget.minDate.month)) {
-      maxValue = DateUtils.getDaysInMonth(
-          widget.selectedDate.year, widget.selectedDate.month);
-      minValue = 1;
-    } else if (widget.selectedDate.year == widget.maxDate.year &&
+    if (widget.selectedDate.year == widget.maxDate.year &&
         widget.selectedDate.month == widget.maxDate.month) {
-      minValue = 1;
       maxValue = widget.maxDate.day;
-    } else if (widget.selectedDate.year == widget.minDate.year &&
+    }
+    if (widget.selectedDate.year == widget.minDate.year &&
         widget.selectedDate.month == widget.minDate.month) {
       minValue = widget.minDate.day;
-      maxValue = DateUtils.getDaysInMonth(
-          widget.selectedDate.year, widget.selectedDate.month);
     }
 
     return CustomNumberPicker(

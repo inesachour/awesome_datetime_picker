@@ -40,16 +40,11 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
   @override
   Widget build(BuildContext context) {
     int maxValue = 12, minValue = 1;
-    if (widget.selectedDate.year < widget.maxDate.year &&
-        widget.selectedDate.year > widget.minDate.year) {
-      maxValue = 12;
-      minValue = 1;
-    } else if (widget.selectedDate.year == widget.maxDate.year) {
-      minValue = 1;
+    if (widget.selectedDate.year == widget.maxDate.year) {
       maxValue = widget.maxDate.month;
-    } else if (widget.selectedDate.year == widget.minDate.year) {
+    }
+    if (widget.selectedDate.year == widget.minDate.year) {
       minValue = widget.minDate.month;
-      maxValue = 12;
     }
 
     return widget.isNumber

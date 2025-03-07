@@ -26,16 +26,11 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
   @override
   Widget build(BuildContext context) {
     int maxValue = 59, minValue = 0;
-    if (widget.selectedTime.hour < widget.maxTime.hour &&
-        widget.selectedTime.hour > widget.minTime.hour) {
-      maxValue = 59;
-      minValue = 0;
-    } else if (widget.selectedTime.hour == widget.maxTime.hour) {
-      minValue = 0;
+    if (widget.selectedTime.hour == widget.maxTime.hour) {
       maxValue = widget.maxTime.minute;
-    } else if (widget.selectedTime.hour == widget.minTime.hour) {
+    }
+    if (widget.selectedTime.hour == widget.minTime.hour) {
       minValue = widget.minTime.minute;
-      maxValue = 59;
     }
 
     return CustomNumberPicker(
