@@ -45,7 +45,7 @@ class _CalendarState extends State<Calendar> {
               locale: LocaleType.fr,
               maxDate: AwesomeDate(year: 2026, month: 11, day: 25),
               minDate: AwesomeDate(year: 2025, month: 2, day: 2),
-              theme: AwesomeDatePickerTheme(
+              /*theme: AwesomeDatePickerTheme(
                 dayTheme: ItemTheme(
                     width: 50,
                     backgroundColor: Colors.red,
@@ -61,7 +61,7 @@ class _CalendarState extends State<Calendar> {
                     backgroundColor: Colors.blue,
                     selectedTextStyle: TextStyle(color: Colors.amber),
                     unselectedTextStyle: TextStyle(color: Colors.white)),
-              ),
+              ),*/
             ),
           ),
           Container(
@@ -71,7 +71,7 @@ class _CalendarState extends State<Calendar> {
               timeFormat: AwesomeTimeFormat.Hm,
               maxTime: AwesomeTime(hour: 10, minute: 15),
               minTime: AwesomeTime(hour: 01, minute: 54),
-              theme: AwesomeTimePickerTheme(
+              /*theme: AwesomeTimePickerTheme(
                 hourTheme: ItemTheme(
                   backgroundColor: Colors.grey,
                   selectedTextStyle: TextStyle(color: Colors.amber),
@@ -82,7 +82,7 @@ class _CalendarState extends State<Calendar> {
                   selectedTextStyle: TextStyle(color: Colors.amber),
                   unselectedTextStyle: TextStyle(color: Colors.white),
                 ),
-              ),
+              ),*/
             ),
           ),
           Container(
@@ -94,7 +94,7 @@ class _CalendarState extends State<Calendar> {
               maxDate: AwesomeDate(year: 2025, month: 3, day: 22),
               minTime: AwesomeTime(hour: 9, minute: 10),
               maxTime: AwesomeTime(hour: 19, minute: 20),
-              theme: AwesomeDateTimePickerTheme(
+              /*theme: AwesomeDateTimePickerTheme(
                 datePickerTheme: AwesomeDatePickerTheme(
                   dayTheme: ItemTheme(
                       width: 50,
@@ -124,7 +124,7 @@ class _CalendarState extends State<Calendar> {
                     unselectedTextStyle: TextStyle(color: Colors.white),
                   ),
                 ),
-              ),
+              ),*/
             ),
           ),
         ],
