@@ -100,7 +100,7 @@ To use a locale, set it as follows:
     locale: LocaleType.en
 ```
 ### AwesomeDateFormat
-The following date format values are only for the display of the date and do not affect the returned value from the date or datetime picker:
+The following date format values are only for the display of the date and do not affect the returned value from the date or datetime picker (which stays as the default):
 
 | Date Format | Example           |
 |-------------|-------------------|
@@ -115,5 +115,15 @@ To use a date format, set it as follows:
 ```
 
 ### AwesomeTimeFormat
+The following time format values are only for the display of the time and do not affect the returned value from the timr or datetime picker (which stays as the default):
+
+| Time Format | Example        |
+|-------------|----------------|
+| dMy         | 13:00          |
+
+To use a date format, set it as follows:
+```dart
+    timeFormat: AwesomeTimeFormat.Hm,
+```
 
 ### AwesomeDateTimePickerTheme
