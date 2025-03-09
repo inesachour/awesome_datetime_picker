@@ -84,7 +84,7 @@ AwesomeDateTimePicker(
 
 ## Customization
 ### LocaleType
-The following table lists the supported locales for the date picker:
+The following table lists the currently supported locales for the date picker:
 
 | Locale Code | Language          |
 |------------|------------------|
@@ -95,6 +95,10 @@ The following table lists the supported locales for the date picker:
 | it         | Italian          |
 | ar         | Arabic           |
 
+To use a locale, set it as follows:
+```dart
+    locale: LocaleType.en
+```
 ### AwesomeDateFormat
 
 ### AwesomeTimeFormat
