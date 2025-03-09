@@ -100,6 +100,12 @@ To use a locale, set it as follows:
     locale: LocaleType.en
 ```
 ### AwesomeDateFormat
+| Date Format | Example          |
+|------------|------------------|
+| dMy         | 1/1/2025          |
+| dMMy         | 1/January/2025           |
+| yMd         | 2025/01/1          |
+| yMMd         | 2025/January/1           |
 
 ### AwesomeTimeFormat
 
