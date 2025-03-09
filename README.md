@@ -84,28 +84,35 @@ AwesomeDateTimePicker(
 
 ## Customization
 ### LocaleType
-The following table lists the currently supported locales for the date picker:
+The following table lists the currently supported locales for the date and datetimer pickers:
 
-| Locale Code | Language          |
-|------------|------------------|
-| en         | English          |
-| fr         | French           |
-| es         | Spanish          |
-| de         | German           |
-| it         | Italian          |
-| ar         | Arabic           |
+| Locale Code | Language         |
+|-------------|------------------|
+| en          | English          |
+| fr          | French           |
+| es          | Spanish          |
+| de          | German           |
+| it          | Italian          |
+| ar          | Arabic           |
 
 To use a locale, set it as follows:
 ```dart
     locale: LocaleType.en
 ```
 ### AwesomeDateFormat
-| Date Format | Example          |
-|------------|------------------|
+The following date format values are only for the display of the date and do not affect the returned value from the date or datetime picker:
+
+| Date Format | Example           |
+|-------------|-------------------|
 | dMy         | 1/1/2025          |
-| dMMy         | 1/January/2025           |
-| yMd         | 2025/01/1          |
-| yMMd         | 2025/January/1           |
+| dMMy        | 1 January 2025    |
+| yMd         | 2025/1/1          |
+| yMMd        | 2025 January 1    |
+
+To use a date format, set it as follows:
+```dart
+    dateFormat: AwesomeDateFormat.dMMy,
+```
 
 ### AwesomeTimeFormat
 
