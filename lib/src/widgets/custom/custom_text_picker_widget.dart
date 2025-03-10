@@ -51,7 +51,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
     super.initState();
     _selectedItem = widget.initialValue;
     _scrollController = FixedExtentScrollController(
-      initialItem: widget.items.indexOf(widget.initialValue),
+      initialItem: widget.items.indexOf(widget.initialValue) - widget.minIndex,
     );
   }
 

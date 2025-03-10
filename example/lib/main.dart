@@ -43,6 +43,8 @@ class _CalendarState extends State<Calendar> {
             ),
             AwesomeDatePicker(
               dateFormat: AwesomeDateFormat.dMMy,
+              minDate: AwesomeDate(year: 2025, month: 2, day: 15),
+              maxDate: AwesomeDate(year: 2026, month: 10, day: 10),
               onChanged: (AwesomeDate date) {
                 print(
                     "----Date changed : ${date.day}/${date.month}/${date.year}\n");
