@@ -1,5 +1,4 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/theme/awesome_datetime_picker_theme.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDateTimePicker extends StatefulWidget {

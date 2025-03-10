@@ -38,7 +38,7 @@ class _CalendarState extends State<Calendar> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             AwesomeDatePicker(
@@ -48,7 +48,7 @@ class _CalendarState extends State<Calendar> {
                     "----Date changed : ${date.day}/${date.month}/${date.year}\n");
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             AwesomeTimePicker(
@@ -57,7 +57,7 @@ class _CalendarState extends State<Calendar> {
                 print("----Time changed : ${time.hour}:${time.minute}\n");
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             AwesomeDateTimePicker(

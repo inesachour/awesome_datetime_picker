@@ -1,5 +1,4 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_text_picker_widget.dart';
