@@ -1,7 +1,7 @@
 name: awesome_datetime_picker
-description: "A new Flutter package project."
+description: "A customizable date-time picker package supporting all platforms (ios, android, web, desktop, ...)."
 version: 0.0.1
-homepage:
+homepage: https://github.com/inesachour/awesome_datetime_picker
 
 environment:
   sdk: '>=3.3.1 <4.0.0'
