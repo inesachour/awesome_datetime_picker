@@ -55,7 +55,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
 
   @override
   void initState() {
-    minDate = widget.minDate ?? AwesomeDate(year: 1990, month: 1, day: 1);
+    minDate = widget.minDate ?? AwesomeDate(year: 1900, month: 1, day: 1);
     maxDate = widget.maxDate ?? AwesomeDate(year: 2100, month: 12, day: 31);
     initialDate = widget.initialDate ??
         AwesomeDate(
