@@ -6,24 +6,22 @@ class CustomNumberPicker extends StatefulWidget {
   final int maxValue;
   final int initialValue;
   final ValueChanged<int> onSelectedItemChanged;
-  //final double itemExtent;
   final int? visibleItemCount;
   final ItemTheme? theme;
-  Color? backgroundColor;
-  Color? selectorColor;
-  bool? fadeEffect;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  double? itemHeight;
-  double? itemWidth;
+  final Color? backgroundColor;
+  final Color? selectorColor;
+  final bool? fadeEffect;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final double? itemHeight;
+  final double? itemWidth;
 
-  CustomNumberPicker({
+  const CustomNumberPicker({
     super.key,
     required this.minValue,
     required this.maxValue,
     required this.initialValue,
     required this.onSelectedItemChanged,
-    //this.itemExtent = 40.0,
     required this.visibleItemCount,
     this.theme,
     this.selectedTextStyle,

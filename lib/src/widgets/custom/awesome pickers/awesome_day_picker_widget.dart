@@ -4,7 +4,7 @@ import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_
 import 'package:flutter/material.dart';
 
 class AwesomeDayPicker extends StatefulWidget {
-  AwesomeDayPicker({
+  const AwesomeDayPicker({
     super.key,
     required this.selectedDate,
     required this.maxDate,
@@ -20,19 +20,19 @@ class AwesomeDayPicker extends StatefulWidget {
     this.itemHeight,
     this.itemWidth,
   });
-  AwesomeDate selectedDate;
-  AwesomeDate maxDate;
-  AwesomeDate minDate;
-  Function(int) onSelectedDayChanged;
-  ItemTheme? theme;
-  Color? backgroundColor;
-  Color? selectorColor;
-  bool? fadeEffect;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  int? visibleItemCount;
-  double? itemHeight;
-  double? itemWidth;
+  final AwesomeDate selectedDate;
+  final AwesomeDate maxDate;
+  final AwesomeDate minDate;
+  final Function(int) onSelectedDayChanged;
+  final ItemTheme? theme;
+  final Color? backgroundColor;
+  final Color? selectorColor;
+  final bool? fadeEffect;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final int? visibleItemCount;
+  final double? itemHeight;
+  final double? itemWidth;
 
   @override
   State<AwesomeDayPicker> createState() => _AwesomeDayPickerState();

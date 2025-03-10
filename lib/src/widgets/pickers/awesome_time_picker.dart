@@ -6,7 +6,7 @@ import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awe
 import 'package:flutter/material.dart';
 
 class AwesomeTimePicker extends StatefulWidget {
-  AwesomeTimePicker({
+  const AwesomeTimePicker({
     super.key,
     this.minTime,
     this.maxTime,
@@ -24,20 +24,20 @@ class AwesomeTimePicker extends StatefulWidget {
     this.itemWidth,
   });
 
-  AwesomeTime? minTime;
-  AwesomeTime? maxTime;
-  AwesomeTime? initialTime;
-  AwesomeTimeFormat timeFormat;
-  AwesomeTimePickerTheme? theme;
+  final AwesomeTime? minTime;
+  final AwesomeTime? maxTime;
+  final AwesomeTime? initialTime;
+  final AwesomeTimeFormat timeFormat;
+  final AwesomeTimePickerTheme? theme;
   final ValueChanged<AwesomeTime>? onChanged;
-  Color? backgroundColor;
-  Color? selectorColor;
-  bool? fadeEffect;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  int? visibleItemCount;
-  double? itemHeight;
-  double? itemWidth;
+  final Color? backgroundColor;
+  final Color? selectorColor;
+  final bool? fadeEffect;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final int? visibleItemCount;
+  final double? itemHeight;
+  final double? itemWidth;
 
   @override
   State<AwesomeTimePicker> createState() => _AwesomeTimePickerState();

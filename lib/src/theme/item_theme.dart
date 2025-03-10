@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ItemTheme {
-  double? width;
-  double? height;
-  Color? backgroundColor;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  Widget? title;
-  EdgeInsets? padding;
-  EdgeInsets? margin;
+  final double? width;
+  final double? height;
+  final Color? backgroundColor;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final Widget? title;
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
 
-  ItemTheme({
+  const ItemTheme({
     this.width,
     this.height,
     this.backgroundColor,

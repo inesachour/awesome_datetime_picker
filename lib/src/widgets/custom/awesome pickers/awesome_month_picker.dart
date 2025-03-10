@@ -5,7 +5,7 @@ import 'package:awesome_datetime_picker/src/widgets/custom/custom_text_picker_wi
 import 'package:flutter/material.dart';
 
 class AwesomeMonthPicker extends StatefulWidget {
-  AwesomeMonthPicker({
+  const AwesomeMonthPicker({
     super.key,
     required this.selectedDate,
     required this.maxDate,
@@ -24,21 +24,21 @@ class AwesomeMonthPicker extends StatefulWidget {
     this.itemWidth,
   });
 
-  AwesomeDate selectedDate;
-  AwesomeDate maxDate;
-  AwesomeDate minDate;
-  Function(int) onSelectedMonthChanged;
-  bool isNumber;
-  LocaleType locale;
-  ItemTheme? theme;
-  Color? backgroundColor;
-  Color? selectorColor;
-  bool? fadeEffect;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  int? visibleItemCount;
-  double? itemHeight;
-  double? itemWidth;
+  final AwesomeDate selectedDate;
+  final AwesomeDate maxDate;
+  final AwesomeDate minDate;
+  final Function(int) onSelectedMonthChanged;
+  final bool isNumber;
+  final LocaleType locale;
+  final ItemTheme? theme;
+  final Color? backgroundColor;
+  final Color? selectorColor;
+  final bool? fadeEffect;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final int? visibleItemCount;
+  final double? itemHeight;
+  final double? itemWidth;
 
   @override
   State<AwesomeMonthPicker> createState() => _AwesomeMonthPickerState();

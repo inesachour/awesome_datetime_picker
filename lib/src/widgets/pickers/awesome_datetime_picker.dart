@@ -2,7 +2,7 @@ import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDateTimePicker extends StatefulWidget {
-  AwesomeDateTimePicker({
+  const AwesomeDateTimePicker({
     super.key,
     this.minDateTime,
     this.maxDateTime,
@@ -22,22 +22,22 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.itemWidth,
   });
 
-  AwesomeDateTime? minDateTime;
-  AwesomeDateTime? maxDateTime;
-  AwesomeDateTime? initialDateTime;
-  LocaleType locale;
-  AwesomeDateFormat dateFormat;
-  AwesomeTimeFormat timeFormat;
-  AwesomeDateTimePickerTheme? theme;
+  final AwesomeDateTime? minDateTime;
+  final AwesomeDateTime? maxDateTime;
+  final AwesomeDateTime? initialDateTime;
+  final LocaleType locale;
+  final AwesomeDateFormat dateFormat;
+  final AwesomeTimeFormat timeFormat;
+  final AwesomeDateTimePickerTheme? theme;
   final ValueChanged<AwesomeDateTime>? onChanged;
-  Color? backgroundColor;
-  Color? selectorColor;
-  bool? fadeEffect;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  int? visibleItemCount;
-  double? itemHeight;
-  double? itemWidth;
+  final Color? backgroundColor;
+  final Color? selectorColor;
+  final bool? fadeEffect;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final int? visibleItemCount;
+  final double? itemHeight;
+  final double? itemWidth;
 
   @override
   State<AwesomeDateTimePicker> createState() => _AwesomeDateTimePickerState();

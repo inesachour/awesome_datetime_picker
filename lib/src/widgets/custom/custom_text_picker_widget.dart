@@ -7,25 +7,23 @@ class CustomTextPicker extends StatefulWidget {
   final int maxIndex;
   final int minIndex;
   final ValueChanged<int> onSelectedItemChanged;
-  //final double itemExtent;
   final int? visibleItemCount;
   final ItemTheme? theme;
-  Color? backgroundColor;
-  Color? selectorColor;
-  bool? fadeEffect;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  double? itemHeight;
-  double? itemWidth;
+  final Color? backgroundColor;
+  final Color? selectorColor;
+  final bool? fadeEffect;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final double? itemHeight;
+  final double? itemWidth;
 
-  CustomTextPicker({
+  const CustomTextPicker({
     super.key,
     required this.items,
     required this.initialValue,
     required this.maxIndex,
     required this.minIndex,
     required this.onSelectedItemChanged,
-    // this.itemExtent = 40.0,
     required this.visibleItemCount,
     this.theme,
     this.selectedTextStyle,

@@ -8,7 +8,7 @@ import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awe
 import 'package:flutter/material.dart';
 
 class AwesomeDatePicker extends StatefulWidget {
-  AwesomeDatePicker({
+  const AwesomeDatePicker({
     super.key,
     this.minDate,
     this.maxDate,
@@ -27,21 +27,21 @@ class AwesomeDatePicker extends StatefulWidget {
     this.itemWidth,
   });
 
-  AwesomeDate? minDate;
-  AwesomeDate? maxDate;
-  AwesomeDate? initialDate;
-  LocaleType locale;
-  AwesomeDateFormat dateFormat;
-  AwesomeDatePickerTheme? theme;
+  final AwesomeDate? minDate;
+  final AwesomeDate? maxDate;
+  final AwesomeDate? initialDate;
+  final LocaleType locale;
+  final AwesomeDateFormat dateFormat;
+  final AwesomeDatePickerTheme? theme;
   final ValueChanged<AwesomeDate>? onChanged;
-  Color? backgroundColor;
-  Color? selectorColor;
-  bool? fadeEffect;
-  TextStyle? selectedTextStyle;
-  TextStyle? unselectedTextStyle;
-  int? visibleItemCount;
-  double? itemHeight;
-  double? itemWidth;
+  final Color? backgroundColor;
+  final Color? selectorColor;
+  final bool? fadeEffect;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? unselectedTextStyle;
+  final int? visibleItemCount;
+  final double? itemHeight;
+  final double? itemWidth;
 
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
