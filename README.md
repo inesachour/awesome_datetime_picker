@@ -132,24 +132,39 @@ Themes can customize the pickers by setting specific properties for the picker e
 #### AwesomeDatePickerTheme
 ```dart
 class AwesomeDatePickerTheme {
-  ItemTheme? yearTheme; // Theme for the year picker element.
-  ItemTheme? monthTheme; // Theme for the month picker element.
-  ItemTheme? dayTheme; // Theme for the day picker element.
+    ItemTheme? yearTheme; // Theme for the year picker element.
+    ItemTheme? monthTheme; // Theme for the month picker element.
+    ItemTheme? dayTheme; // Theme for the day picker element.
 }
 ```
 
 #### AwesomeTimePickerTheme
 ```dart
 class AwesomeTimePickerTheme {
-  ItemTheme? hourTheme; // Theme for the hour picker element.
-  ItemTheme? minuteTheme;  // Theme for the minute picker element.
+    ItemTheme? hourTheme; // Theme for the hour picker element.
+    ItemTheme? minuteTheme;  // Theme for the minute picker element.
 }
 ```
 
 #### AwesomeDateTimePickerTheme
 ```dart
 class AwesomeDateTimePickerTheme {
-  AwesomeDatePickerTheme? datePickerTheme; // Theme for the date picker element.
-  AwesomeTimePickerTheme? timePickerTheme; // Theme for the time picker element.
+    AwesomeDatePickerTheme? datePickerTheme; // Theme for the date picker element.
+    AwesomeTimePickerTheme? timePickerTheme; // Theme for the time picker element.
+}
+```
+
+#### ItemTheme
+The ItemTheme class specifies the theme properties for each item in the picker (year, month, day, hour, and minute).
+```dart
+class ItemTheme {
+    double? width;
+    double? height;
+    Color? backgroundColor;
+    TextStyle? selectedTextStyle;
+    TextStyle? unselectedTextStyle;
+    Widget? title;
+    EdgeInsets? padding;
+    EdgeInsets? margin;
 }
 ```
