@@ -104,7 +104,7 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
                         defaultItemHeight,
                     decoration: BoxDecoration(
                       color:
-                          widget.selectorColor ?? Colors.grey.withOpacity(0.1),
+                          widget.selectorColor ?? Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(0),
                     ),
                   ),
