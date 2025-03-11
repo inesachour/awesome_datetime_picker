@@ -42,7 +42,7 @@ class _CalendarState extends State<Calendar> {
             const SizedBox(
               height: 10,
             ),
-            /*AwesomeDatePicker(
+            AwesomeDatePicker(
               dateFormat: AwesomeDateFormat.dMMy,
               minDate: AwesomeDate(year: 2025, month: 2, day: 15),
               maxDate: AwesomeDate(year: 2026, month: 10, day: 10),
@@ -50,14 +50,14 @@ class _CalendarState extends State<Calendar> {
                 print(
                     "----Date changed : ${date.day}/${date.month}/${date.year}\n");
               },
-            ),*/
+            ),
             const SizedBox(
               height: 10,
             ),
             AwesomeTimePicker(
               timeFormat: AwesomeTimeFormat.hm,
-              //minTime: AwesomeTime(hour: 9, minute: 20),
-              //maxTime: AwesomeTime(hour: 20, minute: 15),
+              minTime: AwesomeTime(hour: 9, minute: 20),
+              maxTime: AwesomeTime(hour: 20, minute: 15),
               onChanged: (AwesomeTime time) {
                 print("----Time changed : ${time.hour}:${time.minute}\n");
               },
@@ -65,14 +65,14 @@ class _CalendarState extends State<Calendar> {
             const SizedBox(
               height: 10,
             ),
-            /*AwesomeDateTimePicker(
+            AwesomeDateTimePicker(
               dateFormat: AwesomeDateFormat.dMMy,
               timeFormat: AwesomeTimeFormat.Hm,
               onChanged: (AwesomeDateTime dateTime) {
                 print(
                     "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
               },
-            ),*/
+            ),
           ],
         ),
       ),

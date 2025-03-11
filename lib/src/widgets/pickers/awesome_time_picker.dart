@@ -130,6 +130,12 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
                   DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
                 selectedTime = maxTime;
               }
+
+              if (selectedTime.hour >= 12) {
+                selectedAmPm = "PM";
+              } else {
+                selectedAmPm = "AM";
+              }
               setState(() {});
 
               widget.onChanged?.call(selectedTime);
@@ -169,11 +175,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
           return AwesomeMinutePicker(
-            key: ValueKey(selectedTime.hour == minTime.hour
-                ? "hour_picker 1"
-                : selectedTime.hour == maxTime.hour
-                    ? "hour_picker 2"
-                    : "hour_picker 3"),
+            key: ValueKey(
+                selectedTime.hour >= 12 ? "hour_picker 1" : "hour_picker 2"),
             selectedTime: selectedTime,
             maxTime: maxTime,
             minTime: minTime,
@@ -231,7 +234,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
               }
               setState(() {});
 
-               widget.onChanged?.call(selectedTime);
+              widget.onChanged?.call(selectedTime);
             },
           );
         } else {

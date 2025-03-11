@@ -47,8 +47,13 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
   @override
   void initState() {
     super.initState();
-    hours = List.generate(
-        widget.isAmPm ? 12 : 24, (index) => (index + 1).toString());
+    hours = List.generate(24, (index) {
+      if (widget.isAmPm && index > 11) {
+        return (index - 11).toString();
+      } else {
+        return (index + 1).toString();
+      }
+    });
   }
 
   @override
@@ -58,12 +63,8 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
       initialValue: widget.isAmPm && widget.maxTime.hour > 12
           ? (widget.selectedTime.hour - 12).toString()
           : widget.selectedTime.hour.toString(),
-      maxIndex: widget.isAmPm && widget.maxTime.hour > 12
-          ? widget.maxTime.hour - 12
-          : widget.maxTime.hour,
-      minIndex: widget.isAmPm && widget.minTime.hour > 12
-          ? widget.minTime.hour - 12
-          : widget.minTime.hour,
+      maxIndex: widget.maxTime.hour,
+      minIndex: widget.minTime.hour,
       onSelectedItemChanged: widget.onSelectedHourChanged,
       theme: widget.theme,
       backgroundColor: widget.backgroundColor,
