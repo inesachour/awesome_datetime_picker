@@ -9,3 +9,7 @@
 ## 0.0.3
 
 * Fix minDate and minTime associated selected date bug.
+
+## 0.0.4
+
+* Documentation and small performance improvements.
