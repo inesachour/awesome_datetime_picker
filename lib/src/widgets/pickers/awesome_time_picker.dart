@@ -102,6 +102,11 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
           return AwesomeMinutePicker(
+            key: ValueKey(selectedTime.hour == minTime.hour
+                ? "hour_picker 1"
+                : selectedTime.hour == maxTime.hour
+                    ? "hour_picker 2"
+                    : "hour_picker 3"),
             selectedTime: selectedTime,
             maxTime: maxTime,
             minTime: minTime,

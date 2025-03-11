@@ -74,6 +74,13 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
       children: List.generate(3, (index) {
         if (widget.dateFormat.value[index] == PickerType.day) {
           return AwesomeDayPicker(
+            key: ValueKey(selectedDate.year == minDate.year &&
+                    selectedDate.month == minDate.month
+                ? "day_picker 1"
+                : selectedDate.year == maxDate.year &&
+                        selectedDate.month == maxDate.month
+                    ? "day_picker 2"
+                    : "day_picker 3"),
             selectedDate: selectedDate,
             maxDate: maxDate,
             minDate: minDate,
@@ -146,6 +153,11 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_text) {
           return AwesomeMonthPicker(
+            key: ValueKey(selectedDate.year == minDate.year
+                ? "text_month_picker 1"
+                : selectedDate.year == maxDate.year
+                    ? "text_month_picker 2"
+                    : "text_month_picker 3"),
             selectedDate: selectedDate,
             maxDate: maxDate,
             minDate: minDate,
@@ -186,6 +198,11 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_number) {
           return AwesomeMonthPicker(
+            key: ValueKey(selectedDate.year == minDate.year
+                ? "number_month_picker 1"
+                : selectedDate.year == maxDate.year
+                    ? "number_month_picker 2"
+                    : "number_month_picker 3"),
             selectedDate: selectedDate,
             maxDate: maxDate,
             minDate: minDate,
