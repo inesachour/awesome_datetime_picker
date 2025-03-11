@@ -1,3 +1,5 @@
+import 'package:awesome_datetime_picker/src/data/picker_type.dart';
+
 enum AwesomeDateFormat {
   dMy([PickerType.day, PickerType.month_number, PickerType.year]),
   dMMy([PickerType.day, PickerType.month_text, PickerType.year]),
@@ -16,14 +18,4 @@ enum AwesomeTimeFormat {
   final List<PickerType> value;
 
   const AwesomeTimeFormat(this.value);
-}
-
-enum PickerType {
-  day,
-  month_number,
-  month_text,
-  year,
-  hour_12,
-  hour_24,
-  minute,
 }
