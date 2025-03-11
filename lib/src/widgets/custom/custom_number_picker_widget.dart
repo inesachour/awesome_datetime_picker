@@ -183,13 +183,13 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
                       widget.itemHeight ??
                       defaultItemHeight,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
                           Colors.white,
-                          Colors.white.withOpacity(0.0),
+                          Color(0x00FFFFFF),
                         ],
                       ),
                     ),
