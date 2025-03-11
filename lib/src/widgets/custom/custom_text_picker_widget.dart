@@ -158,13 +158,13 @@ class _CustomTextPickerState extends State<CustomTextPicker> {
                       widget.itemHeight ??
                       defaultItemHeight,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.white,
-                          Colors.white.withOpacity(0.0),
+                          Color(0x00FFFFFF),
                         ],
                       ),
                     ),
