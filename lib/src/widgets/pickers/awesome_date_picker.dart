@@ -28,20 +28,54 @@ class AwesomeDatePicker extends StatefulWidget {
     this.itemWidth,
   });
 
+  /// The minimum selectable date for the date picker (default 1/1/1900).
   final AwesomeDate? minDate;
+
+  /// The maximum selectable date for the date picker (default 31/12/2100).
   final AwesomeDate? maxDate;
+
+  /// The initial date displayed when the picker is first shown (default current date).
   final AwesomeDate? initialDate;
+
+  /// The locale to use for displaying the date format (default [LocaleType.en]).
   final LocaleType locale;
+
+  /// The format of the date to be displayed in the picker (default [AwesomeDateFormat.dMy]).
   final AwesomeDateFormat dateFormat;
+
+  /// The theme for customizing the appearance of the date picker (year, month, day themes).
   final AwesomeDatePickerTheme? theme;
+
+  /// A callback function that is triggered when the selected date changes.
   final ValueChanged<AwesomeDate>? onChanged;
+
+  /// The background color of the date picker.
+  /// This value is overridden by the value passed in the theme's backgroundColor property.
   final Color? backgroundColor;
+
+  /// The color of the selector (highlight) used in the date picker.
   final Color? selectorColor;
+
+  /// A flag to indicate whether to apply a fade effect on the edges of the picker (default true).
   final bool? fadeEffect;
+
+  /// The text style for the selected date.
+  /// This value is overridden by the value passed in the theme's selectedTextStyle property.
   final TextStyle? selectedTextStyle;
+
+  /// The text style for the unselected dates
+  /// This value is overridden by the value passed in the theme's unselectedTextStyle property.
   final TextStyle? unselectedTextStyle;
+
+  /// The number of visible items in the date picker at once.
   final int? visibleItemCount;
+
+  /// The height of each item in the date picker.
+  /// This value is overridden by the value passed in the theme's height property.
   final double? itemHeight;
+
+  /// The width of each item in the date picker.
+  /// This value is overridden by the value passed in the theme's width property.
   final double? itemWidth;
 
   @override

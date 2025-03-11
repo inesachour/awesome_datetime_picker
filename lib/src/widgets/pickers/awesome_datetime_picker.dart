@@ -22,21 +22,57 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.itemWidth,
   });
 
+  /// The minimum selectable date and time for the date-time picker (default 1/1/1900 00:00).
   final AwesomeDateTime? minDateTime;
+
+  /// The maximum selectable date and time for the date-time picker (default 31/12/2100 23:59).
   final AwesomeDateTime? maxDateTime;
+
+  /// The initial date and time displayed when the picker is first shown (default current date and time).
   final AwesomeDateTime? initialDateTime;
+
+  /// The locale to use for displaying the date format (default [LocaleType.en].
   final LocaleType locale;
+
+  /// The format of the date to be displayed in the picker (default [AwesomeDateFormat.dMy]).
   final AwesomeDateFormat dateFormat;
+
+  /// The format of the time to be displayed in the picker (default [AwesomeTimeFormat.Hm]).
   final AwesomeTimeFormat timeFormat;
+
+  /// The theme for customizing the appearance of the date-time picker (year, month, day, hour, minute themes).
   final AwesomeDateTimePickerTheme? theme;
+
+  /// A callback function that is triggered when the selected date or time changes.
   final ValueChanged<AwesomeDateTime>? onChanged;
+
+  /// The background color of the date-time picker.
+  /// This value is overridden by the value passed in the theme's backgroundColor property.
   final Color? backgroundColor;
+
+  /// The color of the selector (highlight) used in the date-time picker.
   final Color? selectorColor;
+
+  /// A flag to indicate whether to apply a fade effect on the edges of the picker (default true).
   final bool? fadeEffect;
+
+  /// The text style for the selected date and time.
+  /// This value is overridden by the value passed in the theme's selectedTextStyle property.
   final TextStyle? selectedTextStyle;
+
+  /// The text style for the unselected date and time.
+  /// This value is overridden by the value passed in the theme's unselectedTextStyle property.
   final TextStyle? unselectedTextStyle;
+
+  /// The number of visible items in the date-time picker at once.
   final int? visibleItemCount;
+
+  /// The height of each item in the date-time picker.
+  /// This value is overridden by the value passed in the theme's height property.
   final double? itemHeight;
+
+  /// The width of each item in the date-time picker.
+  /// This value is overridden by the value passed in the theme's width property.
   final double? itemWidth;
 
   @override

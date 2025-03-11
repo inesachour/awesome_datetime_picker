@@ -25,19 +25,51 @@ class AwesomeTimePicker extends StatefulWidget {
     this.itemWidth,
   });
 
+  /// The minimum selectable time for the time picker (default 00:00).
   final AwesomeTime? minTime;
+
+  /// The maximum selectable time for the time picker (default 23:59).
   final AwesomeTime? maxTime;
+
+  /// The initial time displayed when the picker is first shown (default current time).
   final AwesomeTime? initialTime;
+
+  /// The format of the time to be displayed in the picker (default [AwesomeTimeFormat.Hm]).
   final AwesomeTimeFormat timeFormat;
+
+  /// The theme for customizing the appearance of the time picker (hour, minute themes).
   final AwesomeTimePickerTheme? theme;
+
+  /// A callback function that is triggered when the selected time changes.
   final ValueChanged<AwesomeTime>? onChanged;
+
+  /// The background color of the time picker.
+  /// This value is overridden by the value passed in the theme's backgroundColor property.
   final Color? backgroundColor;
+
+  /// The color of the selector (highlight) used in the time picker.
   final Color? selectorColor;
+
+  /// A flag to indicate whether to apply a fade effect on the edges of the time picker (default true).
   final bool? fadeEffect;
+
+  /// The text style for the selected time (customize font, size, color, etc.).
+  /// This value is overridden by the value passed in the theme's selectedTextStyle property.
   final TextStyle? selectedTextStyle;
+
+  /// The text style for the unselected times (customize font, size, color, etc.).
+  /// This value is overridden by the value passed in the theme's unselectedTextStyle property.
   final TextStyle? unselectedTextStyle;
+
+  /// The number of visible items in the time picker at once.
   final int? visibleItemCount;
+
+  /// The height of each item in the time picker.
+  /// This value is overridden by the value passed in the theme's height property.
   final double? itemHeight;
+
+  /// The width of each item in the time picker.
+  /// This value is overridden by the value passed in the theme's width property.
   final double? itemWidth;
 
   @override
