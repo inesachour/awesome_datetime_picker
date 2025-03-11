@@ -10,5 +10,10 @@ class AwesomeTimePickerTheme {
   /// It customizes the appearance of the minute picker element.
   final ItemTheme? minuteTheme;
 
-  const AwesomeTimePickerTheme({this.hourTheme, this.minuteTheme});
+  /// The theme for the AM/PM item in the time picker.
+  /// It customizes the appearance of the AM/PM picker element.
+  final ItemTheme? ampmTheme;
+
+  const AwesomeTimePickerTheme(
+      {this.hourTheme, this.minuteTheme, this.ampmTheme});
 }

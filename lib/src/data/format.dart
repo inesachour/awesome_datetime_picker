@@ -21,7 +21,8 @@ enum AwesomeDateFormat {
 
 /// Enum representing different time formats for the [AwesomeTimePicker] and [AwesomeDateTimePicker] widgets.
 enum AwesomeTimeFormat {
-  //hm([PickerType.hour_12, PickerType.minute]),
+  /// 12-hour time format (hour and minute) (e.g., 2:30 PM).
+  hm([PickerType.hour_12, PickerType.minute, PickerType.am_pm]),
 
   /// 24-hour time format (hour and minute) (e.g., 14:30).
   Hm([PickerType.hour_24, PickerType.minute]);

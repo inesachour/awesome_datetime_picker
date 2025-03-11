@@ -6,4 +6,5 @@ enum PickerType {
   hour_12,
   hour_24,
   minute,
+  am_pm
 }
