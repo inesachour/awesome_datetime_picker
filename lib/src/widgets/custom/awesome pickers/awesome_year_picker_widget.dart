@@ -1,6 +1,6 @@
 import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeYearPicker extends StatefulWidget {
@@ -40,12 +40,22 @@ class AwesomeYearPicker extends StatefulWidget {
 }
 
 class _AwesomeYearPickerState extends State<AwesomeYearPicker> {
+  late List<String> years;
+
+  @override
+  void initState() {
+    super.initState();
+    years = List.generate(widget.maxDate.year - widget.minDate.year + 1,
+        (index) => (widget.minDate.year + index).toString());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CustomNumberPicker(
-      initialValue: widget.selectedDate.year,
-      maxValue: widget.maxDate.year,
-      minValue: widget.minDate.year,
+    return CustomItemPicker(
+      items: years,
+      initialValue: widget.selectedDate.year.toString(),
+      maxIndex: widget.maxDate.year - widget.minDate.year,
+      minIndex: 0,
       onSelectedItemChanged: widget.onSelectedYearChanged,
       theme: widget.theme,
       backgroundColor: widget.backgroundColor,

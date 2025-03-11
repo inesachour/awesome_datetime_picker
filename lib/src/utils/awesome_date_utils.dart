@@ -1,4 +1,5 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+import 'package:flutter/material.dart';
 
 class AwesomeDateUtils {
   static List<String> getMonthNames(LocaleType locale) {
@@ -94,5 +95,12 @@ class AwesomeDateUtils {
           'ديسمبر'
         ];
     }
+  }
+
+  static List<String> getMonthDays(int year, int month) {
+    return List.generate(
+      DateUtils.getDaysInMonth(year, month),
+      (index) => (index + 1).toString(),
+    );
   }
 }

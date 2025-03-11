@@ -1,6 +1,7 @@
 import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDayPicker extends StatefulWidget {
@@ -53,10 +54,12 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
       minValue = widget.minDate.day;
     }
 
-    return CustomNumberPicker(
-      initialValue: widget.selectedDate.day,
-      maxValue: maxValue,
-      minValue: minValue,
+    return CustomItemPicker(
+      items: AwesomeDateUtils.getMonthDays(
+          widget.selectedDate.year, widget.selectedDate.month),
+      initialValue: widget.selectedDate.day.toString(),
+      maxIndex: maxValue - 1,
+      minIndex: minValue - 1,
       onSelectedItemChanged: widget.onSelectedDayChanged,
       theme: widget.theme,
       backgroundColor: widget.backgroundColor,

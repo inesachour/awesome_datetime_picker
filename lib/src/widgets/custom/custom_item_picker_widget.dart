@@ -1,10 +1,11 @@
 import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
 import 'package:flutter/material.dart';
 
-class CustomNumberPicker extends StatefulWidget {
-  final int minValue;
-  final int maxValue;
-  final int initialValue;
+class CustomItemPicker extends StatefulWidget {
+  final List<String> items;
+  final String initialValue;
+  final int maxIndex;
+  final int minIndex;
   final ValueChanged<int> onSelectedItemChanged;
   final int? visibleItemCount;
   final ItemTheme? theme;
@@ -16,11 +17,12 @@ class CustomNumberPicker extends StatefulWidget {
   final double? itemHeight;
   final double? itemWidth;
 
-  const CustomNumberPicker({
+  const CustomItemPicker({
     super.key,
-    required this.minValue,
-    required this.maxValue,
+    required this.items,
     required this.initialValue,
+    required this.maxIndex,
+    required this.minIndex,
     required this.onSelectedItemChanged,
     required this.visibleItemCount,
     this.theme,
@@ -35,12 +37,12 @@ class CustomNumberPicker extends StatefulWidget {
             visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
   @override
-  State<CustomNumberPicker> createState() => _CustomNumberPickerState();
+  State<CustomItemPicker> createState() => _CustomItemPickerState();
 }
 
-class _CustomNumberPickerState extends State<CustomNumberPicker> {
+class _CustomItemPickerState extends State<CustomItemPicker> {
   late FixedExtentScrollController _scrollController;
-  late int _selectedItem;
+  late String _selectedItem;
   int defaultVisibleItemCount = 5;
   double defaultItemHeight = 40.0;
 
@@ -49,7 +51,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
     super.initState();
     _selectedItem = widget.initialValue;
     _scrollController = FixedExtentScrollController(
-      initialItem: widget.initialValue - widget.minValue,
+      initialItem: widget.items.indexOf(widget.initialValue) - widget.minIndex,
     );
   }
 
@@ -61,12 +63,10 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final int itemCount = widget.maxValue - widget.minValue + 1;
     final double pickerHeight =
         (widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight) *
             (widget.visibleItemCount ?? defaultVisibleItemCount);
 
-    // Default text styles
     const TextStyle defaultSelectedStyle = TextStyle(
       color: Colors.black,
       fontSize: 20,
@@ -85,7 +85,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
           height: pickerHeight,
           width: widget.theme?.width ??
               widget.itemWidth ??
-              MediaQuery.sizeOf(context).width * 0.16,
+              MediaQuery.of(context).size.width * 0.16,
           margin: widget.theme?.margin,
           padding: widget.theme?.padding,
           decoration: BoxDecoration(
@@ -96,7 +96,6 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
           ),
           child: Stack(
             children: [
-              // The selection highlight
               Positioned.fill(
                 child: Center(
                   child: Container(
@@ -110,34 +109,32 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
                   ),
                 ),
               ),
-
-              // The picker wheel
               ListWheelScrollView.useDelegate(
                 controller: _scrollController,
                 itemExtent: widget.theme?.height ??
                     widget.itemHeight ??
                     defaultItemHeight,
-                perspective: 0.01, // iOS-like perspective
+                perspective: 0.01,
                 physics: const FixedExtentScrollPhysics(),
-                diameterRatio: 1.5, // iOS-like diameter
+                diameterRatio: 1.5,
                 onSelectedItemChanged: (index) {
-                  final selectedValue = widget.minValue + index;
+                  final selectedValue = widget.items[
+                      index + widget.minIndex > widget.maxIndex
+                          ? widget.maxIndex
+                          : index + widget.minIndex];
                   setState(() {
-                    _selectedItem = selectedValue > widget.maxValue
-                        ? widget.maxValue
-                        : selectedValue;
+                    _selectedItem = selectedValue;
                   });
-                  widget.onSelectedItemChanged(selectedValue);
+                  widget.onSelectedItemChanged(index + widget.minIndex + 1);
                 },
                 childDelegate: ListWheelChildBuilderDelegate(
-                  childCount: itemCount,
+                  childCount: widget.maxIndex - widget.minIndex + 1,
                   builder: (context, index) {
-                    final value = widget.minValue + index;
+                    final value = widget.items[index + widget.minIndex];
                     final isSelected = value == _selectedItem;
-
                     return Center(
                       child: Text(
-                        value.toString(),
+                        value,
                         style: isSelected
                             ? (widget.theme?.selectedTextStyle ??
                                 widget.selectedTextStyle ??

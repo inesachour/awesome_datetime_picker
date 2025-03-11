@@ -1,7 +1,6 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_text_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeMonthPicker extends StatefulWidget {
@@ -49,7 +48,9 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
 
   @override
   void initState() {
-    months = AwesomeDateUtils.getMonthNames(widget.locale);
+    months = widget.isNumber
+        ? List.generate(12, (index) => (index + 1).toString())
+        : AwesomeDateUtils.getMonthNames(widget.locale);
     super.initState();
   }
 
@@ -63,37 +64,25 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
       minValue = widget.minDate.month;
     }
 
-    return widget.isNumber
-        ? CustomNumberPicker(
-            initialValue: widget.selectedDate.month,
-            maxValue: maxValue,
-            minValue: minValue,
-            onSelectedItemChanged: widget.onSelectedMonthChanged,
-            theme: widget.theme,
-            backgroundColor: widget.backgroundColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            selectorColor: widget.selectorColor,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-          )
-        : CustomTextPicker(
-            items: months,
-            initialValue: months[widget.selectedDate.month - 1],
-            minIndex: minValue - 1,
-            maxIndex: maxValue - 1,
-            onSelectedItemChanged: widget.onSelectedMonthChanged,
-            theme: widget.theme,
-            backgroundColor: widget.backgroundColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            selectorColor: widget.selectorColor,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-          );
+    return CustomItemPicker(
+      items: months,
+      initialValue: widget.isNumber
+          ? widget.selectedDate.month.toString()
+          : months[widget.selectedDate.month - 1],
+      minIndex: minValue - 1,
+      maxIndex: maxValue - 1,
+      onSelectedItemChanged: widget.onSelectedMonthChanged,
+      theme: widget.theme,
+      backgroundColor: widget.backgroundColor,
+      fadeEffect: widget.fadeEffect,
+      selectedTextStyle: widget.selectedTextStyle,
+      unselectedTextStyle: widget.unselectedTextStyle,
+      selectorColor: widget.selectorColor,
+      visibleItemCount: widget.visibleItemCount,
+      itemHeight: widget.itemHeight,
+      itemWidth: widget.isNumber
+          ? widget.itemWidth
+          : widget.itemWidth ?? MediaQuery.of(context).size.width * 0.25,
+    );
   }
 }

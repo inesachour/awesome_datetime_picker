@@ -1,6 +1,6 @@
 import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_number_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeHourPicker extends StatefulWidget {
@@ -40,12 +40,21 @@ class AwesomeHourPicker extends StatefulWidget {
 }
 
 class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
+  late List<String> hours;
+
+  @override
+  void initState() {
+    super.initState();
+    hours = List.generate(24, (index) => (index + 1).toString());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CustomNumberPicker(
-      initialValue: widget.selectedTime.hour,
-      maxValue: widget.maxTime.hour,
-      minValue: widget.minTime.hour,
+    return CustomItemPicker(
+      items: hours,
+      initialValue: widget.selectedTime.hour.toString(),
+      maxIndex: widget.maxTime.hour,
+      minIndex: widget.minTime.hour,
       onSelectedItemChanged: widget.onSelectedHourChanged,
       theme: widget.theme,
       backgroundColor: widget.backgroundColor,
