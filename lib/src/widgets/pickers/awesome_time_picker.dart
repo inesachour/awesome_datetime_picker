@@ -117,7 +117,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             itemWidth: widget.itemWidth,
             onSelectedHourChanged: (index) {
               selectedTime =
-                  AwesomeTime(hour: index + 1, minute: selectedTime.minute);
+                  AwesomeTime(hour: index, minute: selectedTime.minute);
 
               DateTime nativeSelectedTime =
                   DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
@@ -135,8 +135,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
           return AwesomeMinutePicker(
-            key: ValueKey(
-                selectedTime.hour >= 12 ? "hour_picker 1" : "hour_picker 2"),
+            /*key: ValueKey(
+                selectedTime.hour >= 12 ? "hour_picker 1" : "hour_picker 2"),*/ //TODO
             selectedTime: selectedTime,
             maxTime: maxTime,
             minTime: minTime,

@@ -45,7 +45,7 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
   @override
   void initState() {
     super.initState();
-    hours = List.generate(24, (index) => (index + 1).toString());
+    hours = List.generate(24, (index) => (index).toString());
   }
 
   @override

@@ -60,7 +60,7 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
 
     return CustomItemPicker(
       items: minutes,
-      initialIndex: minutes.indexOf(widget.selectedTime.minute.toString()),
+      initialIndex: minutes.indexOf((widget.selectedTime.minute).toString()),
       maxIndex: maxValue,
       minIndex: minValue,
       onSelectedItemChanged: widget.onSelectedMinuteChanged,
