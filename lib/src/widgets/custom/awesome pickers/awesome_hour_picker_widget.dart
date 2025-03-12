@@ -49,30 +49,36 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
   void initState() {
     super.initState();
     hours = widget.selectedAmPm != null
-        ? List.generate(12, (index) => (index + 1).toString())
+        ? List.generate(12, (index) => (index == 0 ? 12 : index).toString())
         : List.generate(24, (index) => (index).toString());
   }
 
   @override
   Widget build(BuildContext context) {
+    int initialIndex = hours.indexOf(widget.selectedAmPm != null
+        ? AwesomeTimeUtils.convertTo12HourFormat(widget.selectedTime.hour)
+            .toString()
+        : widget.selectedTime.hour.toString());
+
     int maxIndex = widget.selectedAmPm != null
         ? AwesomeTimeUtils.getAmPm(widget.maxTime.hour) != widget.selectedAmPm
             ? 11
-            : AwesomeTimeUtils.convertTo12HourFormat(widget.maxTime.hour)
+            : hours.indexOf(
+                AwesomeTimeUtils.convertTo12HourFormat(widget.maxTime.hour)
+                    .toString())
         : widget.maxTime.hour;
 
     int minIndex = widget.selectedAmPm != null
         ? AwesomeTimeUtils.getAmPm(widget.minTime.hour) != widget.selectedAmPm
             ? 0
-            : AwesomeTimeUtils.convertTo12HourFormat(widget.minTime.hour)
+            : hours.indexOf(
+                AwesomeTimeUtils.convertTo12HourFormat(widget.minTime.hour)
+                    .toString())
         : widget.minTime.hour;
 
     return CustomItemPicker(
       items: hours,
-      initialIndex: hours.indexOf(widget.selectedAmPm != null
-          ? AwesomeTimeUtils.convertTo12HourFormat(widget.selectedTime.hour)
-              .toString()
-          : widget.selectedTime.hour.toString()),
+      initialIndex: initialIndex,
       maxIndex: maxIndex,
       minIndex: minIndex,
       onSelectedItemChanged: widget.onSelectedHourChanged,

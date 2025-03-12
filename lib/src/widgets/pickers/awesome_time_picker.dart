@@ -125,7 +125,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             onSelectedHourChanged: (index) {
               selectedTime = AwesomeTime(
                   hour: AwesomeTimeUtils.convertTo24HourFormat(
-                      index + 1, selectedAmPm),
+                      index == 0 ? 12 : index, selectedAmPm),
                   minute: selectedTime.minute);
 
               DateTime nativeSelectedTime =
@@ -224,6 +224,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
               selectedTime.hour =
                   AwesomeTimeUtils.toggleAmPm(selectedTime.hour);
               setState(() {});
+
+              widget.onChanged?.call(selectedTime);
             },
           );
         } else {
