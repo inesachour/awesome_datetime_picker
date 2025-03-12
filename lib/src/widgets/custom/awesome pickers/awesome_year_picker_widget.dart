@@ -53,7 +53,7 @@ class _AwesomeYearPickerState extends State<AwesomeYearPicker> {
   Widget build(BuildContext context) {
     return CustomItemPicker(
       items: years,
-      initialValue: widget.selectedDate.year.toString(),
+      initialIndex: years.indexOf(widget.selectedDate.year.toString()),
       maxIndex: widget.maxDate.year - widget.minDate.year,
       minIndex: 0,
       onSelectedItemChanged: widget.onSelectedYearChanged,

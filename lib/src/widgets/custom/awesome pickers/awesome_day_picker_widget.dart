@@ -54,10 +54,12 @@ class _AwesomeDayPickerState extends State<AwesomeDayPicker> {
       minValue = widget.minDate.day;
     }
 
+    List<String> days = AwesomeDateUtils.getMonthDays(
+        widget.selectedDate.year, widget.selectedDate.month);
+
     return CustomItemPicker(
-      items: AwesomeDateUtils.getMonthDays(
-          widget.selectedDate.year, widget.selectedDate.month),
-      initialValue: widget.selectedDate.day.toString(),
+      items: days,
+      initialIndex: days.indexOf(widget.selectedDate.day.toString()),
       maxIndex: maxValue - 1,
       minIndex: minValue - 1,
       onSelectedItemChanged: widget.onSelectedDayChanged,

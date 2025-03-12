@@ -41,7 +41,7 @@ class _AwesomeAmPmPickerState extends State<AwesomeAmPmPicker> {
   Widget build(BuildContext context) {
     return CustomItemPicker(
       items: AwesomeTimeUtils.amPm,
-      initialValue: widget.selectedAmPm,
+      initialIndex: AwesomeTimeUtils.amPm.indexOf(widget.selectedAmPm),
       maxIndex: 1,
       minIndex: 0,
       onSelectedItemChanged: widget.onSelectedAmPmChanged,

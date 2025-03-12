@@ -60,9 +60,7 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
   Widget build(BuildContext context) {
     return CustomItemPicker(
       items: hours,
-      initialValue: widget.isAmPm && widget.maxTime.hour > 12
-          ? (widget.selectedTime.hour - 12).toString()
-          : widget.selectedTime.hour.toString(),
+      initialIndex: hours.indexOf(widget.selectedTime.hour.toString()),
       maxIndex: widget.maxTime.hour,
       minIndex: widget.minTime.hour,
       onSelectedItemChanged: widget.onSelectedHourChanged,

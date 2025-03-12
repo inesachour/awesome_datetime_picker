@@ -66,9 +66,9 @@ class _AwesomeMonthPickerState extends State<AwesomeMonthPicker> {
 
     return CustomItemPicker(
       items: months,
-      initialValue: widget.isNumber
-          ? widget.selectedDate.month.toString()
-          : months[widget.selectedDate.month - 1],
+      initialIndex: widget.isNumber
+          ? months.indexOf(widget.selectedDate.month.toString())
+          : widget.selectedDate.month - 1,
       minIndex: minValue - 1,
       maxIndex: maxValue - 1,
       onSelectedItemChanged: widget.onSelectedMonthChanged,

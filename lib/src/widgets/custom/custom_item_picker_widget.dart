@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomItemPicker extends StatefulWidget {
   final List<String> items;
-  final String initialValue;
+  final int initialIndex;
   final int maxIndex;
   final int minIndex;
   final ValueChanged<int> onSelectedItemChanged;
@@ -20,7 +20,7 @@ class CustomItemPicker extends StatefulWidget {
   const CustomItemPicker({
     super.key,
     required this.items,
-    required this.initialValue,
+    required this.initialIndex,
     required this.maxIndex,
     required this.minIndex,
     required this.onSelectedItemChanged,
@@ -49,9 +49,9 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
   @override
   void initState() {
     super.initState();
-    _selectedItem = widget.initialValue;
+    _selectedItem = widget.items[widget.initialIndex];
     _scrollController = FixedExtentScrollController(
-      initialItem: widget.items.indexOf(widget.initialValue) - widget.minIndex,
+      initialItem: widget.initialIndex - widget.minIndex,
     );
   }
 

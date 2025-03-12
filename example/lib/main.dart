@@ -1,5 +1,4 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
