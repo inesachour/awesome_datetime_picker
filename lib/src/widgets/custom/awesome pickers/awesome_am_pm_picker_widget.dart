@@ -1,5 +1,6 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
 import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
+import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _AwesomeAmPmPickerState extends State<AwesomeAmPmPicker> {
   @override
   Widget build(BuildContext context) {
     return CustomItemPicker(
-      items: const ["AM", "PM"],
+      items: AwesomeTimeUtils.amPm,
       initialValue: widget.selectedAmPm,
       maxIndex: 1,
       minIndex: 0,
