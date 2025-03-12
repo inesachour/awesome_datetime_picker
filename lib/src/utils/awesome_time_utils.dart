@@ -23,6 +23,10 @@ class AwesomeTimeUtils {
   static int convertTo12HourFormat(int hour) {
     if (hour == 0) return 12;
     if (hour == 12) return 12;
-    return hour % 12; // Convert 24h to 12h format
+    return hour % 12;
+  }
+
+  static int toggleAmPm(int hour) {
+    return (hour + 12) % 24;
   }
 }

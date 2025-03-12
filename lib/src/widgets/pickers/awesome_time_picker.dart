@@ -106,8 +106,9 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       children: List.generate(widget.timeFormat.value.length, (index) {
         if (widget.timeFormat.value[index] == PickerType.hour_12) {
           return AwesomeHourPicker(
-            key: ValueKey(
-                selectedTime.hour >= 12 ? "hour_picker 1" : "hour_picker 2"),
+            key: ValueKey(selectedAmPm == AwesomeTimeUtils.amPm[0]
+                ? "hour_picker 1"
+                : "hour_picker 2"),
             selectedTime: selectedTime,
             maxTime: maxTime,
             minTime: minTime,
@@ -218,7 +219,12 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedAmPmChanged: (index) {},
+            onSelectedAmPmChanged: (index) {
+              selectedAmPm = AwesomeTimeUtils.amPm[index];
+              selectedTime.hour =
+                  AwesomeTimeUtils.toggleAmPm(selectedTime.hour);
+              setState(() {});
+            },
           );
         } else {
           return Container();
