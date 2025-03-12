@@ -2,6 +2,7 @@ import 'package:awesome_datetime_picker/src/data/format.dart';
 import 'package:awesome_datetime_picker/src/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_time_picker_theme.dart';
+import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_am_pm_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_hour_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_minute_picker_widget.dart';
@@ -91,7 +92,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
     initialTime = widget.initialTime ??
         AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
     selectedTime = initialTime;
-    selectedAmPm = selectedTime.hour >= 12 ? "PM" : "AM";
+    selectedAmPm = AwesomeTimeUtils.getAmPmFrom24Format(selectedTime.hour);
 
     super.initState();
   }
@@ -118,7 +119,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             itemWidth: widget.itemWidth,
             onSelectedHourChanged: (value) {
               selectedTime = AwesomeTime(
-                  hour: selectedAmPm == "AM" ? value : value + 12,
+                  hour:
+                      AwesomeTimeUtils.get24FromAmPmFormat(value, selectedAmPm),
                   minute: selectedTime.minute);
 
               DateTime nativeSelectedTime =
@@ -131,11 +133,9 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
                 selectedTime = maxTime;
               }
 
-              if (selectedTime.hour >= 12) {
-                selectedAmPm = "PM";
-              } else {
-                selectedAmPm = "AM";
-              }
+              selectedAmPm =
+                  AwesomeTimeUtils.getAmPmFrom24Format(selectedTime.hour);
+
               setState(() {});
 
               widget.onChanged?.call(selectedTime);
@@ -225,6 +225,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
             onSelectedAmPmChanged: (value) {
+              //TODO CHANGE VALUE to index
               if (value == 1) {
                 selectedAmPm = "AM";
                 selectedTime.hour -= 12;
