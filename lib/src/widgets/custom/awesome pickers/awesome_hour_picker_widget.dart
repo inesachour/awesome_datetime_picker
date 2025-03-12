@@ -10,7 +10,6 @@ class AwesomeHourPicker extends StatefulWidget {
     required this.maxTime,
     required this.minTime,
     required this.onSelectedHourChanged,
-    this.isAmPm = false,
     this.theme,
     this.backgroundColor,
     this.fadeEffect,
@@ -26,7 +25,6 @@ class AwesomeHourPicker extends StatefulWidget {
   final AwesomeTime maxTime;
   final AwesomeTime minTime;
   final Function(int) onSelectedHourChanged;
-  final bool isAmPm;
   final ItemTheme? theme;
   final Color? backgroundColor;
   final Color? selectorColor;
@@ -47,13 +45,7 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
   @override
   void initState() {
     super.initState();
-    hours = List.generate(24, (index) {
-      if (widget.isAmPm && index > 11) {
-        return (index - 11).toString();
-      } else {
-        return (index + 1).toString();
-      }
-    });
+    hours = List.generate(24, (index) => (index + 1).toString());
   }
 
   @override

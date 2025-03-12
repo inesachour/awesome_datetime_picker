@@ -83,7 +83,6 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
   late AwesomeTime minTime;
   late AwesomeTime maxTime;
   late AwesomeTime initialTime;
-  late String selectedAmPm;
 
   @override
   void initState() {
@@ -92,7 +91,6 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
     initialTime = widget.initialTime ??
         AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
     selectedTime = initialTime;
-    selectedAmPm = AwesomeTimeUtils.getAmPmFrom24Format(selectedTime.hour);
 
     super.initState();
   }
@@ -103,44 +101,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.timeFormat.value.length, (index) {
         if (widget.timeFormat.value[index] == PickerType.hour_12) {
-          return AwesomeHourPicker(
-            selectedTime: selectedTime,
-            maxTime: maxTime,
-            minTime: minTime,
-            isAmPm: true,
-            theme: widget.theme?.hourTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedHourChanged: (value) {
-              selectedTime = AwesomeTime(
-                  hour:
-                      AwesomeTimeUtils.get24FromAmPmFormat(value, selectedAmPm),
-                  minute: selectedTime.minute);
-
-              DateTime nativeSelectedTime =
-                  DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
-              if (nativeSelectedTime.isBefore(
-                  DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
-                selectedTime = minTime;
-              } else if (nativeSelectedTime.isAfter(
-                  DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
-                selectedTime = maxTime;
-              }
-
-              selectedAmPm =
-                  AwesomeTimeUtils.getAmPmFrom24Format(selectedTime.hour);
-
-              setState(() {});
-
-              widget.onChanged?.call(selectedTime);
-            },
-          );
+          //TODO
+          return Container();
         } else if (widget.timeFormat.value[index] == PickerType.hour_24) {
           return AwesomeHourPicker(
             selectedTime: selectedTime,
@@ -208,36 +170,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.am_pm) {
-          return AwesomeAmPmPicker(
-            key: ValueKey(selectedTime.hour == minTime.hour
-                ? "am_pm_picker 1"
-                : selectedTime.hour == maxTime.hour
-                    ? "am_pm_picker 2"
-                    : "am_pm_picker 3"),
-            selectedAmPm: selectedAmPm,
-            theme: widget.theme?.ampmTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedAmPmChanged: (value) {
-              //TODO CHANGE VALUE to index
-              if (value == 1) {
-                selectedAmPm = "AM";
-                selectedTime.hour -= 12;
-              } else {
-                selectedAmPm = "PM";
-                selectedTime.hour += 12;
-              }
-              setState(() {});
-
-              widget.onChanged?.call(selectedTime);
-            },
-          );
+          //TODO
+          return Container();
         } else {
           return Container();
         }
