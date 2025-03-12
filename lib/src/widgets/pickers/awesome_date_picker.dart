@@ -128,11 +128,11 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedDayChanged: (value) {
+            onSelectedDayChanged: (index) {
               selectedDate = AwesomeDate(
                   year: selectedDate.year,
                   month: selectedDate.month,
-                  day: value);
+                  day: index + 1);
 
               DateTime nativeSelectedDate = DateTime(
                   selectedDate.year, selectedDate.month, selectedDate.day);
@@ -162,15 +162,17 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedYearChanged: (value) {
+            onSelectedYearChanged: (index) {
               int day = selectedDate.day;
-              int daysInMonth =
-                  DateUtils.getDaysInMonth(value, selectedDate.month);
+              int daysInMonth = DateUtils.getDaysInMonth(
+                  index + minDate.year, selectedDate.month);
               if (selectedDate.day > daysInMonth) {
                 day = daysInMonth;
               }
-              selectedDate =
-                  AwesomeDate(year: value, month: selectedDate.month, day: day);
+              selectedDate = AwesomeDate(
+                  year: index + minDate.year,
+                  month: selectedDate.month,
+                  day: day);
 
               DateTime nativeSelectedDate = DateTime(
                   selectedDate.year, selectedDate.month, selectedDate.day);
@@ -207,15 +209,15 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedMonthChanged: (value) {
+            onSelectedMonthChanged: (index) {
               int day = selectedDate.day;
               int daysInMonth =
-                  DateUtils.getDaysInMonth(selectedDate.year, value);
+                  DateUtils.getDaysInMonth(selectedDate.year, index + 1);
               if (selectedDate.day > daysInMonth) {
                 day = daysInMonth;
               }
-              selectedDate =
-                  AwesomeDate(year: selectedDate.year, month: value, day: day);
+              selectedDate = AwesomeDate(
+                  year: selectedDate.year, month: index + 1, day: day);
 
               DateTime nativeSelectedDate = DateTime(
                   selectedDate.year, selectedDate.month, selectedDate.day);
@@ -251,15 +253,15 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedMonthChanged: (value) {
+            onSelectedMonthChanged: (index) {
               int day = selectedDate.day;
               int daysInMonth =
-                  DateUtils.getDaysInMonth(selectedDate.year, value);
+                  DateUtils.getDaysInMonth(selectedDate.year, index + 1);
               if (selectedDate.day > daysInMonth) {
                 day = daysInMonth;
               }
-              selectedDate =
-                  AwesomeDate(year: selectedDate.year, month: value, day: day);
+              selectedDate = AwesomeDate(
+                  year: selectedDate.year, month: index + 1, day: day);
 
               DateTime nativeSelectedDate = DateTime(
                   selectedDate.year, selectedDate.month, selectedDate.day);

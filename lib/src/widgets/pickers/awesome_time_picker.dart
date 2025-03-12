@@ -2,8 +2,6 @@ import 'package:awesome_datetime_picker/src/data/format.dart';
 import 'package:awesome_datetime_picker/src/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_time_picker_theme.dart';
-import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_am_pm_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_hour_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_minute_picker_widget.dart';
 import 'package:flutter/material.dart';
@@ -117,9 +115,9 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedHourChanged: (value) {
+            onSelectedHourChanged: (index) {
               selectedTime =
-                  AwesomeTime(hour: value, minute: selectedTime.minute);
+                  AwesomeTime(hour: index + 1, minute: selectedTime.minute);
 
               DateTime nativeSelectedTime =
                   DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
@@ -151,9 +149,9 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedMinuteChanged: (value) {
+            onSelectedMinuteChanged: (index) {
               selectedTime =
-                  AwesomeTime(hour: selectedTime.hour, minute: value);
+                  AwesomeTime(hour: selectedTime.hour, minute: index);
 
               DateTime nativeSelectedTime =
                   DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);

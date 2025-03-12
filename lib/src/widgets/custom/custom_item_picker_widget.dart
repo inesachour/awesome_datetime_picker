@@ -125,7 +125,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                   setState(() {
                     _selectedItem = selectedValue;
                   });
-                  widget.onSelectedItemChanged(index + widget.minIndex + 1);
+                  widget.onSelectedItemChanged(index + widget.minIndex);
                 },
                 childDelegate: ListWheelChildBuilderDelegate(
                   childCount: widget.maxIndex - widget.minIndex + 1,
