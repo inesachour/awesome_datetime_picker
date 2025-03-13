@@ -3,13 +3,14 @@ import 'package:awesome_datetime_picker/src/data/locale.dart';
 import 'package:awesome_datetime_picker/src/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_date_picker_theme.dart';
+import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_day_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_month_picker.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_year_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDatePicker extends StatefulWidget {
-  const AwesomeDatePicker({
+  AwesomeDatePicker({
     super.key,
     this.minDate,
     this.maxDate,
@@ -26,7 +27,15 @@ class AwesomeDatePicker extends StatefulWidget {
     this.visibleItemCount,
     this.itemHeight,
     this.itemWidth,
-  });
+  })  : assert(
+          ValidationUtils.isValidDateRange(minDate: minDate, maxDate: maxDate),
+          'minDate must be before maxDate',
+        ),
+        assert(
+          ValidationUtils.isValidInitialDate(
+              date: initialDate, minDate: minDate, maxDate: maxDate),
+          'initialDate must be within minDate and maxDate range',
+        );
 
   /// The minimum selectable date for the date picker (default 1/1/1900).
   final AwesomeDate? minDate;

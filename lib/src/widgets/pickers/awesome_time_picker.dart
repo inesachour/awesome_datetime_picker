@@ -3,13 +3,14 @@ import 'package:awesome_datetime_picker/src/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_time_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
+import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_am_pm_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_hour_picker_widget.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_minute_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeTimePicker extends StatefulWidget {
-  const AwesomeTimePicker({
+  AwesomeTimePicker({
     super.key,
     this.minTime,
     this.maxTime,
@@ -25,7 +26,15 @@ class AwesomeTimePicker extends StatefulWidget {
     this.visibleItemCount,
     this.itemHeight,
     this.itemWidth,
-  });
+  })  : assert(
+          ValidationUtils.isValidTimeRange(minTime: minTime, maxTime: maxTime),
+          'minTime must be before maxTime',
+        ),
+        assert(
+          ValidationUtils.isValidInitialTime(
+              time: initialTime, minTime: minTime, maxTime: maxTime),
+          'initialTime must be within minTime and maxTime range',
+        );
 
   /// The minimum selectable time for the time picker (default 00:00).
   final AwesomeTime? minTime;
