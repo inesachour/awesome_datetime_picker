@@ -17,3 +17,7 @@
 ## 0.1.0
 
 * Add AM/PM format for time and datetime pickers.
+
+## 0.1.1
+
+* Add asserts.
