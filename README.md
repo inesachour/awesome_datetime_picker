@@ -119,7 +119,8 @@ The following time format values are only for the display of the time and do not
 
 | Time Format | Example        |
 |-------------|----------------|
-| dMy         | 13:00          |
+| Hm          | 13:00          |
+| hm          | 1:00 PM        |
 
 To use a date format, set it as follows:
 ```dart

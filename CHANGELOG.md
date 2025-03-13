@@ -13,3 +13,7 @@
 ## 0.0.4
 
 * Documentation and small performance improvements.
+
+## 0.1.0
+
+* Add AM/PM format for time and datetime pickers.
