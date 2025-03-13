@@ -55,8 +55,8 @@ class _CalendarState extends State<Calendar> {
             ),
             AwesomeTimePicker(
               timeFormat: AwesomeTimeFormat.hm,
-              minTime: AwesomeTime(hour: 5, minute: 20),
-              maxTime: AwesomeTime(hour: 9, minute: 15),
+              //minTime: AwesomeTime(hour: 5, minute: 20),
+              //maxTime: AwesomeTime(hour: 9, minute: 15),
               onChanged: (AwesomeTime time) {
                 print("----Time changed : ${time.hour}:${time.minute}\n");
               },
@@ -66,7 +66,7 @@ class _CalendarState extends State<Calendar> {
             ),
             AwesomeDateTimePicker(
               dateFormat: AwesomeDateFormat.dMMy,
-              timeFormat: AwesomeTimeFormat.hm,
+              timeFormat: AwesomeTimeFormat.Hm,
               onChanged: (AwesomeDateTime dateTime) {
                 print(
                     "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
