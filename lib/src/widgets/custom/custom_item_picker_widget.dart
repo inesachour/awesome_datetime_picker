@@ -85,7 +85,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
           height: pickerHeight,
           width: widget.theme?.width ??
               widget.itemWidth ??
-              MediaQuery.of(context).size.width * 0.16,
+              MediaQuery.of(context).size.width * 0.15,
           margin: widget.theme?.margin,
           padding: widget.theme?.padding,
           decoration: BoxDecoration(

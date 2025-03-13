@@ -66,7 +66,7 @@ class _CalendarState extends State<Calendar> {
             ),
             AwesomeDateTimePicker(
               dateFormat: AwesomeDateFormat.dMMy,
-              timeFormat: AwesomeTimeFormat.Hm,
+              timeFormat: AwesomeTimeFormat.hm,
               onChanged: (AwesomeDateTime dateTime) {
                 print(
                     "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
