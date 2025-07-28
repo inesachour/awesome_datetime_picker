@@ -62,4 +62,54 @@ class AwesomeTimePickerController extends ChangeNotifier {
     return List.generate(
         maxValue - minValue + 1, (index) => (index + minValue).toString());
   }
+
+  onSelectedHourChanged(int index) {
+    selectedTime = AwesomeTime(hour: index, minute: selectedTime.minute);
+
+    DateTime nativeSelectedTime =
+        DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
+    if (nativeSelectedTime
+        .isBefore(DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
+      selectedTime = minTime;
+    } else if (nativeSelectedTime
+        .isAfter(DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
+      selectedTime = maxTime;
+    }
+  }
+
+  onSelectedAmPmHourChanged(int index) {
+    selectedTime = AwesomeTime(
+        hour: AwesomeTimeUtils.convertTo24HourFormat(
+            index == 0 ? 12 : index, selectedAmPm),
+        minute: selectedTime.minute);
+
+    DateTime nativeSelectedTime =
+        DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
+    if (nativeSelectedTime
+        .isBefore(DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
+      selectedTime = minTime;
+    } else if (nativeSelectedTime
+        .isAfter(DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
+      selectedTime = maxTime;
+    }
+  }
+
+  onSelectedMinuteChanged(int index) {
+    selectedTime = AwesomeTime(hour: selectedTime.hour, minute: index);
+
+    DateTime nativeSelectedTime =
+        DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
+    if (nativeSelectedTime
+        .isBefore(DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
+      selectedTime = minTime;
+    } else if (nativeSelectedTime
+        .isAfter(DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
+      selectedTime = maxTime;
+    }
+  }
+
+  onSelectedAmPmChanged(int index) {
+    selectedAmPm = AwesomeTimeUtils.amPm[index];
+    selectedTime.hour = AwesomeTimeUtils.toggleAmPm(selectedTime.hour);
+  }
 }
