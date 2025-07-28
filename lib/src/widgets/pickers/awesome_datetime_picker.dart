@@ -1,7 +1,7 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
 import 'package:flutter/material.dart';
 
-/*class AwesomeDateTimePicker extends StatefulWidget {
+class AwesomeDateTimePicker extends StatefulWidget {
   const AwesomeDateTimePicker({
     super.key,
     this.minDateTime,
@@ -161,4 +161,4 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
       ],
     );
   }
-}*/
+}

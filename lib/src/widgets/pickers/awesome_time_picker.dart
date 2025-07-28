@@ -1,15 +1,14 @@
+import 'package:awesome_datetime_picker/src/controllers/awesome_time_picker_controller.dart';
 import 'package:awesome_datetime_picker/src/data/format.dart';
 import 'package:awesome_datetime_picker/src/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_time_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_am_pm_picker_widget.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_hour_picker_widget.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_minute_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
-/*class AwesomeTimePicker extends StatefulWidget {
+class AwesomeTimePicker extends StatefulWidget {
   AwesomeTimePicker({
     super.key,
     this.minTime,
@@ -88,24 +87,24 @@ import 'package:flutter/material.dart';
 }
 
 class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
-  late AwesomeTime selectedTime;
-  late AwesomeTime minTime;
-  late AwesomeTime maxTime;
-  late AwesomeTime initialTime;
-
-  late String selectedAmPm;
+  late final AwesomeTimePickerController _controller;
 
   @override
   void initState() {
-    minTime = widget.minTime ?? AwesomeTime(hour: 00, minute: 00);
-    maxTime = widget.maxTime ?? AwesomeTime(hour: 23, minute: 59);
-    initialTime = widget.initialTime ??
-        AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
-    selectedTime = initialTime;
-
-    selectedAmPm = AwesomeTimeUtils.getAmPm(selectedTime.hour);
-
     super.initState();
+
+    _controller = AwesomeTimePickerController(
+      minTime: widget.minTime ?? AwesomeTime(hour: 00, minute: 00),
+      maxTime: widget.maxTime ?? AwesomeTime(hour: 23, minute: 59),
+      initialTime: widget.initialTime ??
+          AwesomeTime(
+              hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute),
+    );
+
+    _controller.addListener(() {
+      widget.onChanged?.call(_controller.selectedTime);
+      setState(() {});
+    });
   }
 
   @override
@@ -114,14 +113,15 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.timeFormat.value.length, (index) {
         if (widget.timeFormat.value[index] == PickerType.hour_12) {
-          return AwesomeHourPicker(
-            key: ValueKey(selectedAmPm == AwesomeTimeUtils.amPm[0]
+          return CustomItemPicker(
+            key: ValueKey(_controller.selectedAmPm == AwesomeTimeUtils.amPm[0]
                 ? "hour_picker 1"
                 : "hour_picker 2"),
-            selectedTime: selectedTime,
-            maxTime: maxTime,
-            minTime: minTime,
-            selectedAmPm: selectedAmPm,
+            items: _controller.amPmHours,
+            initialIndex: _controller.amPmHours.indexOf(
+                AwesomeTimeUtils.convertTo12HourFormat(
+                        _controller.selectedTime.hour)
+                    .toString()),
             theme: widget.theme?.minuteTheme,
             backgroundColor: widget.backgroundColor,
             selectorColor: widget.selectorColor,
@@ -131,32 +131,35 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedHourChanged: (index) {
-              selectedTime = AwesomeTime(
+            onSelectedItemChanged: (index) {
+              _controller.selectedTime = AwesomeTime(
                   hour: AwesomeTimeUtils.convertTo24HourFormat(
-                      index == 0 ? 12 : index, selectedAmPm),
-                  minute: selectedTime.minute);
+                      index == 0 ? 12 : index, _controller.selectedAmPm),
+                  minute: _controller.selectedTime.minute);
 
-              DateTime nativeSelectedTime =
-                  DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
-              if (nativeSelectedTime.isBefore(
-                  DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
-                selectedTime = minTime;
-              } else if (nativeSelectedTime.isAfter(
-                  DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
-                selectedTime = maxTime;
+              DateTime nativeSelectedTime = DateTime(
+                  2025,
+                  1,
+                  1,
+                  _controller.selectedTime.hour,
+                  _controller.selectedTime.minute);
+              if (nativeSelectedTime.isBefore(DateTime(2025, 1, 1,
+                  _controller.minTime.hour, _controller.minTime.minute))) {
+                _controller.selectedTime = _controller.minTime;
+              } else if (nativeSelectedTime.isAfter(DateTime(2025, 1, 1,
+                  _controller.maxTime.hour, _controller.maxTime.minute))) {
+                _controller.selectedTime = _controller.maxTime;
               }
               setState(() {});
 
-              widget.onChanged?.call(selectedTime);
+              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.hour_24) {
-          return AwesomeHourPicker(
-            selectedTime: selectedTime,
-            maxTime: maxTime,
-            minTime: minTime,
-            selectedAmPm: null,
+          return CustomItemPicker(
+            items: _controller.hours,
+            initialIndex: _controller.hours
+                .indexOf(_controller.selectedTime.hour.toString()),
             theme: widget.theme?.hourTheme,
             backgroundColor: widget.backgroundColor,
             selectorColor: widget.selectorColor,
@@ -166,34 +169,39 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedHourChanged: (index) {
-              selectedTime =
-                  AwesomeTime(hour: index, minute: selectedTime.minute);
+            onSelectedItemChanged: (index) {
+              _controller.selectedTime = AwesomeTime(
+                  hour: index, minute: _controller.selectedTime.minute);
 
-              DateTime nativeSelectedTime =
-                  DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
-              if (nativeSelectedTime.isBefore(
-                  DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
-                selectedTime = minTime;
-              } else if (nativeSelectedTime.isAfter(
-                  DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
-                selectedTime = maxTime;
+              DateTime nativeSelectedTime = DateTime(
+                  2025,
+                  1,
+                  1,
+                  _controller.selectedTime.hour,
+                  _controller.selectedTime.minute);
+              if (nativeSelectedTime.isBefore(DateTime(2025, 1, 1,
+                  _controller.minTime.hour, _controller.minTime.minute))) {
+                _controller.selectedTime = _controller.minTime;
+              } else if (nativeSelectedTime.isAfter(DateTime(2025, 1, 1,
+                  _controller.maxTime.hour, _controller.maxTime.minute))) {
+                _controller.selectedTime = _controller.maxTime;
               }
               setState(() {});
 
-              widget.onChanged?.call(selectedTime);
+              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
-          return AwesomeMinutePicker(
-            key: ValueKey(selectedTime.hour == minTime.hour
-                ? "minute_picker 1"
-                : selectedTime.hour == maxTime.hour
-                    ? "minute_picker 2"
-                    : "minute_picker 3"),
-            selectedTime: selectedTime,
-            maxTime: maxTime,
-            minTime: minTime,
+          return CustomItemPicker(
+            key: ValueKey(
+                _controller.selectedTime.hour == _controller.minTime.hour
+                    ? "minute_picker 1"
+                    : _controller.selectedTime.hour == _controller.maxTime.hour
+                        ? "minute_picker 2"
+                        : "minute_picker 3"),
+            items: _controller.minutes,
+            initialIndex: _controller.minutes
+                .indexOf(_controller.selectedTime.minute.toString()),
             theme: widget.theme?.minuteTheme,
             backgroundColor: widget.backgroundColor,
             selectorColor: widget.selectorColor,
@@ -203,27 +211,33 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedMinuteChanged: (index) {
-              selectedTime =
-                  AwesomeTime(hour: selectedTime.hour, minute: index);
+            onSelectedItemChanged: (index) {
+              _controller.selectedTime = AwesomeTime(
+                  hour: _controller.selectedTime.hour, minute: index);
 
-              DateTime nativeSelectedTime =
-                  DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
-              if (nativeSelectedTime.isBefore(
-                  DateTime(2025, 1, 1, minTime.hour, minTime.minute))) {
-                selectedTime = minTime;
-              } else if (nativeSelectedTime.isAfter(
-                  DateTime(2025, 1, 1, maxTime.hour, maxTime.minute))) {
-                selectedTime = maxTime;
+              DateTime nativeSelectedTime = DateTime(
+                  2025,
+                  1,
+                  1,
+                  _controller.selectedTime.hour,
+                  _controller.selectedTime.minute);
+              if (nativeSelectedTime.isBefore(DateTime(2025, 1, 1,
+                  _controller.minTime.hour, _controller.minTime.minute))) {
+                _controller.selectedTime = _controller.minTime;
+              } else if (nativeSelectedTime.isAfter(DateTime(2025, 1, 1,
+                  _controller.maxTime.hour, _controller.maxTime.minute))) {
+                _controller.selectedTime = _controller.maxTime;
               }
               setState(() {});
 
-              widget.onChanged?.call(selectedTime);
+              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.am_pm) {
-          return AwesomeAmPmPicker(
-            selectedAmPm: selectedAmPm,
+          return CustomItemPicker(
+            items: AwesomeTimeUtils.amPm,
+            initialIndex:
+                AwesomeTimeUtils.amPm.indexOf(_controller.selectedAmPm),
             theme: widget.theme?.minuteTheme,
             backgroundColor: widget.backgroundColor,
             selectorColor: widget.selectorColor,
@@ -233,13 +247,13 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedAmPmChanged: (index) {
-              selectedAmPm = AwesomeTimeUtils.amPm[index];
-              selectedTime.hour =
-                  AwesomeTimeUtils.toggleAmPm(selectedTime.hour);
+            onSelectedItemChanged: (index) {
+              _controller.selectedAmPm = AwesomeTimeUtils.amPm[index];
+              _controller.selectedTime.hour =
+                  AwesomeTimeUtils.toggleAmPm(_controller.selectedTime.hour);
               setState(() {});
 
-              widget.onChanged?.call(selectedTime);
+              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else {
@@ -248,4 +262,4 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       }),
     );
   }
-}*/
+}
