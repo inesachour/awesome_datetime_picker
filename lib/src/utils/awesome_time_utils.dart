@@ -2,7 +2,7 @@ class AwesomeTimeUtils {
   static const List<String> amPm = ["AM", "PM"];
 
   static String getAmPm(int hour) {
-    if (hour <= 12) {
+    if (hour <= 12 && hour != 0) {
       return "AM";
     }
     return "PM";
