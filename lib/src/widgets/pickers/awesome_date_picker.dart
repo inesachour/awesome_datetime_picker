@@ -176,7 +176,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             items: _controller.monthsNames,
             initialIndex: _controller.monthsNames.indexOf(
                 AwesomeDateUtils.getMonthNames(
-                    widget.locale)[_controller.selectedDate.month]),
+                    widget.locale)[_controller.selectedDate.month - 1]),
             theme: widget.theme?.monthTheme,
             backgroundColor: widget.backgroundColor,
             selectorColor: widget.selectorColor,

@@ -118,13 +118,14 @@ class AwesomeDatePickerController extends ChangeNotifier {
 
   onSelectedMonthNameChanged(String newValue) {
     int day = selectedDate.day;
-    int daysInMonth =
-        DateUtils.getDaysInMonth(selectedDate.year, int.parse(newValue));
+    int monthNumber =
+        AwesomeDateUtils.getMonthNames(locale).indexOf(newValue) + 1;
+    int daysInMonth = DateUtils.getDaysInMonth(selectedDate.year, monthNumber);
     if (selectedDate.day > daysInMonth) {
       day = daysInMonth;
     }
-    selectedDate = AwesomeDate(
-        year: selectedDate.year, month: int.parse(newValue), day: day);
+    selectedDate =
+        AwesomeDate(year: selectedDate.year, month: monthNumber, day: day);
 
     DateTime nativeSelectedDate =
         DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
