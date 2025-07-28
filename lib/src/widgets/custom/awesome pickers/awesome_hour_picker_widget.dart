@@ -4,7 +4,7 @@ import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
-class AwesomeHourPicker extends StatefulWidget {
+/*class AwesomeHourPicker extends StatefulWidget {
   const AwesomeHourPicker({
     super.key,
     required this.selectedTime,
@@ -93,4 +93,4 @@ class _AwesomeHourPickerState extends State<AwesomeHourPicker> {
       itemWidth: widget.itemWidth,
     );
   }
-}
+}*/

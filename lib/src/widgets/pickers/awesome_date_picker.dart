@@ -1,12 +1,12 @@
+import 'package:awesome_datetime_picker/src/controllers/awesome_date_picker_controller.dart';
 import 'package:awesome_datetime_picker/src/data/format.dart';
 import 'package:awesome_datetime_picker/src/data/locale.dart';
 import 'package:awesome_datetime_picker/src/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_date_picker_theme.dart';
+import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
 import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_day_picker_widget.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_month_picker.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_year_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDatePicker extends StatefulWidget {
@@ -97,6 +97,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
   late AwesomeDate maxDate;
   late AwesomeDate initialDate;
 
+  late final AwesomeDatePickerController _controller;
+
   @override
   void initState() {
     minDate = widget.minDate ?? AwesomeDate(year: 1900, month: 1, day: 1);
@@ -109,6 +111,18 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
     selectedDate = initialDate;
 
     super.initState();
+
+    _controller = AwesomeDatePickerController(
+      minDate: widget.minDate ?? AwesomeDate(year: 1900, month: 1, day: 1),
+      maxDate: widget.maxDate ?? AwesomeDate(year: 2100, month: 12, day: 31),
+      locale: widget.locale,
+      initialDate: widget.initialDate,
+    );
+
+    _controller.addListener(() {
+      widget.onChanged?.call(_controller.selectedDate);
+      setState(() {});
+    });
   }
 
   @override
@@ -117,7 +131,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(3, (index) {
         if (widget.dateFormat.value[index] == PickerType.day) {
-          return AwesomeDayPicker(
+          return CustomItemPicker(
             key: ValueKey(selectedDate.year == minDate.year &&
                     selectedDate.month == minDate.month
                 ? "day_picker 1"
@@ -125,9 +139,9 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                         selectedDate.month == maxDate.month
                     ? "day_picker 2"
                     : "day_picker 3"),
-            selectedDate: selectedDate,
-            maxDate: maxDate,
-            minDate: minDate,
+            items: _controller.days,
+            initialIndex: _controller.days
+                .indexOf(_controller.selectedDate.day.toString()),
             theme: widget.theme?.dayTheme,
             backgroundColor: widget.backgroundColor,
             selectorColor: widget.selectorColor,
@@ -137,7 +151,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedDayChanged: (index) {
+            onSelectedItemChanged: (index) {
               selectedDate = AwesomeDate(
                   year: selectedDate.year,
                   month: selectedDate.month,
@@ -158,10 +172,10 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.year) {
-          return AwesomeYearPicker(
-            selectedDate: selectedDate,
-            maxDate: maxDate,
-            minDate: minDate,
+          return CustomItemPicker(
+            items: _controller.years,
+            initialIndex: _controller.years
+                .indexOf(_controller.selectedDate.year.toString()),
             theme: widget.theme?.yearTheme,
             backgroundColor: widget.backgroundColor,
             selectorColor: widget.selectorColor,
@@ -171,7 +185,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedYearChanged: (index) {
+            onSelectedItemChanged: (index) {
               int day = selectedDate.day;
               int daysInMonth = DateUtils.getDaysInMonth(
                   index + minDate.year, selectedDate.month);
@@ -198,19 +212,18 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_text) {
-          return AwesomeMonthPicker(
+          return CustomItemPicker(
             key: ValueKey(selectedDate.year == minDate.year
                 ? "text_month_picker 1"
                 : selectedDate.year == maxDate.year
                     ? "text_month_picker 2"
                     : "text_month_picker 3"),
-            selectedDate: selectedDate,
-            maxDate: maxDate,
-            minDate: minDate,
+            items: _controller.monthsNames,
+            initialIndex: _controller.monthsNames.indexOf(
+                AwesomeDateUtils.getMonthNames(
+                    widget.locale)[_controller.selectedDate.month]),
             theme: widget.theme?.monthTheme,
             backgroundColor: widget.backgroundColor,
-            isNumber: false,
-            locale: widget.locale,
             selectorColor: widget.selectorColor,
             fadeEffect: widget.fadeEffect,
             selectedTextStyle: widget.selectedTextStyle,
@@ -218,7 +231,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedMonthChanged: (index) {
+            onSelectedItemChanged: (index) {
               int day = selectedDate.day;
               int daysInMonth =
                   DateUtils.getDaysInMonth(selectedDate.year, index + 1);
@@ -243,18 +256,17 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_number) {
-          return AwesomeMonthPicker(
+          return CustomItemPicker(
             key: ValueKey(selectedDate.year == minDate.year
                 ? "number_month_picker 1"
                 : selectedDate.year == maxDate.year
                     ? "number_month_picker 2"
                     : "number_month_picker 3"),
-            selectedDate: selectedDate,
-            maxDate: maxDate,
-            minDate: minDate,
+            items: _controller.months,
+            initialIndex: _controller.months
+                .indexOf(_controller.selectedDate.month.toString()),
             theme: widget.theme?.monthTheme,
             backgroundColor: widget.backgroundColor,
-            locale: widget.locale,
             selectorColor: widget.selectorColor,
             fadeEffect: widget.fadeEffect,
             selectedTextStyle: widget.selectedTextStyle,
@@ -262,7 +274,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedMonthChanged: (index) {
+            onSelectedItemChanged: (index) {
               int day = selectedDate.day;
               int daysInMonth =
                   DateUtils.getDaysInMonth(selectedDate.year, index + 1);

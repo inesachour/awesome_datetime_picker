@@ -4,7 +4,7 @@ import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
-class AwesomeAmPmPicker extends StatefulWidget {
+/*class AwesomeAmPmPicker extends StatefulWidget {
   const AwesomeAmPmPicker({
     super.key,
     required this.selectedAmPm,
@@ -56,4 +56,4 @@ class _AwesomeAmPmPickerState extends State<AwesomeAmPmPicker> {
       itemWidth: widget.itemWidth,
     );
   }
-}
+}*/

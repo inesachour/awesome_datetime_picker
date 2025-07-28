@@ -35,15 +35,15 @@ class _CalendarState extends State<Calendar> {
         mainAxisSize: MainAxisSize.max,
         children: [
           AwesomeDatePicker(
-            //dateFormat: AwesomeDateFormat.dMMy,
-            //minDate: AwesomeDate(year: 2025, month: 2, day: 15),
-            //maxDate: AwesomeDate(year: 2026, month: 10, day: 10),
+            dateFormat: AwesomeDateFormat.dMMy,
+            minDate: AwesomeDate(year: 2025, month: 2, day: 15),
+            maxDate: AwesomeDate(year: 2026, month: 10, day: 10),
             onChanged: (AwesomeDate date) {
               print(
                   "----Date changed : ${date.day}/${date.month}/${date.year}\n");
             },
           ),
-          AwesomeTimePicker(
+          /* AwesomeTimePicker(
             timeFormat: AwesomeTimeFormat.hm,
             //minTime: AwesomeTime(hour: 5, minute: 20),
             //maxTime: AwesomeTime(hour: 9, minute: 15),
@@ -58,7 +58,7 @@ class _CalendarState extends State<Calendar> {
               print(
                   "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
             },
-          ),
+          ),*/
         ],
       ),
     );

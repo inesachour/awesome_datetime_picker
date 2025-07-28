@@ -3,7 +3,7 @@ import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
-class AwesomeMinutePicker extends StatefulWidget {
+/*class AwesomeMinutePicker extends StatefulWidget {
   const AwesomeMinutePicker({
     super.key,
     required this.selectedTime,
@@ -75,4 +75,4 @@ class _AwesomeMinutePickerState extends State<AwesomeMinutePicker> {
       itemWidth: widget.itemWidth,
     );
   }
-}
+}*/

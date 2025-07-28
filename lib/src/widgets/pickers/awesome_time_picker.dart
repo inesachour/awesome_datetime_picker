@@ -9,7 +9,7 @@ import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awe
 import 'package:awesome_datetime_picker/src/widgets/custom/awesome%20pickers/awesome_minute_picker_widget.dart';
 import 'package:flutter/material.dart';
 
-class AwesomeTimePicker extends StatefulWidget {
+/*class AwesomeTimePicker extends StatefulWidget {
   AwesomeTimePicker({
     super.key,
     this.minTime,
@@ -248,4 +248,4 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       }),
     );
   }
-}
+}*/

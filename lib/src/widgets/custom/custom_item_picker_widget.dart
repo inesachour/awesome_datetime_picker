@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 class CustomItemPicker extends StatefulWidget {
   final List<String> items;
   final int initialIndex;
-  final int maxIndex;
-  final int minIndex;
   final ValueChanged<int> onSelectedItemChanged;
   final int? visibleItemCount;
   final ItemTheme? theme;
@@ -21,8 +19,6 @@ class CustomItemPicker extends StatefulWidget {
     super.key,
     required this.items,
     required this.initialIndex,
-    required this.maxIndex,
-    required this.minIndex,
     required this.onSelectedItemChanged,
     required this.visibleItemCount,
     this.theme,
@@ -51,7 +47,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
     super.initState();
     _selectedItem = widget.items[widget.initialIndex];
     _scrollController = FixedExtentScrollController(
-      initialItem: widget.initialIndex - widget.minIndex,
+      initialItem: widget.initialIndex,
     );
   }
 
@@ -118,19 +114,16 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                 physics: const FixedExtentScrollPhysics(),
                 diameterRatio: 1.5,
                 onSelectedItemChanged: (index) {
-                  final selectedValue = widget.items[
-                      index + widget.minIndex > widget.maxIndex
-                          ? widget.maxIndex
-                          : index + widget.minIndex];
+                  final selectedValue = widget.items[index];
                   setState(() {
                     _selectedItem = selectedValue;
                   });
-                  widget.onSelectedItemChanged(index + widget.minIndex);
+                  widget.onSelectedItemChanged(index);
                 },
                 childDelegate: ListWheelChildBuilderDelegate(
-                  childCount: widget.maxIndex - widget.minIndex + 1,
+                  childCount: widget.items.length,
                   builder: (context, index) {
-                    final value = widget.items[index + widget.minIndex];
+                    final value = widget.items[index];
                     final isSelected = value == _selectedItem;
                     return Center(
                       child: Text(
