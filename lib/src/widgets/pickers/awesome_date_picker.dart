@@ -139,8 +139,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedDayChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedDayChanged(newValue);
               setState(() {});
               widget.onChanged?.call(_controller.selectedDate);
             },
@@ -159,8 +159,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedYearChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedYearChanged(newValue);
               setState(() {});
               widget.onChanged?.call(_controller.selectedDate);
             },
@@ -186,8 +186,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedMonthNameChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedMonthNameChanged(newValue);
               setState(() {});
               widget.onChanged?.call(_controller.selectedDate);
             },
@@ -212,8 +212,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedMonthNumberChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedMonthNumberChanged(newValue);
               setState(() {});
 
               widget.onChanged?.call(_controller.selectedDate);

@@ -63,8 +63,9 @@ class AwesomeTimePickerController extends ChangeNotifier {
         maxValue - minValue + 1, (index) => (index + minValue).toString());
   }
 
-  onSelectedHourChanged(int index) {
-    selectedTime = AwesomeTime(hour: index, minute: selectedTime.minute);
+  onSelectedHourChanged(String newValue) {
+    selectedTime =
+        AwesomeTime(hour: int.parse(newValue), minute: selectedTime.minute);
 
     DateTime nativeSelectedTime =
         DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
@@ -77,10 +78,10 @@ class AwesomeTimePickerController extends ChangeNotifier {
     }
   }
 
-  onSelectedAmPmHourChanged(int index) {
+  onSelectedAmPmHourChanged(String newValue) {
     selectedTime = AwesomeTime(
         hour: AwesomeTimeUtils.convertTo24HourFormat(
-            index == 0 ? 12 : index, selectedAmPm),
+            int.parse(newValue) == 0 ? 12 : int.parse(newValue), selectedAmPm),
         minute: selectedTime.minute);
 
     DateTime nativeSelectedTime =
@@ -94,8 +95,9 @@ class AwesomeTimePickerController extends ChangeNotifier {
     }
   }
 
-  onSelectedMinuteChanged(int index) {
-    selectedTime = AwesomeTime(hour: selectedTime.hour, minute: index);
+  onSelectedMinuteChanged(String newValue) {
+    selectedTime =
+        AwesomeTime(hour: selectedTime.hour, minute: int.parse(newValue));
 
     DateTime nativeSelectedTime =
         DateTime(2025, 1, 1, selectedTime.hour, selectedTime.minute);
@@ -108,8 +110,8 @@ class AwesomeTimePickerController extends ChangeNotifier {
     }
   }
 
-  onSelectedAmPmChanged(int index) {
-    selectedAmPm = AwesomeTimeUtils.amPm[index];
+  onSelectedAmPmChanged(String newValue) {
+    selectedAmPm = newValue;
     selectedTime.hour = AwesomeTimeUtils.toggleAmPm(selectedTime.hour);
   }
 }

@@ -131,8 +131,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedAmPmHourChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedAmPmHourChanged(newValue);
               setState(() {});
               widget.onChanged?.call(_controller.selectedTime);
             },
@@ -151,8 +151,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedHourChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedHourChanged(newValue);
               setState(() {});
               widget.onChanged?.call(_controller.selectedTime);
             },
@@ -177,8 +177,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedMinuteChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedMinuteChanged(newValue);
               setState(() {});
               widget.onChanged?.call(_controller.selectedTime);
             },
@@ -197,8 +197,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (index) {
-              _controller.onSelectedAmPmChanged(index);
+            onSelectedItemChanged: (newValue) {
+              _controller.onSelectedAmPmChanged(newValue);
               setState(() {});
               widget.onChanged?.call(_controller.selectedTime);
             },

@@ -74,15 +74,15 @@ class AwesomeDatePickerController extends ChangeNotifier {
     return allDays.sublist(minValue - 1, maxValue);
   }
 
-  onSelectedYearChanged(int index) {
+  onSelectedYearChanged(String newValue) {
     int day = selectedDate.day;
     int daysInMonth =
-        DateUtils.getDaysInMonth(index + minDate.year, selectedDate.month);
+        DateUtils.getDaysInMonth(int.parse(newValue), selectedDate.month);
     if (selectedDate.day > daysInMonth) {
       day = daysInMonth;
     }
     selectedDate = AwesomeDate(
-        year: index + minDate.year, month: selectedDate.month, day: day);
+        year: int.parse(newValue), month: selectedDate.month, day: day);
 
     DateTime nativeSelectedDate =
         DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
@@ -95,49 +95,53 @@ class AwesomeDatePickerController extends ChangeNotifier {
     }
   }
 
-  onSelectedMonthNumberChanged(int index) {
+  onSelectedMonthNumberChanged(String newValue) {
     int day = selectedDate.day;
-    int daysInMonth = DateUtils.getDaysInMonth(selectedDate.year, index + 1);
+    int daysInMonth =
+        DateUtils.getDaysInMonth(selectedDate.year, int.parse(newValue));
     if (selectedDate.day > daysInMonth) {
       day = daysInMonth;
     }
-    selectedDate =
-        AwesomeDate(year: selectedDate.year, month: index + 1, day: day);
-
-    DateTime nativeSelectedDate =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    if (nativeSelectedDate
-        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
-      selectedDate = minDate;
-    } else if (nativeSelectedDate
-        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
-      selectedDate = maxDate;
-    }
-  }
-
-  onSelectedMonthNameChanged(int index) {
-    int day = selectedDate.day;
-    int daysInMonth = DateUtils.getDaysInMonth(selectedDate.year, index + 1);
-    if (selectedDate.day > daysInMonth) {
-      day = daysInMonth;
-    }
-    selectedDate =
-        AwesomeDate(year: selectedDate.year, month: index + 1, day: day);
-
-    DateTime nativeSelectedDate =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    if (nativeSelectedDate
-        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
-      selectedDate = minDate;
-    } else if (nativeSelectedDate
-        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
-      selectedDate = maxDate;
-    }
-  }
-
-  onSelectedDayChanged(int index) {
     selectedDate = AwesomeDate(
-        year: selectedDate.year, month: selectedDate.month, day: index + 1);
+        year: selectedDate.year, month: int.parse(newValue), day: day);
+
+    DateTime nativeSelectedDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    if (nativeSelectedDate
+        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
+      selectedDate = minDate;
+    } else if (nativeSelectedDate
+        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+      selectedDate = maxDate;
+    }
+  }
+
+  onSelectedMonthNameChanged(String newValue) {
+    int day = selectedDate.day;
+    int daysInMonth =
+        DateUtils.getDaysInMonth(selectedDate.year, int.parse(newValue));
+    if (selectedDate.day > daysInMonth) {
+      day = daysInMonth;
+    }
+    selectedDate = AwesomeDate(
+        year: selectedDate.year, month: int.parse(newValue), day: day);
+
+    DateTime nativeSelectedDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    if (nativeSelectedDate
+        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
+      selectedDate = minDate;
+    } else if (nativeSelectedDate
+        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+      selectedDate = maxDate;
+    }
+  }
+
+  onSelectedDayChanged(String newValue) {
+    selectedDate = AwesomeDate(
+        year: selectedDate.year,
+        month: selectedDate.month,
+        day: int.parse(newValue));
 
     DateTime nativeSelectedDate =
         DateTime(selectedDate.year, selectedDate.month, selectedDate.day);

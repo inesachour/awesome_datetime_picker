@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CustomItemPicker extends StatefulWidget {
   final List<String> items;
   final int initialIndex;
-  final ValueChanged<int> onSelectedItemChanged;
+  final ValueChanged<String> onSelectedItemChanged;
   final int? visibleItemCount;
   final ItemTheme? theme;
   final Color? backgroundColor;
@@ -118,7 +118,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                   setState(() {
                     _selectedItem = selectedValue;
                   });
-                  widget.onSelectedItemChanged(index);
+                  widget.onSelectedItemChanged(selectedValue);
                 },
                 childDelegate: ListWheelChildBuilderDelegate(
                   childCount: widget.items.length,
