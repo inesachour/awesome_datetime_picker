@@ -113,6 +113,9 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.timeFormat.value.length, (index) {
         if (widget.timeFormat.value[index] == PickerType.hour_12) {
+          print(
+              "zzzz ${AwesomeTimeUtils.convertTo12HourFormat(_controller.selectedTime.hour).toString()}");
+              print("zzzz ${_controller.amPmHours}");
           return CustomItemPicker(
             key: ValueKey(_controller.selectedAmPm == AwesomeTimeUtils.amPm[0]
                 ? "hour_picker 1"

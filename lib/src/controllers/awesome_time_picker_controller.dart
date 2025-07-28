@@ -37,28 +37,16 @@ class AwesomeTimePickerController extends ChangeNotifier {
   }
 
   List<String> get amPmHours {
-    int maxTimeIndex = hours.indexOf(
-        AwesomeTimeUtils.convertTo12HourFormat(maxTime.hour).toString());
-    if (maxTimeIndex == 0) {
-      maxTimeIndex = 11;
-    }
-
-    int minTimeIndex = hours.indexOf(
-        AwesomeTimeUtils.convertTo12HourFormat(minTime.hour).toString());
-    if (minTimeIndex == 12) {
-      minTimeIndex = 0;
-    }
-
-    int maxValue = AwesomeTimeUtils.getAmPm(maxTime.hour) != selectedAmPm
+    int maxIndex = AwesomeTimeUtils.getAmPm(maxTime.hour) != selectedAmPm
         ? 11
-        : maxTimeIndex;
+        : AwesomeTimeUtils.convertTo12HourFormat(maxTime.hour);
 
-    int minValue = AwesomeTimeUtils.getAmPm(minTime.hour) != selectedAmPm
+    int minIndex = AwesomeTimeUtils.getAmPm(minTime.hour) != selectedAmPm
         ? 0
-        : minTimeIndex;
+        : AwesomeTimeUtils.convertTo12HourFormat(minTime.hour);
 
-    return List.generate(maxValue - minValue + 1,
-        (i) => AwesomeTimeUtils.convertTo12HourFormat(minValue + i).toString());
+    return List.generate(
+        maxIndex - minIndex + 1, (i) => (minIndex + i).toString());
   }
 
   List<String> get minutes {
