@@ -32,7 +32,7 @@ class AwesomeDatePickerController extends ChangeNotifier {
         maxDate.year - minDate.year + 1, (i) => (minDate.year + i).toString());
   }
 
-  List<String> get months {
+  List<String> get monthsNumbers {
     int maxValue = 12, minValue = 1;
     if (selectedDate.year == maxDate.year) {
       maxValue = maxDate.month;
@@ -72,5 +72,81 @@ class AwesomeDatePickerController extends ChangeNotifier {
     List<String> allDays =
         AwesomeDateUtils.getMonthDays(selectedDate.year, selectedDate.month);
     return allDays.sublist(minValue - 1, maxValue);
+  }
+
+  onSelectedYearChanged(int index) {
+    int day = selectedDate.day;
+    int daysInMonth =
+        DateUtils.getDaysInMonth(index + minDate.year, selectedDate.month);
+    if (selectedDate.day > daysInMonth) {
+      day = daysInMonth;
+    }
+    selectedDate = AwesomeDate(
+        year: index + minDate.year, month: selectedDate.month, day: day);
+
+    DateTime nativeSelectedDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    if (nativeSelectedDate
+        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
+      selectedDate = minDate;
+    } else if (nativeSelectedDate
+        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+      selectedDate = maxDate;
+    }
+  }
+
+  onSelectedMonthNumberChanged(int index) {
+    int day = selectedDate.day;
+    int daysInMonth = DateUtils.getDaysInMonth(selectedDate.year, index + 1);
+    if (selectedDate.day > daysInMonth) {
+      day = daysInMonth;
+    }
+    selectedDate =
+        AwesomeDate(year: selectedDate.year, month: index + 1, day: day);
+
+    DateTime nativeSelectedDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    if (nativeSelectedDate
+        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
+      selectedDate = minDate;
+    } else if (nativeSelectedDate
+        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+      selectedDate = maxDate;
+    }
+  }
+
+  onSelectedMonthNameChanged(int index) {
+    int day = selectedDate.day;
+    int daysInMonth = DateUtils.getDaysInMonth(selectedDate.year, index + 1);
+    if (selectedDate.day > daysInMonth) {
+      day = daysInMonth;
+    }
+    selectedDate =
+        AwesomeDate(year: selectedDate.year, month: index + 1, day: day);
+
+    DateTime nativeSelectedDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    if (nativeSelectedDate
+        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
+      selectedDate = minDate;
+    } else if (nativeSelectedDate
+        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+      selectedDate = maxDate;
+    }
+  }
+
+  onSelectedDayChanged(int index) {
+    selectedDate = AwesomeDate(
+        year: selectedDate.year, month: selectedDate.month, day: index + 1);
+
+    DateTime nativeSelectedDate =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    if (nativeSelectedDate
+        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
+      selectedDate = minDate;
+    } else if (nativeSelectedDate
+        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
+      selectedDate = maxDate;
+    }
   }
 }

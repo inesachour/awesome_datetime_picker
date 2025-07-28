@@ -140,26 +140,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (index) {
-              _controller.selectedDate = AwesomeDate(
-                  year: _controller.selectedDate.year,
-                  month: _controller.selectedDate.month,
-                  day: index + 1);
-
-              DateTime nativeSelectedDate = DateTime(
-                  _controller.selectedDate.year,
-                  _controller.selectedDate.month,
-                  _controller.selectedDate.day);
-              if (nativeSelectedDate.isBefore(DateTime(_controller.minDate.year,
-                  _controller.minDate.month, _controller.minDate.day))) {
-                _controller.selectedDate = _controller.minDate;
-              } else if (nativeSelectedDate.isAfter(DateTime(
-                  _controller.maxDate.year,
-                  _controller.maxDate.month,
-                  _controller.maxDate.day))) {
-                _controller.selectedDate = _controller.maxDate;
-              }
+              _controller.onSelectedDayChanged(index);
               setState(() {});
-
               widget.onChanged?.call(_controller.selectedDate);
             },
           );
@@ -178,33 +160,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (index) {
-              int day = _controller.selectedDate.day;
-              int daysInMonth = DateUtils.getDaysInMonth(
-                  index + _controller.minDate.year,
-                  _controller.selectedDate.month);
-              if (_controller.selectedDate.day > daysInMonth) {
-                day = daysInMonth;
-              }
-              _controller.selectedDate = AwesomeDate(
-                  year: index + _controller.minDate.year,
-                  month: _controller.selectedDate.month,
-                  day: day);
-
-              DateTime nativeSelectedDate = DateTime(
-                  _controller.selectedDate.year,
-                  _controller.selectedDate.month,
-                  _controller.selectedDate.day);
-              if (nativeSelectedDate.isBefore(DateTime(_controller.minDate.year,
-                  _controller.minDate.month, _controller.minDate.day))) {
-                _controller.selectedDate = _controller.minDate;
-              } else if (nativeSelectedDate.isAfter(DateTime(
-                  _controller.maxDate.year,
-                  _controller.maxDate.month,
-                  _controller.maxDate.day))) {
-                _controller.selectedDate = _controller.maxDate;
-              }
+              _controller.onSelectedYearChanged(index);
               setState(() {});
-
               widget.onChanged?.call(_controller.selectedDate);
             },
           );
@@ -230,32 +187,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (index) {
-              int day = _controller.selectedDate.day;
-              int daysInMonth = DateUtils.getDaysInMonth(
-                  _controller.selectedDate.year, index + 1);
-              if (_controller.selectedDate.day > daysInMonth) {
-                day = daysInMonth;
-              }
-              _controller.selectedDate = AwesomeDate(
-                  year: _controller.selectedDate.year,
-                  month: index + 1,
-                  day: day);
-
-              DateTime nativeSelectedDate = DateTime(
-                  _controller.selectedDate.year,
-                  _controller.selectedDate.month,
-                  _controller.selectedDate.day);
-              if (nativeSelectedDate.isBefore(DateTime(_controller.minDate.year,
-                  _controller.minDate.month, _controller.minDate.day))) {
-                _controller.selectedDate = _controller.minDate;
-              } else if (nativeSelectedDate.isAfter(DateTime(
-                  _controller.maxDate.year,
-                  _controller.maxDate.month,
-                  _controller.maxDate.day))) {
-                _controller.selectedDate = _controller.maxDate;
-              }
+              _controller.onSelectedMonthNameChanged(index);
               setState(() {});
-
               widget.onChanged?.call(_controller.selectedDate);
             },
           );
@@ -267,8 +200,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
                     : _controller.selectedDate.year == _controller.maxDate.year
                         ? "number_month_picker 2"
                         : "number_month_picker 3"),
-            items: _controller.months,
-            initialIndex: _controller.months
+            items: _controller.monthsNumbers,
+            initialIndex: _controller.monthsNumbers
                 .indexOf(_controller.selectedDate.month.toString()),
             theme: widget.theme?.monthTheme,
             backgroundColor: widget.backgroundColor,
@@ -280,30 +213,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemHeight: widget.itemHeight,
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (index) {
-              int day = _controller.selectedDate.day;
-              int daysInMonth = DateUtils.getDaysInMonth(
-                  _controller.selectedDate.year, index + 1);
-              if (_controller.selectedDate.day > daysInMonth) {
-                day = daysInMonth;
-              }
-              _controller.selectedDate = AwesomeDate(
-                  year: _controller.selectedDate.year,
-                  month: index + 1,
-                  day: day);
-
-              DateTime nativeSelectedDate = DateTime(
-                  _controller.selectedDate.year,
-                  _controller.selectedDate.month,
-                  _controller.selectedDate.day);
-              if (nativeSelectedDate.isBefore(DateTime(_controller.minDate.year,
-                  _controller.minDate.month, _controller.minDate.day))) {
-                _controller.selectedDate = _controller.minDate;
-              } else if (nativeSelectedDate.isAfter(DateTime(
-                  _controller.maxDate.year,
-                  _controller.maxDate.month,
-                  _controller.maxDate.day))) {
-                _controller.selectedDate = _controller.maxDate;
-              }
+              _controller.onSelectedMonthNumberChanged(index);
               setState(() {});
 
               widget.onChanged?.call(_controller.selectedDate);
