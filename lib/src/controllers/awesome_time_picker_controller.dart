@@ -61,6 +61,15 @@ class AwesomeTimePickerController extends ChangeNotifier {
         maxValue - minValue + 1, (index) => (index + minValue).toString());
   }
 
+  List<String> get amPm {
+    if (AwesomeTimeUtils.getAmPm(maxTime.hour) == "AM") {
+      return ["AM"];
+    } else if (AwesomeTimeUtils.getAmPm(minTime.hour) == "PM") {
+      return ["PM"];
+    }
+    return AwesomeTimeUtils.amPm;
+  }
+
   onSelectedHourChanged(String newValue) {
     selectedTime =
         AwesomeTime(hour: int.parse(newValue), minute: selectedTime.minute);

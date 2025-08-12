@@ -188,7 +188,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           );
         } else if (widget.timeFormat.value[index] == PickerType.am_pm) {
           return CustomItemPicker(
-            items: AwesomeTimeUtils.amPm,
+            items: _controller.amPm,
             initialIndex:
                 AwesomeTimeUtils.amPm.indexOf(_controller.selectedAmPm),
             theme: widget.theme?.minuteTheme,

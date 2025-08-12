@@ -34,7 +34,7 @@ class _CalendarState extends State<Calendar> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
         children: [
-          AwesomeDatePicker(
+          /*AwesomeDatePicker(
             dateFormat: AwesomeDateFormat.dMMy,
             minDate: AwesomeDate(year: 2025, month: 2, day: 15),
             maxDate: AwesomeDate(year: 2026, month: 10, day: 10),
@@ -42,7 +42,7 @@ class _CalendarState extends State<Calendar> {
               print(
                   "----Date changed : ${date.day}/${date.month}/${date.year}\n");
             },
-          ),
+          ),*/
           AwesomeTimePicker(
             timeFormat: AwesomeTimeFormat.hm,
             minTime: AwesomeTime(hour: 5, minute: 20),
@@ -52,14 +52,14 @@ class _CalendarState extends State<Calendar> {
               print("----Time changed : ${time.hour}:${time.minute}\n");
             },
           ),
-          AwesomeDateTimePicker(
+          /*AwesomeDateTimePicker(
             //dateFormat: AwesomeDateFormat.dMMy,
             //timeFormat: AwesomeTimeFormat.Hm,
             onChanged: (AwesomeDateTime dateTime) {
               print(
                   "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
             },
-          ),
+          ),*/
         ],
       ),
     );
