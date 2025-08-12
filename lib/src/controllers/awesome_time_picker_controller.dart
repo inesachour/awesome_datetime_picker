@@ -17,7 +17,11 @@ class AwesomeTimePickerController extends ChangeNotifier {
     required this.maxTime,
     AwesomeTime? initialTime,
   }) {
-    _selectedTime = initialTime ?? minTime; //TODO NOW BUT VERIF
+    _selectedTime = initialTime != null &&
+            AwesomeTimeUtils.isBefore(initialTime, maxTime) &&
+            AwesomeTimeUtils.isAfter(initialTime, minTime)
+        ? initialTime
+        : minTime; //TODO NOW BUT VERIF
     _selectedAmPm = AwesomeTimeUtils.getAmPm(selectedTime.hour);
   }
 

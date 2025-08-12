@@ -1,3 +1,5 @@
+import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+
 class AwesomeTimeUtils {
   static const List<String> amPm = ["AM", "PM"];
 
@@ -36,5 +38,23 @@ class AwesomeTimeUtils {
 
   static int toggleAmPm(int hour) {
     return (hour + 12) % 24;
+  }
+
+  static bool isAfter(AwesomeTime time1, AwesomeTime time2) {
+    if (time1.hour > time2.hour) {
+      return true;
+    } else if (time1.hour == time2.hour) {
+      return time1.minute > time2.minute;
+    }
+    return false;
+  }
+
+  static bool isBefore(AwesomeTime time1, AwesomeTime time2) {
+    if (time1.hour < time2.hour) {
+      return true;
+    } else if (time1.hour == time2.hour) {
+      return time1.minute < time2.minute;
+    }
+    return false;
   }
 }

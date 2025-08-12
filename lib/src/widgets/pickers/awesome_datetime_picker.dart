@@ -1,4 +1,5 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+import 'package:awesome_datetime_picker/src/controllers/awesome_datetime_picker_controller.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDateTimePicker extends StatefulWidget {
@@ -80,21 +81,13 @@ class AwesomeDateTimePicker extends StatefulWidget {
 }
 
 class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
-  late AwesomeDateTime minDateTime;
-  late AwesomeDateTime maxDateTime;
+  late final AwesomeDateTimePickerController _controller;
   late AwesomeDateTime initialDateTime;
-  late AwesomeDateTime selectedDateTime;
 
   @override
   void initState() {
-    minDateTime = widget.minDateTime ??
-        AwesomeDateTime(
-            date: AwesomeDate(year: 1990, month: 1, day: 1),
-            time: AwesomeTime(hour: 00, minute: 00));
-    maxDateTime = widget.maxDateTime ??
-        AwesomeDateTime(
-            date: AwesomeDate(year: 2100, month: 12, day: 31),
-            time: AwesomeTime(hour: 23, minute: 59));
+    super.initState();
+
     initialDateTime = widget.initialDateTime ??
         AwesomeDateTime(
             date: AwesomeDate(
@@ -103,9 +96,23 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
                 day: DateTime.now().day),
             time: AwesomeTime(
                 hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute));
-    selectedDateTime = initialDateTime;
 
-    super.initState();
+    _controller = AwesomeDateTimePickerController(
+      minDateTime: widget.minDateTime ??
+          AwesomeDateTime(
+              date: AwesomeDate(year: 1900, month: 1, day: 1),
+              time: AwesomeTime(hour: 00, minute: 00)),
+      maxDateTime: widget.maxDateTime ??
+          AwesomeDateTime(
+              date: AwesomeDate(year: 2100, month: 12, day: 31),
+              time: AwesomeTime(hour: 23, minute: 59)),
+      initialDateTime: initialDateTime,
+    );
+
+    _controller.addListener(() {
+      widget.onChanged?.call(_controller.selectedDateTime);
+      setState(() {});
+    });
   }
 
   @override
@@ -118,8 +125,8 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           backgroundColor: widget.backgroundColor,
           dateFormat: widget.dateFormat,
           locale: widget.locale,
-          maxDate: maxDateTime.date,
-          minDate: minDateTime.date,
+          maxDate: _controller.maxDateTime.date,
+          minDate: _controller.minDateTime.date,
           initialDate: initialDateTime.date,
           selectorColor: widget.selectorColor,
           fadeEffect: widget.fadeEffect,
@@ -129,19 +136,17 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           itemHeight: widget.itemHeight,
           itemWidth: widget.itemWidth,
           onChanged: (AwesomeDate date) {
-            setState(() {
-              selectedDateTime.date = date;
-            });
-            widget.onChanged?.call(
-                AwesomeDateTime(date: date, time: selectedDateTime.time));
+            _controller.selectedDate = date;
+            widget.onChanged?.call(AwesomeDateTime(
+                date: date, time: _controller.selectedDateTime.time));
           },
         ),
         AwesomeTimePicker(
           theme: widget.theme?.timePickerTheme,
           backgroundColor: widget.backgroundColor,
           timeFormat: widget.timeFormat,
-          maxTime: maxDateTime.time,
-          minTime: minDateTime.time,
+          maxTime: _controller.maxTime,
+          minTime: _controller.minTime,
           initialTime: initialDateTime.time,
           selectorColor: widget.selectorColor,
           fadeEffect: widget.fadeEffect,
@@ -151,11 +156,9 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           itemHeight: widget.itemHeight,
           itemWidth: widget.itemWidth,
           onChanged: (AwesomeTime time) {
-            setState(() {
-              selectedDateTime.time = time;
-            });
-            widget.onChanged?.call(
-                AwesomeDateTime(date: selectedDateTime.date, time: time));
+            _controller.selectedTime = time;
+            widget.onChanged?.call(AwesomeDateTime(
+                date: _controller.selectedDateTime.date, time: time));
           },
         ),
       ],
