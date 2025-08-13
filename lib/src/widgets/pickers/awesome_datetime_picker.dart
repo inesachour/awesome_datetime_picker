@@ -135,11 +135,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           visibleItemCount: widget.visibleItemCount,
           itemHeight: widget.itemHeight,
           itemWidth: widget.itemWidth,
-          onChanged: (AwesomeDate date) {
-            _controller.selectedDate = date;
-            widget.onChanged?.call(AwesomeDateTime(
-                date: date, time: _controller.selectedDateTime.time));
-          },
+          onChanged: (AwesomeDate date) => _controller.setDate(date),
         ),
         AwesomeTimePicker(
           theme: widget.theme?.timePickerTheme,
@@ -155,11 +151,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           visibleItemCount: widget.visibleItemCount,
           itemHeight: widget.itemHeight,
           itemWidth: widget.itemWidth,
-          onChanged: (AwesomeTime time) {
-            _controller.selectedTime = time;
-            widget.onChanged?.call(AwesomeDateTime(
-                date: _controller.selectedDateTime.date, time: time));
-          },
+          onChanged: (AwesomeTime time) => _controller.setTime(time),
         ),
       ],
     );

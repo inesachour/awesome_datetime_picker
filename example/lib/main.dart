@@ -52,15 +52,17 @@ class _CalendarState extends State<Calendar> {
               print("----Time changed : ${time.hour}:${time.minute}\n");
             },
           ),
-         /* AwesomeDateTimePicker(
+          AwesomeDateTimePicker(
             //dateFormat: AwesomeDateFormat.dMMy,
             //timeFormat: AwesomeTimeFormat.Hm,
-            maxDateTime: AwesomeDateTime(date: AwesomeDate(year: 2025, month: 12, day: 10), time: AwesomeTime(hour: 15, minute: 59)),
+            maxDateTime: AwesomeDateTime(
+                date: AwesomeDate(year: 2025, month: 12, day: 10),
+                time: AwesomeTime(hour: 15, minute: 59)),
             onChanged: (AwesomeDateTime dateTime) {
               print(
                   "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
             },
-          ),*/
+          ),
         ],
       ),
     );

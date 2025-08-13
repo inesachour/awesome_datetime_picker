@@ -1,7 +1,4 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
-import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
-import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeDateTimePickerController extends ChangeNotifier {
@@ -9,7 +6,6 @@ class AwesomeDateTimePickerController extends ChangeNotifier {
   final AwesomeDateTime maxDateTime;
 
   late AwesomeDateTime _selectedDateTime;
-
   AwesomeDateTime get selectedDateTime => _selectedDateTime;
 
   AwesomeDateTimePickerController({
@@ -17,47 +13,67 @@ class AwesomeDateTimePickerController extends ChangeNotifier {
     required this.maxDateTime,
     AwesomeDateTime? initialDateTime,
   }) {
-    _selectedDateTime = initialDateTime ?? minDateTime; //TODO NOW BUT VERIF
+    _selectedDateTime = initialDateTime ?? minDateTime;
+    _clampDateTime();
   }
 
-  set selectedTime(AwesomeTime time) {
-    _selectedDateTime.time = time;
+  // Central update method
+  void _setDateTime(AwesomeDate date, AwesomeTime time) {
+    _selectedDateTime = AwesomeDateTime(date: date, time: time);
+    _clampDateTime();
     notifyListeners();
   }
 
-  set selectedDate(AwesomeDate date) {
-    _selectedDateTime.date = date;
-    if (date.year == maxDateTime.date.year &&
-        date.month == maxDateTime.date.month &&
-        date.day == maxDateTime.date.day) {
-      if (AwesomeTimeUtils.isAfter(_selectedDateTime.time, maxDateTime.time)) {
-        _selectedDateTime.time = maxDateTime.time;
-      }
-    } else if (date.year == minDateTime.date.year &&
-        date.month == minDateTime.date.month &&
-        date.day == minDateTime.date.day) {
-      if (AwesomeTimeUtils.isBefore(_selectedDateTime.time, minDateTime.time)) {
-        _selectedDateTime.time = minDateTime.time;
-      }
+  // Clamp to min/max rules
+  void _clampDateTime() {
+    final minDT = DateTime(
+      minDateTime.date.year,
+      minDateTime.date.month,
+      minDateTime.date.day,
+      minDateTime.time.hour,
+      minDateTime.time.minute,
+    );
+    final maxDT = DateTime(
+      maxDateTime.date.year,
+      maxDateTime.date.month,
+      maxDateTime.date.day,
+      maxDateTime.time.hour,
+      maxDateTime.time.minute,
+    );
+    final native = DateTime(
+      _selectedDateTime.date.year,
+      _selectedDateTime.date.month,
+      _selectedDateTime.date.day,
+      _selectedDateTime.time.hour,
+      _selectedDateTime.time.minute,
+    );
+
+    if (native.isBefore(minDT)) {
+      _selectedDateTime = minDateTime;
+    } else if (native.isAfter(maxDT)) {
+      _selectedDateTime = maxDateTime;
     }
-    notifyListeners();
   }
 
+  // Public setters
+  void setDate(AwesomeDate date) {
+    _setDateTime(date, _selectedDateTime.time);
+  }
+
+  void setTime(AwesomeTime time) {
+    _setDateTime(_selectedDateTime.date, time);
+  }
+
+  // Dynamic min/max time based on current date
   AwesomeTime get minTime {
-    if (_selectedDateTime.date.year == minDateTime.date.year &&
-        _selectedDateTime.date.month == minDateTime.date.month &&
-        _selectedDateTime.date.day == minDateTime.date.day) {
-      return minDateTime.time;
-    }
-    return AwesomeTime(hour: 00, minute: 00);
+    return _selectedDateTime.date == minDateTime.date
+        ? minDateTime.time
+        : AwesomeTime(hour: 0, minute: 0);
   }
 
   AwesomeTime get maxTime {
-    if (_selectedDateTime.date.year == maxDateTime.date.year &&
-        _selectedDateTime.date.month == maxDateTime.date.month &&
-        _selectedDateTime.date.day == maxDateTime.date.day) {
-      return maxDateTime.time;
-    }
-    return AwesomeTime(hour: 23, minute: 59);
+    return _selectedDateTime.date == maxDateTime.date
+        ? maxDateTime.time
+        : AwesomeTime(hour: 23, minute: 59);
   }
 }
