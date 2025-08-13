@@ -43,15 +43,15 @@ class _CalendarState extends State<Calendar> {
                   "----Date changed : ${date.day}/${date.month}/${date.year}\n");
             },
           ),
-          /*AwesomeTimePicker(
+          AwesomeTimePicker(
             timeFormat: AwesomeTimeFormat.hm,
             minTime: AwesomeTime(hour: 5, minute: 20),
-            maxTime: AwesomeTime(hour: 9, minute: 15),
+            maxTime: AwesomeTime(hour: 12, minute: 15),
             initialTime: AwesomeTime(hour: 8, minute: 10),
             onChanged: (AwesomeTime time) {
               print("----Time changed : ${time.hour}:${time.minute}\n");
             },
-          ),*/
+          ),
          /* AwesomeDateTimePicker(
             //dateFormat: AwesomeDateFormat.dMMy,
             //timeFormat: AwesomeTimeFormat.Hm,
