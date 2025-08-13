@@ -6,10 +6,8 @@ class AwesomeDatePickerController extends ChangeNotifier {
   final AwesomeDate minDate;
   final AwesomeDate maxDate;
   final LocaleType locale;
-  //final bool Function(DateTime)? dayFilter;
 
   late AwesomeDate _selectedDate;
-
   AwesomeDate get selectedDate => _selectedDate;
 
   AwesomeDatePickerController({
@@ -17,141 +15,93 @@ class AwesomeDatePickerController extends ChangeNotifier {
     required this.maxDate,
     required this.locale,
     AwesomeDate? initialDate,
-    //this.dayFilter,
   }) {
-    _selectedDate = initialDate ?? minDate; //TODO TODAY BUT VERIF
+    _selectedDate = initialDate ?? minDate;
   }
 
-  set selectedDate(AwesomeDate date) {
-    _selectedDate = date;
+  /// Centralized setter
+  void _setDate(int year, int month, int day) {
+    // Clamp day to month max
+    final maxDay = DateUtils.getDaysInMonth(year, month);
+    if (day > maxDay) day = maxDay;
+
+    // Build new date
+    var newDate = AwesomeDate(year: year, month: month, day: day);
+
+    // Clamp to min/max range
+    final minDT = DateTime(minDate.year, minDate.month, minDate.day);
+    final maxDT = DateTime(maxDate.year, maxDate.month, maxDate.day);
+    final native = DateTime(year, month, day);
+
+    if (native.isBefore(minDT)) {
+      newDate = minDate;
+    } else if (native.isAfter(maxDT)) {
+      newDate = maxDate;
+    }
+
+    _selectedDate = newDate;
     notifyListeners();
   }
 
-  List<String> get years {
-    return List.generate(
-        maxDate.year - minDate.year + 1, (i) => (minDate.year + i).toString());
+  void onSelectedYearChanged(String newValue) {
+    final year = int.parse(newValue);
+    _setDate(year, _selectedDate.month, _selectedDate.day);
   }
 
+  void onSelectedMonthNumberChanged(String newValue) {
+    final month = int.parse(newValue);
+    _setDate(_selectedDate.year, month, _selectedDate.day);
+  }
+
+  void onSelectedMonthNameChanged(String newValue) {
+    final monthNumber =
+        AwesomeDateUtils.getMonthNames(locale).indexOf(newValue) + 1;
+    _setDate(_selectedDate.year, monthNumber, _selectedDate.day);
+  }
+
+  void onSelectedDayChanged(String newValue) {
+    final day = int.parse(newValue);
+    _setDate(_selectedDate.year, _selectedDate.month, day);
+  }
+
+
+  List<String> get years => List.generate(
+        maxDate.year - minDate.year + 1,
+        (i) => (minDate.year + i).toString(),
+      );
+
   List<String> get monthsNumbers {
-    int maxValue = 12, minValue = 1;
-    if (selectedDate.year == maxDate.year) {
-      maxValue = maxDate.month;
-    }
-    if (selectedDate.year == minDate.year) {
-      minValue = minDate.month;
-    }
+    int minValue = (selectedDate.year == minDate.year) ? minDate.month : 1;
+    int maxValue = (selectedDate.year == maxDate.year) ? maxDate.month : 12;
+
     return List.generate(
-        maxValue - minValue + 1, (index) => (index + minValue).toString());
+        maxValue - minValue + 1, (i) => (i + minValue).toString());
   }
 
   List<String> get monthsNames {
-    int maxValue = 12, minValue = 1;
-    if (selectedDate.year == maxDate.year) {
-      maxValue = maxDate.month;
-    }
-    if (selectedDate.year == minDate.year) {
-      minValue = minDate.month;
-    }
-    List<String> allMonthsNames = AwesomeDateUtils.getMonthNames(locale);
+    int minValue = (selectedDate.year == minDate.year) ? minDate.month : 1;
+    int maxValue = (selectedDate.year == maxDate.year) ? maxDate.month : 12;
+
+    final allMonthsNames = AwesomeDateUtils.getMonthNames(locale);
     return allMonthsNames.sublist(minValue - 1, maxValue);
   }
 
   List<String> get days {
+    int minValue = 1;
     int maxValue =
-            DateUtils.getDaysInMonth(selectedDate.year, selectedDate.month),
-        minValue = 1;
-    if (selectedDate.year == maxDate.year &&
-        selectedDate.month == maxDate.month) {
-      maxValue = maxDate.day;
-    }
+        DateUtils.getDaysInMonth(selectedDate.year, selectedDate.month);
+
     if (selectedDate.year == minDate.year &&
         selectedDate.month == minDate.month) {
       minValue = minDate.day;
     }
+    if (selectedDate.year == maxDate.year &&
+        selectedDate.month == maxDate.month) {
+      maxValue = maxDate.day;
+    }
 
-    List<String> allDays =
+    final allDays =
         AwesomeDateUtils.getMonthDays(selectedDate.year, selectedDate.month);
     return allDays.sublist(minValue - 1, maxValue);
-  }
-
-  onSelectedYearChanged(String newValue) {
-    int day = selectedDate.day;
-    int daysInMonth =
-        DateUtils.getDaysInMonth(int.parse(newValue), selectedDate.month);
-    if (selectedDate.day > daysInMonth) {
-      day = daysInMonth;
-    }
-    selectedDate = AwesomeDate(
-        year: int.parse(newValue), month: selectedDate.month, day: day);
-
-    DateTime nativeSelectedDate =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    if (nativeSelectedDate
-        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
-      selectedDate = minDate;
-    } else if (nativeSelectedDate
-        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
-      selectedDate = maxDate;
-    }
-  }
-
-  onSelectedMonthNumberChanged(String newValue) {
-    int day = selectedDate.day;
-    int daysInMonth =
-        DateUtils.getDaysInMonth(selectedDate.year, int.parse(newValue));
-    if (selectedDate.day > daysInMonth) {
-      day = daysInMonth;
-    }
-    selectedDate = AwesomeDate(
-        year: selectedDate.year, month: int.parse(newValue), day: day);
-
-    DateTime nativeSelectedDate =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    if (nativeSelectedDate
-        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
-      selectedDate = minDate;
-    } else if (nativeSelectedDate
-        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
-      selectedDate = maxDate;
-    }
-  }
-
-  onSelectedMonthNameChanged(String newValue) {
-    int day = selectedDate.day;
-    int monthNumber =
-        AwesomeDateUtils.getMonthNames(locale).indexOf(newValue) + 1;
-    int daysInMonth = DateUtils.getDaysInMonth(selectedDate.year, monthNumber);
-    if (selectedDate.day > daysInMonth) {
-      day = daysInMonth;
-    }
-    selectedDate =
-        AwesomeDate(year: selectedDate.year, month: monthNumber, day: day);
-
-    DateTime nativeSelectedDate =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    if (nativeSelectedDate
-        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
-      selectedDate = minDate;
-    } else if (nativeSelectedDate
-        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
-      selectedDate = maxDate;
-    }
-  }
-
-  onSelectedDayChanged(String newValue) {
-    selectedDate = AwesomeDate(
-        year: selectedDate.year,
-        month: selectedDate.month,
-        day: int.parse(newValue));
-
-    DateTime nativeSelectedDate =
-        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    if (nativeSelectedDate
-        .isBefore(DateTime(minDate.year, minDate.month, minDate.day))) {
-      selectedDate = minDate;
-    } else if (nativeSelectedDate
-        .isAfter(DateTime(maxDate.year, maxDate.month, maxDate.day))) {
-      selectedDate = maxDate;
-    }
   }
 }
