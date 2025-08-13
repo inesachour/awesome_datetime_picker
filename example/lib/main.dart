@@ -46,7 +46,7 @@ class _CalendarState extends State<Calendar> {
           AwesomeTimePicker(
             timeFormat: AwesomeTimeFormat.hm,
             minTime: AwesomeTime(hour: 5, minute: 20),
-            maxTime: AwesomeTime(hour: 12, minute: 15),
+            maxTime: AwesomeTime(hour: 15, minute: 15),
             initialTime: AwesomeTime(hour: 8, minute: 10),
             onChanged: (AwesomeTime time) {
               print("----Time changed : ${time.hour}:${time.minute}\n");
