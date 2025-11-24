@@ -6,6 +6,7 @@ import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_date_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
 import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_style.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,7 @@ class AwesomeDatePicker extends StatefulWidget {
     this.visibleItemCount,
     this.itemHeight,
     this.itemWidth,
+    this.excludedWeekdays,
   })  : assert(
           ValidationUtils.isValidDateRange(minDate: minDate, maxDate: maxDate),
           'minDate must be before maxDate',
@@ -87,6 +89,9 @@ class AwesomeDatePicker extends StatefulWidget {
   /// This value is overridden by the value passed in the theme's width property.
   final double? itemWidth;
 
+  /// List of weekdays to exclude (1 = Monday, 7 = Sunday).
+  final List<int>? excludedWeekdays;
+
   @override
   State<AwesomeDatePicker> createState() => _AwesomeDatePickerState();
 }
@@ -103,6 +108,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
       maxDate: widget.maxDate ?? AwesomeDate(year: 2100, month: 12, day: 31),
       locale: widget.locale,
       initialDate: widget.initialDate,
+      excludedWeekdays: widget.excludedWeekdays,
     );
 
     _controller.addListener(() {
@@ -115,106 +121,131 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(3, (index) {
-        if (widget.dateFormat.value[index] == PickerType.day) {
-          return CustomItemPicker(
-            key: ValueKey(_controller.selectedDate.year ==
-                        _controller.minDate.year &&
-                    _controller.selectedDate.month == _controller.minDate.month
-                ? "day_picker 1"
-                : _controller.selectedDate.year == _controller.maxDate.year &&
-                        _controller.selectedDate.month ==
-                            _controller.maxDate.month
-                    ? "day_picker 2"
-                    : "day_picker 3"),
-            items: _controller.days,
-            initialIndex: _controller.days
-                .indexOf(_controller.selectedDate.day.toString()),
-            theme: widget.theme?.dayTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedDayChanged(newValue);
-            },
-          );
-        } else if (widget.dateFormat.value[index] == PickerType.year) {
-          return CustomItemPicker(
-            items: _controller.years,
-            initialIndex: _controller.years
-                .indexOf(_controller.selectedDate.year.toString()),
-            theme: widget.theme?.yearTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedYearChanged(newValue);
-            },
-          );
-        } else if (widget.dateFormat.value[index] == PickerType.month_text) {
-          return CustomItemPicker(
-            key: ValueKey(
-                _controller.selectedDate.year == _controller.minDate.year
-                    ? "text_month_picker 1"
-                    : _controller.selectedDate.year == _controller.maxDate.year
-                        ? "text_month_picker 2"
-                        : "text_month_picker 3"),
-            items: _controller.monthsNames,
-            initialIndex: _controller.monthsNames.indexOf(
-                AwesomeDateUtils.getMonthNames(
-                    widget.locale)[_controller.selectedDate.month - 1]),
-            theme: widget.theme?.monthTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth:
-                widget.itemWidth ?? MediaQuery.of(context).size.width * 0.25,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedMonthNameChanged(newValue);
-            },
-          );
-        } else if (widget.dateFormat.value[index] == PickerType.month_number) {
-          return CustomItemPicker(
-            key: ValueKey(
-                _controller.selectedDate.year == _controller.minDate.year
-                    ? "number_month_picker 1"
-                    : _controller.selectedDate.year == _controller.maxDate.year
-                        ? "number_month_picker 2"
-                        : "number_month_picker 3"),
-            items: _controller.monthsNumbers,
-            initialIndex: _controller.monthsNumbers
-                .indexOf(_controller.selectedDate.month.toString()),
-            theme: widget.theme?.monthTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedMonthNumberChanged(newValue);
-            },
-          );
-        } else {
-          return Container();
-        }
+      children: List.generate(widget.dateFormat.value.length, (index) {
+        final type = widget.dateFormat.value[index];
+        return _buildPicker(type);
       }),
+    );
+  }
+
+  Widget _buildPicker(PickerType type) {
+    switch (type) {
+      case PickerType.day:
+        return _buildDayPicker();
+      case PickerType.year:
+        return _buildYearPicker();
+      case PickerType.month_text:
+        return _buildTextMonthPicker();
+      case PickerType.month_number:
+        return _buildNumberMonthPicker();
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildDayPicker() {
+    return CustomItemPicker(
+      key: ValueKey(_controller.selectedDate.year == _controller.minDate.year &&
+              _controller.selectedDate.month == _controller.minDate.month
+          ? "day_picker 1"
+          : _controller.selectedDate.year == _controller.maxDate.year &&
+                  _controller.selectedDate.month == _controller.maxDate.month
+              ? "day_picker 2"
+              : "day_picker 3"),
+      items: _controller.days,
+      initialIndex:
+          _controller.days.indexOf(_controller.selectedDate.day.toString()),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.dayTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedDayChanged(newValue);
+      },
+    );
+  }
+
+  Widget _buildYearPicker() {
+    return CustomItemPicker(
+      items: _controller.years,
+      initialIndex:
+          _controller.years.indexOf(_controller.selectedDate.year.toString()),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.yearTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedYearChanged(newValue);
+      },
+    );
+  }
+
+  Widget _buildTextMonthPicker() {
+    return CustomItemPicker(
+      key: ValueKey(_controller.selectedDate.year == _controller.minDate.year
+          ? "text_month_picker 1"
+          : _controller.selectedDate.year == _controller.maxDate.year
+              ? "text_month_picker 2"
+              : "text_month_picker 3"),
+      items: _controller.monthsNames,
+      initialIndex: _controller.monthsNames.indexOf(
+          AwesomeDateUtils.getMonthNames(
+              widget.locale)[_controller.selectedDate.month - 1]),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.monthTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth ?? MediaQuery.of(context).size.width * 0.25,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedMonthNameChanged(newValue);
+      },
+    );
+  }
+
+  Widget _buildNumberMonthPicker() {
+    return CustomItemPicker(
+      key: ValueKey(_controller.selectedDate.year == _controller.minDate.year
+          ? "number_month_picker 1"
+          : _controller.selectedDate.year == _controller.maxDate.year
+              ? "number_month_picker 2"
+              : "number_month_picker 3"),
+      items: _controller.monthsNumbers,
+      initialIndex: _controller.monthsNumbers
+          .indexOf(_controller.selectedDate.month.toString()),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.monthTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedMonthNumberChanged(newValue);
+      },
     );
   }
 }

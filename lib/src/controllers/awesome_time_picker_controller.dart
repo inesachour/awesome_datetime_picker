@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class AwesomeTimePickerController extends ChangeNotifier {
   final AwesomeTime minTime;
   final AwesomeTime maxTime;
+  final List<int>? excludedHours;
 
   AwesomeTime _selectedTime;
   String _selectedAmPm;
@@ -24,6 +25,7 @@ class AwesomeTimePickerController extends ChangeNotifier {
     required this.minTime,
     required this.maxTime,
     AwesomeTime? initialTime,
+    this.excludedHours,
   })  : _selectedTime = (initialTime != null &&
                 !initialTime.isBefore(minTime) &&
                 !initialTime.isAfter(maxTime))
@@ -33,7 +35,34 @@ class AwesomeTimePickerController extends ChangeNotifier {
                 !initialTime.isBefore(minTime) &&
                 !initialTime.isAfter(maxTime))
             ? initialTime.hour
-            : minTime.hour);
+            : minTime.hour) {
+    // Ensure initial time is valid regarding exclusions
+    if (_isHourExcluded(_selectedTime.hour)) {
+      final nextValid = _findNextValidTime(_selectedTime);
+      _selectedTime = nextValid;
+      _selectedAmPm = AwesomeTimeUtils.getAmPm(nextValid.hour);
+    }
+  }
+
+  bool _isHourExcluded(int hour) {
+    return excludedHours?.contains(hour) ?? false;
+  }
+
+  AwesomeTime _findNextValidTime(AwesomeTime time) {
+    if (excludedHours == null || excludedHours!.isEmpty) return time;
+
+    int currentHour = time.hour;
+    int currentMinute = time.minute;
+
+    // Try to find a valid hour within the next 24 hours
+    for (int i = 0; i < 24; i++) {
+      if (!_isHourExcluded(currentHour)) {
+        return AwesomeTime(hour: currentHour, minute: currentMinute);
+      }
+      currentHour = (currentHour + 1) % 24;
+    }
+    return time; // Fallback if all hours are excluded
+  }
 
   /// Centralized setter — clamps and notifies
   void _setTime(int hour, int minute) {
@@ -45,6 +74,11 @@ class AwesomeTimePickerController extends ChangeNotifier {
       newTime = minTime;
     } else if (newTime.isAfter(maxTime)) {
       newTime = maxTime;
+    }
+
+    // Check exclusions
+    if (_isHourExcluded(newTime.hour)) {
+      newTime = _findNextValidTime(newTime);
     }
 
     _selectedTime = newTime;
@@ -87,10 +121,13 @@ class AwesomeTimePickerController extends ChangeNotifier {
   /// Hours in 24-hour format
   List<String> get hours {
     if (_cachedHours == null) {
-      _cachedHours = List.generate(
-        maxTime.hour - minTime.hour + 1,
-        (i) => (minTime.hour + i).toString(),
-      );
+      List<String> validHours = [];
+      for (int i = minTime.hour; i <= maxTime.hour; i++) {
+        if (!_isHourExcluded(i)) {
+          validHours.add(i.toString());
+        }
+      }
+      _cachedHours = validHours;
     }
     return _cachedHours!;
   }
@@ -99,56 +136,63 @@ class AwesomeTimePickerController extends ChangeNotifier {
   List<String> get amPmHours {
     final cacheKey = _selectedAmPm;
     if (_cachedAmPmHours == null || _cachedAmPmHoursKey != cacheKey) {
-      // Determine the range of hours available for the selected AM/PM
-      int minHour12, maxHour12;
-
-      if (_selectedAmPm == "AM") {
-        // AM: hours 12, 1-11 (representing 00:00-11:59)
-        if (AwesomeTimeUtils.getAmPm(minTime.hour) == "AM") {
-          minHour12 = AwesomeTimeUtils.convertTo12HourFormat(minTime.hour);
-        } else {
-          minHour12 = 12; // Start from midnight
-        }
-
-        if (AwesomeTimeUtils.getAmPm(maxTime.hour) == "AM") {
-          maxHour12 = AwesomeTimeUtils.convertTo12HourFormat(maxTime.hour);
-        } else {
-          maxHour12 = 11; // End at 11 AM
-        }
-      } else {
-        // PM: hours 12, 1-11 (representing 12:00-23:59)
-        if (AwesomeTimeUtils.getAmPm(minTime.hour) == "PM") {
-          minHour12 = AwesomeTimeUtils.convertTo12HourFormat(minTime.hour);
-        } else {
-          minHour12 = 12; // Start from noon
-        }
-
-        if (AwesomeTimeUtils.getAmPm(maxTime.hour) == "PM") {
-          maxHour12 = AwesomeTimeUtils.convertTo12HourFormat(maxTime.hour);
-        } else {
-          maxHour12 = 11; // End at 11 PM
-        }
-      }
-
-      // Generate the list: 12, 1, 2, ..., 11
-      // We need to handle the wrap-around (12 comes before 1)
-      List<String> hours = [];
-      if (minHour12 == 12) {
-        hours.add("12");
-        for (int i = 1; i <= maxHour12 && i <= 11; i++) {
-          hours.add(i.toString());
-        }
-      } else {
-        // minHour12 is 1-11
-        for (int i = minHour12; i <= maxHour12 && i <= 11; i++) {
-          hours.add(i.toString());
-        }
-      }
-
-      _cachedAmPmHours = hours;
+      _cachedAmPmHours = _getHourRangeFor12HourFormat(_selectedAmPm);
       _cachedAmPmHoursKey = cacheKey;
     }
     return _cachedAmPmHours!;
+  }
+
+  /// Helper: Generate 12-hour format hour list for given AM/PM period
+  /// Returns hours in format: 12, 1, 2, 3, ..., 11
+  List<String> _getHourRangeFor12HourFormat(String amPm) {
+    // Determine min and max hours in 12-hour format (12, 1-11)
+    final minHour12 = _getMinHourFor12HourFormat(amPm);
+    final maxHour12 = _getMaxHourFor12HourFormat(amPm);
+
+    // Generate list: handle wrap-around where 12 comes before 1
+    List<String> hours = [];
+
+    // Helper to add if valid
+    void addIfValid(int h12) {
+      final h24 = AwesomeTimeUtils.convertTo24HourFormat(h12, amPm);
+      if (!_isHourExcluded(h24)) {
+        hours.add(h12.toString());
+      }
+    }
+
+    if (minHour12 == 12) {
+      addIfValid(12);
+      for (int i = 1; i <= maxHour12 && i <= 11; i++) {
+        addIfValid(i);
+      }
+    } else {
+      for (int i = minHour12; i <= maxHour12; i++) {
+        addIfValid(i);
+      }
+    }
+    return hours;
+  }
+
+  /// Get minimum hour for the selected AM/PM period
+  int _getMinHourFor12HourFormat(String amPm) {
+    final minTimeIsInSamePeriod =
+        AwesomeTimeUtils.getAmPm(minTime.hour) == amPm;
+    if (minTimeIsInSamePeriod) {
+      return AwesomeTimeUtils.convertTo12HourFormat(minTime.hour);
+    } else {
+      return 12; // Start from 12 (midnight for AM, noon for PM)
+    }
+  }
+
+  /// Get maximum hour for the selected AM/PM period
+  int _getMaxHourFor12HourFormat(String amPm) {
+    final maxTimeIsInSamePeriod =
+        AwesomeTimeUtils.getAmPm(maxTime.hour) == amPm;
+    if (maxTimeIsInSamePeriod) {
+      return AwesomeTimeUtils.convertTo12HourFormat(maxTime.hour);
+    } else {
+      return 11; // End at 11 (11 AM or 11 PM)
+    }
   }
 
   /// Minutes list

@@ -42,29 +42,43 @@ class _CalendarState extends State<Calendar> {
               print(
                   "----Date changed : ${date.day}/${date.month}/${date.year}\n");
             },
+            excludedWeekdays: [1, 2, 3, 4, 5, 6],
           ),
           AwesomeTimePicker(
             timeFormat: AwesomeTimeFormat.hm,
-            minTime: AwesomeTime(hour: 5, minute: 20),
-            maxTime: AwesomeTime(hour: 15, minute: 15),
-            initialTime: AwesomeTime(hour: 8, minute: 10),
+            minTime: const AwesomeTime(hour: 5, minute: 20),
+            maxTime: const AwesomeTime(hour: 15, minute: 15),
+            initialTime: const AwesomeTime(hour: 15, minute: 10),
             onChanged: (AwesomeTime time) {
               print("----Time changed : ${time.hour}:${time.minute}\n");
             },
+            excludedHours: [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+            ],
           ),
           AwesomeDateTimePicker(
-            //dateFormat: AwesomeDateFormat.dMMy,
-            timeFormat: AwesomeTimeFormat.hm,
-            dateFormat: AwesomeDateFormat.dMMy,
-            maxDateTime: AwesomeDateTime(
-                date: AwesomeDate(year: 2025, month: 12, day: 10),
-                time: AwesomeTime(hour: 15, minute: 59)),
+            initialDateTime: AwesomeDateTime(
+              date: AwesomeDate(year: 2025, month: 12, day: 12),
+              time: const AwesomeTime(hour: 10, minute: 30),
+            ),
             minDateTime: AwesomeDateTime(
-                date: AwesomeDate(year: 2025, month: 10, day: 9),
-                time: AwesomeTime(hour: 15, minute: 59)),
-            onChanged: (AwesomeDateTime dateTime) {
-              print(
-                  "----Date time changed : ${dateTime.date.year}/${dateTime.date.month}/${dateTime.date.day} ${dateTime.time.hour}:${dateTime.time.minute}\n");
+              date: AwesomeDate(year: 2025, month: 12, day: 1),
+              time: const AwesomeTime(hour: 8, minute: 0),
+            ),
+            maxDateTime: AwesomeDateTime(
+              date: AwesomeDate(year: 2025, month: 12, day: 31),
+              time: const AwesomeTime(hour: 18, minute: 0),
+            ),
+            dateFormat: AwesomeDateFormat.dMMy,
+            timeFormat: AwesomeTimeFormat.hm,
+            onChanged: (dateTime) {
+              debugPrint('Selected: $dateTime');
             },
           ),
         ],

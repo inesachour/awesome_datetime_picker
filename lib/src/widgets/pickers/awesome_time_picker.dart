@@ -5,6 +5,7 @@ import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_time_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_style.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class AwesomeTimePicker extends StatefulWidget {
     this.visibleItemCount,
     this.itemHeight,
     this.itemWidth,
+    this.excludedHours,
   }) : assert(
           ValidationUtils.isValidTimeRange(minTime: minTime, maxTime: maxTime),
           'minTime must be before maxTime',
@@ -77,6 +79,9 @@ class AwesomeTimePicker extends StatefulWidget {
   /// This value is overridden by the value passed in the theme's width property.
   final double? itemWidth;
 
+  /// List of hours to exclude (0-23).
+  final List<int>? excludedHours;
+
   @override
   State<AwesomeTimePicker> createState() => _AwesomeTimePickerState();
 }
@@ -110,11 +115,12 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       minTime: minTime,
       maxTime: maxTime,
       initialTime: initialTime,
+      excludedHours: widget.excludedHours,
     );
 
     _controller.addListener(() {
       widget.onChanged?.call(_controller.selectedTime);
-      setState(() {});
+      // setState(() {}); // Removed redundant setState
     });
   }
 
@@ -123,93 +129,120 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.timeFormat.value.length, (index) {
-        if (widget.timeFormat.value[index] == PickerType.hour_12) {
-          return CustomItemPicker(
-            key: ValueKey(_controller.selectedAmPm == AwesomeTimeUtils.amPm[0]
-                ? "hour_picker 1"
-                : "hour_picker 2"),
-            items: _controller.amPmHours,
-            initialIndex: _controller.amPmHours.indexOf(
-                AwesomeTimeUtils.convertTo12HourFormat(
-                        _controller.selectedTime.hour)
-                    .toString()),
-            theme: widget.theme?.minuteTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedAmPmHourChanged(newValue);
-            },
-          );
-        } else if (widget.timeFormat.value[index] == PickerType.hour_24) {
-          return CustomItemPicker(
-            items: _controller.hours,
-            initialIndex: _controller.hours
-                .indexOf(_controller.selectedTime.hour.toString()),
-            theme: widget.theme?.hourTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedHourChanged(newValue);
-            },
-          );
-        } else if (widget.timeFormat.value[index] == PickerType.minute) {
-          return CustomItemPicker(
-            key: ValueKey(
-                _controller.selectedTime.hour == _controller.minTime.hour
-                    ? "minute_picker 1"
-                    : _controller.selectedTime.hour == _controller.maxTime.hour
-                        ? "minute_picker 2"
-                        : "minute_picker 3"),
-            items: _controller.minutes,
-            initialIndex: _controller.minutes
-                .indexOf(_controller.selectedTime.minute.toString()),
-            theme: widget.theme?.minuteTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedMinuteChanged(newValue);
-            },
-          );
-        } else if (widget.timeFormat.value[index] == PickerType.am_pm) {
-          return CustomItemPicker(
-            items: _controller.amPm,
-            initialIndex:
-                AwesomeTimeUtils.amPm.indexOf(_controller.selectedAmPm),
-            theme: widget.theme?.minuteTheme,
-            backgroundColor: widget.backgroundColor,
-            selectorColor: widget.selectorColor,
-            fadeEffect: widget.fadeEffect,
-            selectedTextStyle: widget.selectedTextStyle,
-            unselectedTextStyle: widget.unselectedTextStyle,
-            visibleItemCount: widget.visibleItemCount,
-            itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
-            onSelectedItemChanged: (newValue) {
-              _controller.onSelectedAmPmChanged(newValue);
-            },
-          );
-        } else {
-          return Container();
-        }
+        final type = widget.timeFormat.value[index];
+        return _buildPicker(type);
       }),
+    );
+  }
+
+  Widget _buildPicker(PickerType type) {
+    switch (type) {
+      case PickerType.hour_12:
+        return _buildHour12Picker();
+      case PickerType.hour_24:
+        return _buildHour24Picker();
+      case PickerType.minute:
+        return _buildMinutePicker();
+      case PickerType.am_pm:
+        return _buildAmPmPicker();
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildHour12Picker() {
+    return CustomItemPicker(
+      key: ValueKey(_controller.selectedAmPm == AwesomeTimeUtils.amPm[0]
+          ? "hour_picker 1"
+          : "hour_picker 2"),
+      items: _controller.amPmHours,
+      initialIndex: _controller.amPmHours.indexOf(
+          AwesomeTimeUtils.convertTo12HourFormat(_controller.selectedTime.hour)
+              .toString()),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.minuteTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedAmPmHourChanged(newValue);
+      },
+    );
+  }
+
+  Widget _buildHour24Picker() {
+    return CustomItemPicker(
+      items: _controller.hours,
+      initialIndex:
+          _controller.hours.indexOf(_controller.selectedTime.hour.toString()),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.hourTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedHourChanged(newValue);
+      },
+    );
+  }
+
+  Widget _buildMinutePicker() {
+    return CustomItemPicker(
+      key: ValueKey(_controller.selectedTime.hour == _controller.minTime.hour
+          ? "minute_picker 1"
+          : _controller.selectedTime.hour == _controller.maxTime.hour
+              ? "minute_picker 2"
+              : "minute_picker 3"),
+      items: _controller.minutes,
+      initialIndex: _controller.minutes
+          .indexOf(_controller.selectedTime.minute.toString()),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.minuteTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedMinuteChanged(newValue);
+      },
+    );
+  }
+
+  Widget _buildAmPmPicker() {
+    return CustomItemPicker(
+      items: _controller.amPm,
+      initialIndex: AwesomeTimeUtils.amPm.indexOf(_controller.selectedAmPm),
+      style: CustomItemPickerStyle(
+        theme: widget.theme?.minuteTheme,
+        backgroundColor: widget.backgroundColor,
+        selectorColor: widget.selectorColor,
+        fadeEffect: widget.fadeEffect,
+        selectedTextStyle: widget.selectedTextStyle,
+        unselectedTextStyle: widget.unselectedTextStyle,
+        itemHeight: widget.itemHeight,
+        itemWidth: widget.itemWidth,
+      ),
+      visibleItemCount: widget.visibleItemCount,
+      onSelectedItemChanged: (newValue) {
+        _controller.onSelectedAmPmChanged(newValue);
+      },
     );
   }
 }

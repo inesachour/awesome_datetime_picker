@@ -6,6 +6,7 @@ class AwesomeDatePickerController extends ChangeNotifier {
   final AwesomeDate minDate;
   final AwesomeDate maxDate;
   final LocaleType locale;
+  final List<int>? excludedWeekdays;
 
   AwesomeDate _selectedDate;
   AwesomeDate get selectedDate => _selectedDate;
@@ -25,16 +26,74 @@ class AwesomeDatePickerController extends ChangeNotifier {
     required this.maxDate,
     required this.locale,
     AwesomeDate? initialDate,
-  }) : _selectedDate = initialDate ?? minDate;
+    this.excludedWeekdays,
+  }) : _selectedDate = (initialDate != null &&
+                (initialDate.year > minDate.year ||
+                    (initialDate.year == minDate.year &&
+                        initialDate.month >= minDate.month &&
+                        initialDate.day >= minDate.day)) &&
+                (initialDate.year < maxDate.year ||
+                    (initialDate.year == maxDate.year &&
+                        initialDate.month <= maxDate.month &&
+                        initialDate.day <= maxDate.day)))
+            ? initialDate
+            : minDate {
+    // Ensure initial date is valid regarding exclusions
+    if (_isDateExcluded(_selectedDate)) {
+      _selectedDate = _findNextValidDate(_selectedDate);
+    }
+  }
+
+  bool _isDateExcluded(AwesomeDate date) {
+    if (excludedWeekdays == null || excludedWeekdays!.isEmpty) return false;
+    final dt = date.toDateTime();
+    return excludedWeekdays!.contains(dt.weekday);
+  }
+
+  AwesomeDate _findNextValidDate(AwesomeDate date) {
+    if (excludedWeekdays == null || excludedWeekdays!.isEmpty) return date;
+
+    DateTime dt = date.toDateTime();
+    // Try to find a valid date within the next 30 days to avoid infinite loops
+    for (int i = 0; i < 30; i++) {
+      if (!excludedWeekdays!.contains(dt.weekday)) {
+        return AwesomeDate(year: dt.year, month: dt.month, day: dt.day);
+      }
+      dt = dt.add(const Duration(days: 1));
+
+      // Check boundaries
+      final maxDt = maxDate.toDateTime();
+      if (dt.isAfter(maxDt)) {
+        // If we hit max date, try going backwards
+        return _findPreviousValidDate(date);
+      }
+    }
+    return date; // Fallback
+  }
+
+  AwesomeDate _findPreviousValidDate(AwesomeDate date) {
+    DateTime dt = date.toDateTime();
+    final minDt = minDate.toDateTime();
+
+    for (int i = 0; i < 30; i++) {
+      if (!excludedWeekdays!.contains(dt.weekday)) {
+        return AwesomeDate(year: dt.year, month: dt.month, day: dt.day);
+      }
+      dt = dt.subtract(const Duration(days: 1));
+      if (dt.isBefore(minDt)) return date; // Fallback
+    }
+    return date;
+  }
 
   /// Centralized setter
   void _setDate(int year, int month, int day) {
     // Clamp day to month max
-    final maxDay = DateUtils.getDaysInMonth(year, month);
-    if (day > maxDay) day = maxDay;
+    final maxDay = AwesomeDateUtils.getDaysInMonth(year, month);
+    int clampedDay = day;
+    if (clampedDay > maxDay) clampedDay = maxDay;
 
     // Build new date
-    var newDate = AwesomeDate(year: year, month: month, day: day);
+    var newDate = AwesomeDate(year: year, month: month, day: clampedDay);
 
     // Clamp to min/max range
     final minDT = minDate.toDateTime();
@@ -45,6 +104,11 @@ class AwesomeDatePickerController extends ChangeNotifier {
       newDate = minDate;
     } else if (native.isAfter(maxDT)) {
       newDate = maxDate;
+    }
+
+    // Check exclusions
+    if (_isDateExcluded(newDate)) {
+      newDate = _findNextValidDate(newDate);
     }
 
     _selectedDate = newDate;
@@ -121,8 +185,8 @@ class AwesomeDatePickerController extends ChangeNotifier {
         _cachedDaysYear != selectedDate.year ||
         _cachedDaysMonth != selectedDate.month) {
       int minValue = 1;
-      int maxValue =
-          DateUtils.getDaysInMonth(selectedDate.year, selectedDate.month);
+      int maxValue = AwesomeDateUtils.getDaysInMonth(
+          selectedDate.year, selectedDate.month);
 
       if (selectedDate.year == minDate.year &&
           selectedDate.month == minDate.month) {
@@ -133,13 +197,20 @@ class AwesomeDatePickerController extends ChangeNotifier {
         maxValue = maxDate.day;
       }
 
-      final allDays =
-          AwesomeDateUtils.getMonthDays(selectedDate.year, selectedDate.month);
-      _cachedDays = allDays.sublist(minValue - 1, maxValue);
+      // Generate days and filter excluded ones
+      List<String> validDays = [];
+      for (int i = minValue; i <= maxValue; i++) {
+        final date = AwesomeDate(
+            year: selectedDate.year, month: selectedDate.month, day: i);
+        if (!_isDateExcluded(date)) {
+          validDays.add(i.toString());
+        }
+      }
+
+      _cachedDays = validDays;
       _cachedDaysYear = selectedDate.year;
       _cachedDaysMonth = selectedDate.month;
     }
     return _cachedDays!;
   }
 }
-

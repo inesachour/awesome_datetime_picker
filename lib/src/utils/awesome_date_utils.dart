@@ -103,4 +103,8 @@ class AwesomeDateUtils {
       (index) => (index + 1).toString(),
     );
   }
+
+  static int getDaysInMonth(int year, int month) {
+    return DateUtils.getDaysInMonth(year, month);
+  }
 }

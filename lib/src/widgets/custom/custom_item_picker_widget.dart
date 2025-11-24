@@ -1,4 +1,4 @@
-import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
+import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_style.dart';
 import 'package:flutter/material.dart';
 
 class CustomItemPicker extends StatefulWidget {
@@ -6,14 +6,7 @@ class CustomItemPicker extends StatefulWidget {
   final int initialIndex;
   final ValueChanged<String> onSelectedItemChanged;
   final int? visibleItemCount;
-  final ItemTheme? theme;
-  final Color? backgroundColor;
-  final Color? selectorColor;
-  final bool? fadeEffect;
-  final TextStyle? selectedTextStyle;
-  final TextStyle? unselectedTextStyle;
-  final double? itemHeight;
-  final double? itemWidth;
+  final CustomItemPickerStyle style;
 
   const CustomItemPicker({
     super.key,
@@ -21,14 +14,7 @@ class CustomItemPicker extends StatefulWidget {
     required this.initialIndex,
     required this.onSelectedItemChanged,
     required this.visibleItemCount,
-    this.theme,
-    this.selectedTextStyle,
-    this.unselectedTextStyle,
-    this.backgroundColor,
-    this.selectorColor,
-    this.fadeEffect = true,
-    this.itemHeight,
-    this.itemWidth,
+    required this.style,
   }) : assert(visibleItemCount == null ||
             visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
@@ -52,6 +38,29 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
   }
 
   @override
+  void didUpdateWidget(CustomItemPicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Only sync if the parent's requested index is different from our current internal index.
+    // This handles external updates and validation rejections while avoiding
+    // interrupting the user's manual scroll (where widget.initialIndex == _selectedIndex).
+    if (widget.initialIndex != _selectedIndex) {
+      _selectedIndex = widget.initialIndex;
+      // Ensure the index is within bounds
+      if (_selectedIndex >= widget.items.length) {
+        _selectedIndex = widget.items.length - 1;
+      }
+      if (_selectedIndex < 0) {
+        _selectedIndex = 0;
+      }
+
+      // Jump to the new index if scroll controller is attached
+      if (_scrollController.hasClients) {
+        _scrollController.jumpToItem(_selectedIndex);
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
@@ -59,8 +68,9 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final double itemHeight =
-        widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight;
+    final double itemHeight = widget.style.theme?.height ??
+        widget.style.itemHeight ??
+        defaultItemHeight;
     final double pickerHeight =
         itemHeight * (widget.visibleItemCount ?? defaultVisibleItemCount);
 
@@ -75,27 +85,27 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
       fontSize: 18,
     );
 
-    final selectedStyle = widget.theme?.selectedTextStyle ??
-        widget.selectedTextStyle ??
+    final selectedStyle = widget.style.theme?.selectedTextStyle ??
+        widget.style.selectedTextStyle ??
         defaultSelectedStyle;
 
-    final unselectedStyle = widget.theme?.unselectedTextStyle ??
-        widget.unselectedTextStyle ??
+    final unselectedStyle = widget.style.theme?.unselectedTextStyle ??
+        widget.style.unselectedTextStyle ??
         defaultUnselectedStyle;
 
     return Column(
       children: [
-        widget.theme?.title ?? const SizedBox.shrink(),
+        widget.style.theme?.title ?? const SizedBox.shrink(),
         Container(
           height: pickerHeight,
-          width: widget.theme?.width ??
-              widget.itemWidth ??
+          width: widget.style.theme?.width ??
+              widget.style.itemWidth ??
               MediaQuery.of(context).size.width * 0.15,
-          margin: widget.theme?.margin,
-          padding: widget.theme?.padding,
+          margin: widget.style.theme?.margin,
+          padding: widget.style.theme?.padding,
           decoration: BoxDecoration(
-            color: widget.theme?.backgroundColor ??
-                widget.backgroundColor ??
+            color: widget.style.theme?.backgroundColor ??
+                widget.style.backgroundColor ??
                 Colors.white,
             borderRadius: BorderRadius.circular(0),
           ),
@@ -107,7 +117,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                   child: Container(
                     height: itemHeight,
                     decoration: BoxDecoration(
-                      color: widget.selectorColor ?? Colors.grey.shade100,
+                      color: widget.style.selectorColor ?? Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(0),
                     ),
                   ),
@@ -150,7 +160,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
               ),
 
               // Fade effects
-              if (widget.fadeEffect ?? true) ...[
+              if (widget.style.fadeEffect ?? true) ...[
                 _FadeGradient(
                   height: itemHeight,
                   isTop: true,
