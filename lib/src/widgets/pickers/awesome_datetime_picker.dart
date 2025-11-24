@@ -138,6 +138,8 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           onChanged: (AwesomeDate date) => _controller.setDate(date),
         ),
         AwesomeTimePicker(
+          key: ValueKey(
+              '${_controller.minTime.hour}:${_controller.minTime.minute}-${_controller.maxTime.hour}:${_controller.maxTime.minute}'),
           theme: widget.theme?.timePickerTheme,
           backgroundColor: widget.backgroundColor,
           timeFormat: widget.timeFormat,

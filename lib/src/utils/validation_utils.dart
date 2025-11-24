@@ -1,76 +1,91 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
 
 class ValidationUtils {
-  static bool isValidTimeRange(
-      {required AwesomeTime? minTime, required AwesomeTime? maxTime}) {
-    final minDateTime =
-        DateTime(2025, 1, 1, minTime?.hour ?? 00, minTime?.minute ?? 00);
-    final maxDateTime =
-        DateTime(2025, 1, 1, maxTime?.hour ?? 23, maxTime?.minute ?? 59);
-    return minDateTime.isBefore(maxDateTime) ||
-        minDateTime.isAtSameMomentAs(maxDateTime);
+  /// Validate that minTime is before or equal to maxTime
+  static bool isValidTimeRange({
+    required AwesomeTime? minTime,
+    required AwesomeTime? maxTime,
+  }) {
+    if (minTime == null || maxTime == null) return true;
+    return !minTime.isAfter(maxTime);
   }
 
+  /// Validate that initialTime is within minTime and maxTime range
   static bool isValidInitialTime({
     AwesomeTime? time,
     AwesomeTime? minTime,
     AwesomeTime? maxTime,
   }) {
-    final timeDateTime = DateTime(2025, 1, 1, time?.hour ?? DateTime.now().hour,
-        time?.minute ?? DateTime.now().minute);
-    final minDateTime =
-        DateTime(2025, 1, 1, minTime?.hour ?? 00, minTime?.minute ?? 00);
-    final maxDateTime =
-        DateTime(2025, 1, 1, maxTime?.hour ?? 23, maxTime?.minute ?? 59);
-
-    if (timeDateTime.isBefore(minDateTime) ||
-        timeDateTime.isAfter(maxDateTime)) {
-      return false;
-    }
-    return true;
+    if (time == null) return true;
+    
+    final min = minTime ?? const AwesomeTime(hour: 0, minute: 0);
+    final max = maxTime ?? const AwesomeTime(hour: 23, minute: 59);
+    
+    return !time.isBefore(min) && !time.isAfter(max);
   }
 
-  static bool isValidDateRange(
-      {required AwesomeDate? minDate, required AwesomeDate? maxDate}) {
-    final minDateTime = DateTime(
-      minDate?.year ?? 1900,
-      minDate?.month ?? 1,
-      minDate?.day ?? 1,
-    );
-    final maxDateTime = DateTime(
-      maxDate?.year ?? 2100,
-      maxDate?.month ?? 12,
-      maxDate?.day ?? 31,
-    );
-    return minDateTime.isBefore(maxDateTime) ||
-        minDateTime.isAtSameMomentAs(maxDateTime);
+  /// Validate that minDate is before or equal to maxDate
+  static bool isValidDateRange({
+    required AwesomeDate? minDate,
+    required AwesomeDate? maxDate,
+  }) {
+    if (minDate == null || maxDate == null) return true;
+    
+    final minDT = minDate.toDateTime();
+    final maxDT = maxDate.toDateTime();
+    
+    return minDT.isBefore(maxDT) || minDT.isAtSameMomentAs(maxDT);
   }
 
+  /// Validate that initialDate is within minDate and maxDate range
   static bool isValidInitialDate({
     AwesomeDate? date,
     AwesomeDate? minDate,
     AwesomeDate? maxDate,
   }) {
-    final timeDateTime = DateTime(
-      date?.year ?? DateTime.now().year,
-      date?.month ?? DateTime.now().month,
-      date?.day ?? DateTime.now().day,
-    );
-    final minDateTime = DateTime(
-      minDate?.year ?? 1900,
-      minDate?.month ?? 1,
-      minDate?.day ?? 1,
-    );
-    final maxDateTime = DateTime(
-      maxDate?.year ?? 2100,
-      maxDate?.month ?? 12,
-      maxDate?.day ?? 31,
-    );
+    if (date == null) return true;
+    
+    final dateDT = date.toDateTime();
+    final minDT = (minDate ?? const AwesomeDate(year: 1900, month: 1, day: 1)).toDateTime();
+    final maxDT = (maxDate ?? const AwesomeDate(year: 2100, month: 12, day: 31)).toDateTime();
+    
+    return !dateDT.isBefore(minDT) && !dateDT.isAfter(maxDT);
+  }
 
-    if (timeDateTime.isBefore(minDateTime) ||
-        timeDateTime.isAfter(maxDateTime)) {
-      return false;
-    }
-    return true;
+  /// Validate that minDateTime is before or equal to maxDateTime
+  static bool isValidDateTimeRange({
+    required AwesomeDateTime? minDateTime,
+    required AwesomeDateTime? maxDateTime,
+  }) {
+    if (minDateTime == null || maxDateTime == null) return true;
+    
+    final minDT = minDateTime.toDateTime();
+    final maxDT = maxDateTime.toDateTime();
+    
+    return minDT.isBefore(maxDT) || minDT.isAtSameMomentAs(maxDT);
+  }
+
+  /// Validate that initialDateTime is within minDateTime and maxDateTime range
+  static bool isValidInitialDateTime({
+    AwesomeDateTime? dateTime,
+    AwesomeDateTime? minDateTime,
+    AwesomeDateTime? maxDateTime,
+  }) {
+    if (dateTime == null) return true;
+    
+    final dt = dateTime.toDateTime();
+    final minDT = (minDateTime ?? 
+        AwesomeDateTime(
+          date: const AwesomeDate(year: 1900, month: 1, day: 1),
+          time: const AwesomeTime(hour: 0, minute: 0),
+        )).toDateTime();
+    final maxDT = (maxDateTime ?? 
+        AwesomeDateTime(
+          date: const AwesomeDate(year: 2100, month: 12, day: 31),
+          time: const AwesomeTime(hour: 23, minute: 59),
+        )).toDateTime();
+    
+    return !dt.isBefore(minDT) && !dt.isAfter(maxDT);
   }
 }
+

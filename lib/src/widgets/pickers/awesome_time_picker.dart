@@ -133,8 +133,6 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedAmPmHourChanged(newValue);
-              setState(() {});
-              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.hour_24) {
@@ -153,8 +151,6 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedHourChanged(newValue);
-              setState(() {});
-              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.minute) {
@@ -179,8 +175,6 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedMinuteChanged(newValue);
-              setState(() {});
-              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else if (widget.timeFormat.value[index] == PickerType.am_pm) {
@@ -199,8 +193,6 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedAmPmChanged(newValue);
-              setState(() {});
-              widget.onChanged?.call(_controller.selectedTime);
             },
           );
         } else {

@@ -141,8 +141,6 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedDayChanged(newValue);
-              setState(() {});
-              widget.onChanged?.call(_controller.selectedDate);
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.year) {
@@ -161,8 +159,6 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedYearChanged(newValue);
-              setState(() {});
-              widget.onChanged?.call(_controller.selectedDate);
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_text) {
@@ -188,8 +184,6 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedMonthNameChanged(newValue);
-              setState(() {});
-              widget.onChanged?.call(_controller.selectedDate);
             },
           );
         } else if (widget.dateFormat.value[index] == PickerType.month_number) {
@@ -214,9 +208,6 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             itemWidth: widget.itemWidth,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedMonthNumberChanged(newValue);
-              setState(() {});
-
-              widget.onChanged?.call(_controller.selectedDate);
             },
           );
         } else {

@@ -7,17 +7,25 @@ class AwesomeDatePickerController extends ChangeNotifier {
   final AwesomeDate maxDate;
   final LocaleType locale;
 
-  late AwesomeDate _selectedDate;
+  AwesomeDate _selectedDate;
   AwesomeDate get selectedDate => _selectedDate;
+
+  // Cache for computed lists
+  List<String>? _cachedYears;
+  List<String>? _cachedMonthsNumbers;
+  int? _cachedMonthsNumbersYear;
+  List<String>? _cachedMonthsNames;
+  int? _cachedMonthsNamesYear;
+  List<String>? _cachedDays;
+  int? _cachedDaysYear;
+  int? _cachedDaysMonth;
 
   AwesomeDatePickerController({
     required this.minDate,
     required this.maxDate,
     required this.locale,
     AwesomeDate? initialDate,
-  }) {
-    _selectedDate = initialDate ?? minDate;
-  }
+  }) : _selectedDate = initialDate ?? minDate;
 
   /// Centralized setter
   void _setDate(int year, int month, int day) {
@@ -29,9 +37,9 @@ class AwesomeDatePickerController extends ChangeNotifier {
     var newDate = AwesomeDate(year: year, month: month, day: day);
 
     // Clamp to min/max range
-    final minDT = DateTime(minDate.year, minDate.month, minDate.day);
-    final maxDT = DateTime(maxDate.year, maxDate.month, maxDate.day);
-    final native = DateTime(year, month, day);
+    final minDT = minDate.toDateTime();
+    final maxDT = maxDate.toDateTime();
+    final native = newDate.toDateTime();
 
     if (native.isBefore(minDT)) {
       newDate = minDate;
@@ -40,6 +48,12 @@ class AwesomeDatePickerController extends ChangeNotifier {
     }
 
     _selectedDate = newDate;
+
+    // Invalidate caches that depend on selected date
+    _cachedMonthsNumbers = null;
+    _cachedMonthsNames = null;
+    _cachedDays = null;
+
     notifyListeners();
   }
 
@@ -64,44 +78,68 @@ class AwesomeDatePickerController extends ChangeNotifier {
     _setDate(_selectedDate.year, _selectedDate.month, day);
   }
 
+  // ===== Computed Lists with Caching =====
 
-  List<String> get years => List.generate(
+  List<String> get years {
+    if (_cachedYears == null) {
+      _cachedYears = List.generate(
         maxDate.year - minDate.year + 1,
         (i) => (minDate.year + i).toString(),
       );
+    }
+    return _cachedYears!;
+  }
 
   List<String> get monthsNumbers {
-    int minValue = (selectedDate.year == minDate.year) ? minDate.month : 1;
-    int maxValue = (selectedDate.year == maxDate.year) ? maxDate.month : 12;
+    if (_cachedMonthsNumbers == null ||
+        _cachedMonthsNumbersYear != selectedDate.year) {
+      int minValue = (selectedDate.year == minDate.year) ? minDate.month : 1;
+      int maxValue = (selectedDate.year == maxDate.year) ? maxDate.month : 12;
 
-    return List.generate(
-        maxValue - minValue + 1, (i) => (i + minValue).toString());
+      _cachedMonthsNumbers = List.generate(
+          maxValue - minValue + 1, (i) => (i + minValue).toString());
+      _cachedMonthsNumbersYear = selectedDate.year;
+    }
+    return _cachedMonthsNumbers!;
   }
 
   List<String> get monthsNames {
-    int minValue = (selectedDate.year == minDate.year) ? minDate.month : 1;
-    int maxValue = (selectedDate.year == maxDate.year) ? maxDate.month : 12;
+    if (_cachedMonthsNames == null ||
+        _cachedMonthsNamesYear != selectedDate.year) {
+      int minValue = (selectedDate.year == minDate.year) ? minDate.month : 1;
+      int maxValue = (selectedDate.year == maxDate.year) ? maxDate.month : 12;
 
-    final allMonthsNames = AwesomeDateUtils.getMonthNames(locale);
-    return allMonthsNames.sublist(minValue - 1, maxValue);
+      final allMonthsNames = AwesomeDateUtils.getMonthNames(locale);
+      _cachedMonthsNames = allMonthsNames.sublist(minValue - 1, maxValue);
+      _cachedMonthsNamesYear = selectedDate.year;
+    }
+    return _cachedMonthsNames!;
   }
 
   List<String> get days {
-    int minValue = 1;
-    int maxValue =
-        DateUtils.getDaysInMonth(selectedDate.year, selectedDate.month);
+    if (_cachedDays == null ||
+        _cachedDaysYear != selectedDate.year ||
+        _cachedDaysMonth != selectedDate.month) {
+      int minValue = 1;
+      int maxValue =
+          DateUtils.getDaysInMonth(selectedDate.year, selectedDate.month);
 
-    if (selectedDate.year == minDate.year &&
-        selectedDate.month == minDate.month) {
-      minValue = minDate.day;
-    }
-    if (selectedDate.year == maxDate.year &&
-        selectedDate.month == maxDate.month) {
-      maxValue = maxDate.day;
-    }
+      if (selectedDate.year == minDate.year &&
+          selectedDate.month == minDate.month) {
+        minValue = minDate.day;
+      }
+      if (selectedDate.year == maxDate.year &&
+          selectedDate.month == maxDate.month) {
+        maxValue = maxDate.day;
+      }
 
-    final allDays =
-        AwesomeDateUtils.getMonthDays(selectedDate.year, selectedDate.month);
-    return allDays.sublist(minValue - 1, maxValue);
+      final allDays =
+          AwesomeDateUtils.getMonthDays(selectedDate.year, selectedDate.month);
+      _cachedDays = allDays.sublist(minValue - 1, maxValue);
+      _cachedDaysYear = selectedDate.year;
+      _cachedDaysMonth = selectedDate.month;
+    }
+    return _cachedDays!;
   }
 }
+
