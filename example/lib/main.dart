@@ -54,7 +54,7 @@ class _CalendarState extends State<Calendar> {
           ),
           AwesomeDateTimePicker(
             //dateFormat: AwesomeDateFormat.dMMy,
-            //timeFormat: AwesomeTimeFormat.Hm,
+            timeFormat: AwesomeTimeFormat.hm,
             maxDateTime: AwesomeDateTime(
                 date: AwesomeDate(year: 2025, month: 12, day: 10),
                 time: AwesomeTime(hour: 15, minute: 59)),
