@@ -25,14 +25,9 @@ class AwesomeTimePicker extends StatefulWidget {
     this.visibleItemCount,
     this.itemHeight,
     this.itemWidth,
-  })  : assert(
+  }) : assert(
           ValidationUtils.isValidTimeRange(minTime: minTime, maxTime: maxTime),
           'minTime must be before maxTime',
-        ),
-        assert(
-          ValidationUtils.isValidInitialTime(
-              time: initialTime, minTime: minTime, maxTime: maxTime),
-          'initialTime must be within minTime and maxTime range',
         );
 
   /// The minimum selectable time for the time picker (default 00:00).
@@ -93,12 +88,28 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
   void initState() {
     super.initState();
 
+    final minTime = widget.minTime ?? const AwesomeTime(hour: 0, minute: 0);
+    final maxTime = widget.maxTime ?? const AwesomeTime(hour: 23, minute: 59);
+    final initialTime = widget.initialTime ??
+        AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
+
+    // Debug warning for invalid initial time
+    assert(() {
+      if (!ValidationUtils.isValidInitialTime(
+          time: initialTime, minTime: minTime, maxTime: maxTime)) {
+        debugPrint(
+          '⚠️ AwesomeTimePicker: initialTime ($initialTime) is outside the valid range '
+          '(minTime: $minTime, maxTime: $maxTime). '
+          'The time will be automatically clamped to the valid range.',
+        );
+      }
+      return true;
+    }());
+
     _controller = AwesomeTimePickerController(
-      minTime: widget.minTime ?? AwesomeTime(hour: 00, minute: 00),
-      maxTime: widget.maxTime ?? AwesomeTime(hour: 23, minute: 59),
-      initialTime: widget.initialTime ??
-          AwesomeTime(
-              hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute),
+      minTime: minTime,
+      maxTime: maxTime,
+      initialTime: initialTime,
     );
 
     _controller.addListener(() {

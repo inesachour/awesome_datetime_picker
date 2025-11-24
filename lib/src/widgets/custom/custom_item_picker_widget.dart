@@ -38,14 +38,14 @@ class CustomItemPicker extends StatefulWidget {
 
 class _CustomItemPickerState extends State<CustomItemPicker> {
   late FixedExtentScrollController _scrollController;
-  late String _selectedItem;
-  int defaultVisibleItemCount = 5;
-  double defaultItemHeight = 40.0;
+  late int _selectedIndex;
+  static const int defaultVisibleItemCount = 5;
+  static const double defaultItemHeight = 40.0;
 
   @override
   void initState() {
     super.initState();
-    _selectedItem = widget.items[widget.initialIndex];
+    _selectedIndex = widget.initialIndex;
     _scrollController = FixedExtentScrollController(
       initialItem: widget.initialIndex,
     );
@@ -59,9 +59,10 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final double itemHeight =
+        widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight;
     final double pickerHeight =
-        (widget.theme?.height ?? widget.itemHeight ?? defaultItemHeight) *
-            (widget.visibleItemCount ?? defaultVisibleItemCount);
+        itemHeight * (widget.visibleItemCount ?? defaultVisibleItemCount);
 
     const TextStyle defaultSelectedStyle = TextStyle(
       color: Colors.black,
@@ -74,9 +75,17 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
       fontSize: 18,
     );
 
+    final selectedStyle = widget.theme?.selectedTextStyle ??
+        widget.selectedTextStyle ??
+        defaultSelectedStyle;
+
+    final unselectedStyle = widget.theme?.unselectedTextStyle ??
+        widget.unselectedTextStyle ??
+        defaultUnselectedStyle;
+
     return Column(
       children: [
-        widget.theme?.title ?? Container(),
+        widget.theme?.title ?? const SizedBox.shrink(),
         Container(
           height: pickerHeight,
           width: widget.theme?.width ??
@@ -92,12 +101,11 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
           ),
           child: Stack(
             children: [
+              // Selector highlight
               Positioned.fill(
                 child: Center(
                   child: Container(
-                    height: widget.theme?.height ??
-                        widget.itemHeight ??
-                        defaultItemHeight,
+                    height: itemHeight,
                     decoration: BoxDecoration(
                       color: widget.selectorColor ?? Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(0),
@@ -105,90 +113,90 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                   ),
                 ),
               ),
+
+              // Scrollable list
               ListWheelScrollView.useDelegate(
                 controller: _scrollController,
-                itemExtent: widget.theme?.height ??
-                    widget.itemHeight ??
-                    defaultItemHeight,
+                itemExtent: itemHeight,
                 perspective: 0.01,
                 physics: const FixedExtentScrollPhysics(),
                 diameterRatio: 1.5,
                 onSelectedItemChanged: (index) {
-                  final selectedValue = widget.items[index];
-                  setState(() {
-                    _selectedItem = selectedValue;
-                  });
-                  widget.onSelectedItemChanged(selectedValue);
+                  // Only update if index actually changed
+                  if (_selectedIndex != index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                    widget.onSelectedItemChanged(widget.items[index]);
+                  }
                 },
                 childDelegate: ListWheelChildBuilderDelegate(
                   childCount: widget.items.length,
                   builder: (context, index) {
                     final value = widget.items[index];
-                    final isSelected = value == _selectedItem;
+                    final isSelected = index == _selectedIndex;
+
                     return Center(
                       child: Text(
                         value,
-                        style: isSelected
-                            ? (widget.theme?.selectedTextStyle ??
-                                widget.selectedTextStyle ??
-                                defaultSelectedStyle)
-                            : (widget.theme?.unselectedTextStyle ??
-                                widget.unselectedTextStyle ??
-                                defaultUnselectedStyle),
+                        style: isSelected ? selectedStyle : unselectedStyle,
                       ),
                     );
                   },
                 ),
               ),
-              if (widget.fadeEffect == null || widget.fadeEffect!) ...[
-                // Top fade out gradient
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: widget.theme?.height ??
-                      widget.itemHeight ??
-                      defaultItemHeight,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.white,
-                          Color(0x00FFFFFF),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
 
-                // Bottom fade out gradient
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: widget.theme?.height ??
-                      widget.itemHeight ??
-                      defaultItemHeight,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.white,
-                          Color(0x00FFFFFF),
-                        ],
-                      ),
-                    ),
-                  ),
+              // Fade effects
+              if (widget.fadeEffect ?? true) ...[
+                _FadeGradient(
+                  height: itemHeight,
+                  isTop: true,
+                ),
+                _FadeGradient(
+                  height: itemHeight,
+                  isTop: false,
                 ),
               ],
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Optimized fade gradient widget - stateless and const-friendly
+class _FadeGradient extends StatelessWidget {
+  final double height;
+  final bool isTop;
+
+  const _FadeGradient({
+    required this.height,
+    required this.isTop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: isTop ? 0 : null,
+      bottom: isTop ? null : 0,
+      left: 0,
+      right: 0,
+      height: height,
+      child: IgnorePointer(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: isTop ? Alignment.topCenter : Alignment.bottomCenter,
+              end: isTop ? Alignment.bottomCenter : Alignment.topCenter,
+              colors: const [
+                Colors.white,
+                Color(0x00FFFFFF),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
