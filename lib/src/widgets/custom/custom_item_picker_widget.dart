@@ -140,6 +140,9 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                       child: Text(
                         value,
                         style: isSelected ? selectedStyle : unselectedStyle,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
                       ),
                     );
                   },
