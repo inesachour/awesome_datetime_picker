@@ -181,7 +181,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
             unselectedTextStyle: widget.unselectedTextStyle,
             visibleItemCount: widget.visibleItemCount,
             itemHeight: widget.itemHeight,
-            itemWidth: widget.itemWidth,
+            itemWidth:
+                widget.itemWidth ?? MediaQuery.of(context).size.width * 0.25,
             onSelectedItemChanged: (newValue) {
               _controller.onSelectedMonthNameChanged(newValue);
             },
