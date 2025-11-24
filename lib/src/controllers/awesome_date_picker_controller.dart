@@ -87,29 +87,11 @@ class AwesomeDatePickerController extends ChangeNotifier {
 
   /// Centralized setter
   void _setDate(int year, int month, int day) {
-    // Clamp day to month max
-    final maxDay = AwesomeDateUtils.getDaysInMonth(year, month);
-    int clampedDay = day;
-    if (clampedDay > maxDay) clampedDay = maxDay;
-
-    // Build new date
+    final clampedDay = _clampDayToMonth(year, month, day);
     var newDate = AwesomeDate(year: year, month: month, day: clampedDay);
 
-    // Clamp to min/max range
-    final minDT = minDate.toDateTime();
-    final maxDT = maxDate.toDateTime();
-    final native = newDate.toDateTime();
-
-    if (native.isBefore(minDT)) {
-      newDate = minDate;
-    } else if (native.isAfter(maxDT)) {
-      newDate = maxDate;
-    }
-
-    // Check exclusions
-    if (_isDateExcluded(newDate)) {
-      newDate = _findNextValidDate(newDate);
-    }
+    newDate = _clampDateToRange(newDate);
+    newDate = _handleExclusions(newDate);
 
     _selectedDate = newDate;
 
@@ -119,6 +101,31 @@ class AwesomeDatePickerController extends ChangeNotifier {
     _cachedDays = null;
 
     notifyListeners();
+  }
+
+  int _clampDayToMonth(int year, int month, int day) {
+    final maxDay = AwesomeDateUtils.getDaysInMonth(year, month);
+    return day > maxDay ? maxDay : day;
+  }
+
+  AwesomeDate _clampDateToRange(AwesomeDate date) {
+    final minDT = minDate.toDateTime();
+    final maxDT = maxDate.toDateTime();
+    final native = date.toDateTime();
+
+    if (native.isBefore(minDT)) {
+      return minDate;
+    } else if (native.isAfter(maxDT)) {
+      return maxDate;
+    }
+    return date;
+  }
+
+  AwesomeDate _handleExclusions(AwesomeDate date) {
+    if (_isDateExcluded(date)) {
+      return _findNextValidDate(date);
+    }
+    return date;
   }
 
   void onSelectedYearChanged(String newValue) {

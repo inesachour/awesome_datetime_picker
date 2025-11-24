@@ -3,6 +3,7 @@ import 'package:awesome_datetime_picker/src/data/format.dart';
 import 'package:awesome_datetime_picker/src/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/theme/awesome_time_picker_theme.dart';
+import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
 import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
 import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_style.dart';
@@ -138,29 +139,64 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
   Widget _buildPicker(PickerType type) {
     switch (type) {
       case PickerType.hour_12:
-        return _buildHour12Picker();
+        return _buildItemPicker(
+          key: ValueKey(_controller.selectedAmPm == AwesomeTimeUtils.amPm[0]
+              ? "hour_picker 1"
+              : "hour_picker 2"),
+          items: _controller.amPmHours,
+          initialValue: AwesomeTimeUtils.convertTo12HourFormat(
+                  _controller.selectedTime.hour)
+              .toString(),
+          theme: widget.theme
+              ?.minuteTheme, // Note: Using minuteTheme for consistency with original code, but might want hourTheme?
+          onChanged: _controller.onSelectedAmPmHourChanged,
+        );
       case PickerType.hour_24:
-        return _buildHour24Picker();
+        return _buildItemPicker(
+          items: _controller.hours,
+          initialValue: _controller.selectedTime.hour.toString(),
+          theme: widget.theme?.hourTheme,
+          onChanged: _controller.onSelectedHourChanged,
+        );
       case PickerType.minute:
-        return _buildMinutePicker();
+        return _buildItemPicker(
+          key:
+              ValueKey(_controller.selectedTime.hour == _controller.minTime.hour
+                  ? "minute_picker 1"
+                  : _controller.selectedTime.hour == _controller.maxTime.hour
+                      ? "minute_picker 2"
+                      : "minute_picker 3"),
+          items: _controller.minutes,
+          initialValue: _controller.selectedTime.minute.toString(),
+          theme: widget.theme?.minuteTheme,
+          onChanged: _controller.onSelectedMinuteChanged,
+        );
       case PickerType.am_pm:
-        return _buildAmPmPicker();
+        return _buildItemPicker(
+          items: _controller.amPm,
+          initialValue: _controller.selectedAmPm,
+          theme: widget.theme
+              ?.minuteTheme, // Note: Using minuteTheme for consistency with original code
+          onChanged: _controller.onSelectedAmPmChanged,
+        );
       default:
         return const SizedBox.shrink();
     }
   }
 
-  Widget _buildHour12Picker() {
+  Widget _buildItemPicker({
+    Key? key,
+    required List<String> items,
+    required String initialValue,
+    required ItemTheme? theme,
+    required ValueChanged<String> onChanged,
+  }) {
     return CustomItemPicker(
-      key: ValueKey(_controller.selectedAmPm == AwesomeTimeUtils.amPm[0]
-          ? "hour_picker 1"
-          : "hour_picker 2"),
-      items: _controller.amPmHours,
-      initialIndex: _controller.amPmHours.indexOf(
-          AwesomeTimeUtils.convertTo12HourFormat(_controller.selectedTime.hour)
-              .toString()),
+      key: key,
+      items: items,
+      initialIndex: items.indexOf(initialValue),
       style: CustomItemPickerStyle(
-        theme: widget.theme?.minuteTheme,
+        theme: theme,
         backgroundColor: widget.backgroundColor,
         selectorColor: widget.selectorColor,
         fadeEffect: widget.fadeEffect,
@@ -170,79 +206,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
         itemWidth: widget.itemWidth,
       ),
       visibleItemCount: widget.visibleItemCount,
-      onSelectedItemChanged: (newValue) {
-        _controller.onSelectedAmPmHourChanged(newValue);
-      },
-    );
-  }
-
-  Widget _buildHour24Picker() {
-    return CustomItemPicker(
-      items: _controller.hours,
-      initialIndex:
-          _controller.hours.indexOf(_controller.selectedTime.hour.toString()),
-      style: CustomItemPickerStyle(
-        theme: widget.theme?.hourTheme,
-        backgroundColor: widget.backgroundColor,
-        selectorColor: widget.selectorColor,
-        fadeEffect: widget.fadeEffect,
-        selectedTextStyle: widget.selectedTextStyle,
-        unselectedTextStyle: widget.unselectedTextStyle,
-        itemHeight: widget.itemHeight,
-        itemWidth: widget.itemWidth,
-      ),
-      visibleItemCount: widget.visibleItemCount,
-      onSelectedItemChanged: (newValue) {
-        _controller.onSelectedHourChanged(newValue);
-      },
-    );
-  }
-
-  Widget _buildMinutePicker() {
-    return CustomItemPicker(
-      key: ValueKey(_controller.selectedTime.hour == _controller.minTime.hour
-          ? "minute_picker 1"
-          : _controller.selectedTime.hour == _controller.maxTime.hour
-              ? "minute_picker 2"
-              : "minute_picker 3"),
-      items: _controller.minutes,
-      initialIndex: _controller.minutes
-          .indexOf(_controller.selectedTime.minute.toString()),
-      style: CustomItemPickerStyle(
-        theme: widget.theme?.minuteTheme,
-        backgroundColor: widget.backgroundColor,
-        selectorColor: widget.selectorColor,
-        fadeEffect: widget.fadeEffect,
-        selectedTextStyle: widget.selectedTextStyle,
-        unselectedTextStyle: widget.unselectedTextStyle,
-        itemHeight: widget.itemHeight,
-        itemWidth: widget.itemWidth,
-      ),
-      visibleItemCount: widget.visibleItemCount,
-      onSelectedItemChanged: (newValue) {
-        _controller.onSelectedMinuteChanged(newValue);
-      },
-    );
-  }
-
-  Widget _buildAmPmPicker() {
-    return CustomItemPicker(
-      items: _controller.amPm,
-      initialIndex: AwesomeTimeUtils.amPm.indexOf(_controller.selectedAmPm),
-      style: CustomItemPickerStyle(
-        theme: widget.theme?.minuteTheme,
-        backgroundColor: widget.backgroundColor,
-        selectorColor: widget.selectorColor,
-        fadeEffect: widget.fadeEffect,
-        selectedTextStyle: widget.selectedTextStyle,
-        unselectedTextStyle: widget.unselectedTextStyle,
-        itemHeight: widget.itemHeight,
-        itemWidth: widget.itemWidth,
-      ),
-      visibleItemCount: widget.visibleItemCount,
-      onSelectedItemChanged: (newValue) {
-        _controller.onSelectedAmPmChanged(newValue);
-      },
+      onSelectedItemChanged: onChanged,
     );
   }
 }

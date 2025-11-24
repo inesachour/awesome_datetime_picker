@@ -66,20 +66,10 @@ class AwesomeTimePickerController extends ChangeNotifier {
 
   /// Centralized setter — clamps and notifies
   void _setTime(int hour, int minute) {
-    // Build new time
     var newTime = AwesomeTime(hour: hour, minute: minute);
 
-    // Clamp to min/max range
-    if (newTime.isBefore(minTime)) {
-      newTime = minTime;
-    } else if (newTime.isAfter(maxTime)) {
-      newTime = maxTime;
-    }
-
-    // Check exclusions
-    if (_isHourExcluded(newTime.hour)) {
-      newTime = _findNextValidTime(newTime);
-    }
+    newTime = _clampTimeToRange(newTime);
+    newTime = _handleExclusions(newTime);
 
     _selectedTime = newTime;
     _selectedAmPm = AwesomeTimeUtils.getAmPm(newTime.hour);
@@ -89,6 +79,22 @@ class AwesomeTimePickerController extends ChangeNotifier {
     _cachedAmPmHours = null;
 
     notifyListeners();
+  }
+
+  AwesomeTime _clampTimeToRange(AwesomeTime time) {
+    if (time.isBefore(minTime)) {
+      return minTime;
+    } else if (time.isAfter(maxTime)) {
+      return maxTime;
+    }
+    return time;
+  }
+
+  AwesomeTime _handleExclusions(AwesomeTime time) {
+    if (_isHourExcluded(time.hour)) {
+      return _findNextValidTime(time);
+    }
+    return time;
   }
 
   /// Update hour in 24-hour mode
