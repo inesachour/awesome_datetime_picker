@@ -114,6 +114,12 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -123,6 +129,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           minDate: _controller.minDateTime.date,
           maxDate: _controller.maxDateTime.date,
           locale: widget.locale,
+          dateFormat: widget.dateFormat,
           theme: widget.theme?.datePickerTheme,
           backgroundColor: widget.backgroundColor,
           selectorColor: widget.selectorColor,

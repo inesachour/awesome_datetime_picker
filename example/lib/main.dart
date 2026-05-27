@@ -42,7 +42,7 @@ class _CalendarState extends State<Calendar> {
               print(
                   "----Date changed : ${date.day}/${date.month}/${date.year}\n");
             },
-            excludedWeekdays: [1, 2, 3, 4, 5, 6],
+            //excludedWeekdays: [1, 2, 3, 4, 5, 6],
           ),
           AwesomeTimePicker(
             timeFormat: AwesomeTimeFormat.hm,
@@ -52,15 +52,6 @@ class _CalendarState extends State<Calendar> {
             onChanged: (AwesomeTime time) {
               print("----Time changed : ${time.hour}:${time.minute}\n");
             },
-            excludedHours: [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-            ],
           ),
           AwesomeDateTimePicker(
             initialDateTime: AwesomeDateTime(

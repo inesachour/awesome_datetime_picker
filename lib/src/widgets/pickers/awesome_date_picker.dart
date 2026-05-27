@@ -119,6 +119,12 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

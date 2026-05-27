@@ -121,8 +121,14 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
 
     _controller.addListener(() {
       widget.onChanged?.call(_controller.selectedTime);
-      // setState(() {}); // Removed redundant setState
+      setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -147,8 +153,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           initialValue: AwesomeTimeUtils.convertTo12HourFormat(
                   _controller.selectedTime.hour)
               .toString(),
-          theme: widget.theme
-              ?.minuteTheme, // Note: Using minuteTheme for consistency with original code, but might want hourTheme?
+          theme: widget.theme?.hourTheme,
           onChanged: _controller.onSelectedAmPmHourChanged,
         );
       case PickerType.hour_24:
@@ -175,8 +180,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
         return _buildItemPicker(
           items: _controller.amPm,
           initialValue: _controller.selectedAmPm,
-          theme: widget.theme
-              ?.minuteTheme, // Note: Using minuteTheme for consistency with original code
+          theme: widget.theme?.hourTheme,
           onChanged: _controller.onSelectedAmPmChanged,
         );
       default:
