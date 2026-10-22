@@ -1,6 +1,6 @@
 name: awesome_datetime_picker
 description: "A customizable date-time picker package supporting all platforms (ios, android, web, desktop, ...)."
-version: 0.2.0
+version: 0.2.1
 homepage: https://github.com/inesachour/awesome_datetime_picker
 repository: https://github.com/inesachour/awesome_datetime_picker
 issue_tracker: https://github.com/inesachour/awesome_datetime_picker/issues

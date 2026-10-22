@@ -65,3 +65,7 @@
 * Add `AwesomePickerThemeData`, a `ThemeExtension` that sets the colors, text styles, sizes and `AwesomeWheelStyle` of every picker once in `ThemeData` (with `lerp`, so theme changes animate). Precedence: per-wheel `ItemTheme`, then picker options, then the theme, then the defaults; `wheelStyle` is merged property by property. Add `AwesomeWheelStyle.mergedOver` and `AwesomeWheelStyle.lerp`.
 * Add `AwesomeDurationPicker`, `AwesomeDurationPickerController` and `AwesomeDurationPickerTheme`: pick a `Duration` in hours and minutes, minutes and seconds, or all three (`AwesomeDurationFormat`), with `minDuration`/`maxDuration` (the first wheel is not limited to 59), minute and second intervals, looping, semantic labels, localized digits and the usual styling. `showAwesomeDurationPicker` shows it in a bottom sheet or a dialog.
 * Internal restructuring into feature folders; the public API is unchanged.
+
+## 0.2.1
+
+* Fix the README images not showing on pub.dev: pub.dev drops relative image paths inside HTML, so the images now use absolute URLs.

@@ -5,12 +5,12 @@
 iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-time picker, a date-range picker and a duration picker, plus ready-made bottom sheets and dialogs. They work on every platform (iOS, Android, web, desktop), follow your light or dark theme, and can be customized down to the shape of the selector.
 
 <p align="center">
-  <img src="doc/images/demo.gif" alt="The date-time picker being scrolled" width="320">
+  <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/demo.gif?raw=true" alt="The date-time picker being scrolled" width="320">
 </p>
 
 <p align="center">
   <b><a href="https://inesachour.github.io/awesome_datetime_picker/">Try it in your browser</a></b>
-  (the <a href="example">example app</a>, with switches for dark mode, languages, exclusions and more)
+  (the <a href="https://github.com/inesachour/awesome_datetime_picker/tree/master/example">example app</a>, with switches for dark mode, languages, exclusions and more)
 </p>
 
 ## Features
@@ -28,24 +28,24 @@ iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-ti
 
 <table>
   <tr>
-    <td align="center"><img src="doc/images/date_picker.png" alt="Date picker with month names" width="250"><br><sub>Date picker</sub></td>
-    <td align="center"><img src="doc/images/time_picker.png" alt="12-hour time picker with 5-minute steps" width="250"><br><sub>Time picker, 12-hour, 5-minute steps</sub></td>
-    <td align="center"><img src="doc/images/datetime_picker.png" alt="Date-time picker" width="250"><br><sub>Date-time picker</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/date_picker.png?raw=true" alt="Date picker with month names" width="250"><br><sub>Date picker</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/time_picker.png?raw=true" alt="12-hour time picker with 5-minute steps" width="250"><br><sub>Time picker, 12-hour, 5-minute steps</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/datetime_picker.png?raw=true" alt="Date-time picker" width="250"><br><sub>Date-time picker</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="doc/images/date_range_picker.png" alt="Date range picker with check-in and check-out" width="250"><br><sub>Date range picker</sub></td>
-    <td align="center"><img src="doc/images/duration_picker.png" alt="Duration pickers: hours and minutes, and minutes and seconds" width="250"><br><sub>Duration pickers</sub></td>
-    <td align="center"><img src="doc/images/modal_sheet.png" alt="A date picker in a bottom sheet" width="250"><br><sub>In a bottom sheet</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/date_range_picker.png?raw=true" alt="Date range picker with check-in and check-out" width="250"><br><sub>Date range picker</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/duration_picker.png?raw=true" alt="Duration pickers: hours and minutes, and minutes and seconds" width="250"><br><sub>Duration pickers</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/modal_sheet.png?raw=true" alt="A date picker in a bottom sheet" width="250"><br><sub>In a bottom sheet</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="doc/images/dark_mode.png" alt="Date-time picker in dark mode" width="250"><br><sub>Dark mode</sub></td>
-    <td align="center"><img src="doc/images/disabled_values.png" alt="Weekends shown dimmed with weekday labels" width="250"><br><sub>Excluded weekends shown dimmed</sub></td>
-    <td align="center"><img src="doc/images/localization.png" alt="Date pickers in French, Spanish and German" width="250"><br><sub>Localization</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/dark_mode.png?raw=true" alt="Date-time picker in dark mode" width="250"><br><sub>Dark mode</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/disabled_values.png?raw=true" alt="Weekends shown dimmed with weekday labels" width="250"><br><sub>Excluded weekends shown dimmed</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/localization.png?raw=true" alt="Date pickers in French, Spanish and German" width="250"><br><sub>Localization</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="doc/images/time_picker_seconds.png" alt="Time picker with seconds" width="250"><br><sub>With seconds</sub></td>
-    <td align="center"><img src="doc/images/wheel_style.png" alt="Time picker with a custom selector and curved wheels" width="250"><br><sub>Custom wheel style</sub></td>
-    <td align="center"><img src="doc/images/wheel_presets.png" alt="The default look and the ios, material and minimal presets" width="250"><br><sub>Style presets</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/time_picker_seconds.png?raw=true" alt="Time picker with seconds" width="250"><br><sub>With seconds</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/wheel_style.png?raw=true" alt="Time picker with a custom selector and curved wheels" width="250"><br><sub>Custom wheel style</sub></td>
+    <td align="center"><img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/wheel_presets.png?raw=true" alt="The default look and the ios, material and minimal presets" width="250"><br><sub>Style presets</sub></td>
   </tr>
 </table>
 
@@ -229,7 +229,7 @@ AwesomeDurationPicker(
 - `looping` wraps the minutes and seconds wheels; the first wheel never loops. `AwesomeDurationPickerTheme` styles the hours, minutes and seconds wheels (`hourTheme`, `minuteTheme`, `secondTheme`), and `ItemTheme(title: Text('hours'))` puts a caption above a wheel.
 
 <p align="center">
-  <img src="doc/images/duration_picker.png" alt="Duration pickers: hours and minutes, and minutes and seconds" width="300">
+  <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/duration_picker.png?raw=true" alt="Duration pickers: hours and minutes, and minutes and seconds" width="300">
 </p>
 
 ## Showing a picker in a modal
@@ -496,7 +496,7 @@ AwesomeDatePicker(wheelStyle: AwesomeWheelStyle.ios().copyWith(magnification: 1.
 ```
 
 <p align="center">
-  <img src="doc/images/wheel_presets.png" alt="The default look and the ios, material and minimal presets" width="300">
+  <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/doc/images/wheel_presets.png?raw=true" alt="The default look and the ios, material and minimal presets" width="300">
 </p>
 
 `ios()` uses the values of Flutter's `CupertinoPicker`. `copyWith` replaces the properties you give; it cannot reset one to "unset".
