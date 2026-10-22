@@ -1,7 +1,6 @@
 # Awesome DateTime Picker
 
 [![pub package](https://img.shields.io/pub/v/awesome_datetime_picker.svg)](https://pub.dev/packages/awesome_datetime_picker)
-[![CI](https://github.com/inesachour/awesome_datetime_picker/actions/workflows/ci.yml/badge.svg)](https://github.com/inesachour/awesome_datetime_picker/actions/workflows/ci.yml)
 
 iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-time picker, a date-range picker and a duration picker, plus ready-made bottom sheets and dialogs. They work on every platform (iOS, Android, web, desktop), follow your light or dark theme, and can be customized down to the shape of the selector.
 
@@ -593,27 +592,18 @@ Run the screenshot command whenever the look of a picker changes, and commit the
 
 To try your changes, run the example app (`cd example && flutter run`, or `flutter run -d chrome` for the web version). It is also the live demo above.
 
-### Continuous integration
+### Checks before a release
 
-Every push and pull request runs, on GitHub Actions (`.github/workflows/ci.yml`):
-
-| Job | What it checks |
-|-----|----------------|
-| Test | Formatting (`dart format`), analysis and the tests, on Linux and macOS |
-| Example app | Analysis and the tests of the example app |
-| Lowest dependency versions | `flutter pub downgrade`, then analysis and tests: the check behind the *downgrade analysis* of pub.dev |
-| Web | The example builds for the web; the tests also run in Chrome |
-| Screenshots | The images of the README still generate (they are attached to the run) |
-| Publish dry run | `flutter pub publish --dry-run`, what pub.dev validates |
-
-To run the same checks yourself:
+Run these from the package folder; each should pass:
 
 ```sh
 dart format --output=none --set-exit-if-changed lib test tool example/lib example/test
 flutter analyze && flutter test
 (cd example && flutter analyze && flutter test)
-flutter pub downgrade && flutter analyze && flutter test   # then: flutter pub upgrade
-flutter pub publish --dry-run
+flutter pub downgrade && flutter analyze && flutter test   # the lowest dependency versions; then: flutter pub upgrade
+flutter pub publish --dry-run                              # what pub.dev validates
 ```
+
+### The live demo
 
 The demo is deployed to GitHub Pages by `.github/workflows/pages.yml` on every push to `master`. Enable it once in the repository: *Settings > Pages > Build and deployment > Source: GitHub Actions*.
