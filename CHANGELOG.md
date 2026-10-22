@@ -52,5 +52,6 @@
 * Add `localeName` to every picker: any locale known by `intl` localizes the month names, the weekday names (`showWeekday`), the AM/PM markers and the digits (e.g. `fa`, `ar_EG`). `LocaleType` is unchanged. The package now depends on `intl` (`>=0.19.0 <1.0.0`).
 * Add `AwesomeDateRangePicker` and `AwesomeDateRange`: pick a start and an end date, with `minLength`/`maxLength`, the exclusions applying to both dates, labels, a controller (`AwesomeDateRangePickerController`) and the usual styling options.
 * Add `showAwesomePicker`, `showAwesomeDatePicker`, `showAwesomeTimePicker`, `showAwesomeDateTimePicker` and `showAwesomeDateRangePicker` to show a picker in a bottom sheet or a dialog with Cancel and Done buttons and get the confirmed value.
-* Complete API documentation and README.
+* Fix pickers stretching to the full height of a bounded parent (e.g. `Center(child: AwesomeDatePicker())` showed the picker at the top): a picker is now only as tall as its wheels.
+* Documentation: README reorganized (demo, feature list, gallery, quick start, one options table, upgrade notes), new screenshots and an animated demo regenerated from the real widgets by `tool/generate_screenshots_test.dart`, screenshot gallery on pub.dev, complete API documentation.
 * Internal restructuring into feature folders; the public API is unchanged.

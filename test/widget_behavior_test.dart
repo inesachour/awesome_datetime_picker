@@ -14,6 +14,8 @@ void phone(WidgetTester t) {
 }
 
 void main() {
+  layoutTests();
+
   testWidgets('time wheels show zero-padded minutes', (t) async {
     await t.pumpWidget(wrap(AwesomeTimePicker(
       initialTime: const AwesomeTime(hour: 9, minute: 5),
@@ -93,5 +95,36 @@ void main() {
           time: AwesomeTime(hour: 0, minute: 0)),
     )));
     expect(t.takeException(), isA<AssertionError>());
+  });
+}
+
+void layoutTests() {
+  group('layout', () {
+    testWidgets('a picker is only as tall as its wheels in a bounded parent',
+        (t) async {
+      t.view.physicalSize = const Size(1170, 2532);
+      t.view.devicePixelRatio = 3;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(wrap(AwesomeDatePicker()));
+      // 5 visible items of 40 logical pixels, not the 844 of the screen
+      expect(t.getSize(find.byType(AwesomeDatePicker)).height, 200);
+    });
+
+    testWidgets('Center really centers it vertically', (t) async {
+      t.view.physicalSize = const Size(1170, 2532);
+      t.view.devicePixelRatio = 3;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(wrap(AwesomeTimePicker()));
+      expect(t.getCenter(find.byType(AwesomeTimePicker)).dy, closeTo(422, 1));
+    });
+
+    testWidgets('the same holds for the date-time and range pickers',
+        (t) async {
+      t.view.physicalSize = const Size(1170, 2532);
+      t.view.devicePixelRatio = 3;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(wrap(AwesomeDateTimePicker()));
+      expect(t.getSize(find.byType(AwesomeDateTimePicker)).height, 200);
+    });
   });
 }

@@ -1,16 +1,16 @@
-# example
+# awesome_datetime_picker example
 
-A new Flutter project.
+A small app showing the package: the date, time, date-time and date-range
+pickers, the modal helpers (bottom sheet and dialog), and switches to try the
+main options live: dark mode, language (`localeName`), excluded weekends and
+holidays, dimmed excluded values, weekday labels, seconds, a 15-minute
+interval, looping wheels and haptic feedback.
 
-## Getting Started
+Run it from this folder:
 
-This project is a starting point for a Flutter application.
+```sh
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The source is in [`lib/main.dart`](lib/main.dart). Each option it uses is
+documented in the [package README](../README.md).

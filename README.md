@@ -1,181 +1,94 @@
 # Awesome DateTime Picker
 
-## Overview
-"Awesome DateTime Picker" is a Flutter package that offers customizable date, time, and date-time wheel pickers with a sliding style inspired by the `CupertinoDatePicker`. It works on every Flutter platform (iOS, Android, web, desktop) and follows the light or dark appearance of your app.
+[![pub package](https://img.shields.io/pub/v/awesome_datetime_picker.svg)](https://pub.dev/packages/awesome_datetime_picker)
+
+iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-time picker and a date-range picker, plus ready-made bottom sheets and dialogs. They work on every platform (iOS, Android, web, desktop), follow your light or dark theme, and can be customized down to the shape of the selector.
+
+<p align="center">
+  <img src="doc/images/demo.gif" alt="The date-time picker being scrolled" width="320">
+</p>
+
+## Features
+
+- **Five pickers**: date, time, date-time, date range, and the `showAwesome...Picker` functions that open any of them in a bottom sheet or a dialog with Cancel and Done.
+- **Limits and exclusions**: minimum and maximum, excluded weekdays, specific dates (holidays), hours, or any rule through a predicate. Excluded values are removed from the wheels, or shown dimmed.
+- **Time your way**: 12-hour or 24-hour clock, optional seconds, and minute and second intervals (every 5, 15, 30 minutes...).
+- **More date formats**: day-month-year in any order, month and year only (card expiry), weekday labels ("Mon 12").
+- **Localization**: six built-in languages, and any language of [`intl`](https://pub.dev/packages/intl) with its own digits (`fa`, `ar_EG`, ...).
+- **Light and dark** automatically; per-wheel themes, wheel curvature, magnification, custom selector, looping wheels, haptic feedback.
+- **Controllers** (like `TextEditingController`) to read and set the selection from code.
+- **Accessible and cross-platform**: screen readers can adjust each wheel, and wheels can be dragged with a mouse or trackpad on the web and on desktop.
+
+## Gallery
+
+<table>
+  <tr>
+    <td align="center"><img src="doc/images/date_picker.png" alt="Date picker with month names" width="260"><br><sub>Date picker</sub></td>
+    <td align="center"><img src="doc/images/time_picker.png" alt="12-hour time picker with 5-minute steps" width="260"><br><sub>Time picker, 12-hour, 5-minute steps</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="doc/images/datetime_picker.png" alt="Date-time picker" width="260"><br><sub>Date-time picker</sub></td>
+    <td align="center"><img src="doc/images/date_range_picker.png" alt="Date range picker with check-in and check-out" width="260"><br><sub>Date range picker</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="doc/images/modal_sheet.png" alt="Date range picker in a bottom sheet" width="260"><br><sub>In a bottom sheet</sub></td>
+    <td align="center"><img src="doc/images/dark_mode.png" alt="Date-time picker in dark mode" width="260"><br><sub>Dark mode</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="doc/images/disabled_values.png" alt="Weekends shown dimmed with weekday labels" width="260"><br><sub>Excluded weekends shown dimmed</sub></td>
+    <td align="center"><img src="doc/images/wheel_style.png" alt="Time picker with a custom selector and curved wheels" width="260"><br><sub>Custom wheel style</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="doc/images/time_picker_seconds.png" alt="Time picker with seconds" width="260"><br><sub>With seconds</sub></td>
+    <td align="center"><img src="doc/images/localization.png" alt="Date pickers in French, Spanish and German" width="260"><br><sub>Localization</sub></td>
+  </tr>
+</table>
+
+<sub>The images are rendered from the real widgets by `tool/generate_screenshots_test.dart`, with the Roboto font bundled with Flutter (an iOS device shows the system font).</sub>
+
+## Contents
+
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [The pickers](#the-pickers) and [their options](#options)
+- [Showing a picker in a modal](#showing-a-picker-in-a-modal)
+- [Controllers](#controllers)
+- [Excluding values](#excluding-values)
+- [Time: formats, seconds and intervals](#time-formats-seconds-and-intervals)
+- [Date formats and weekday labels](#date-formats-and-weekday-labels)
+- [Localization](#localization)
+- [Appearance](#appearance)
+- [Behavior to know about](#behavior-to-know-about)
+- [Accessibility and platforms](#accessibility-and-platforms)
+- [Upgrading from 0.1.x](#upgrading-from-01x)
+- [Contributing](#contributing)
 
 ## Installation
+
 ```yaml
 dependencies:
-  awesome_datetime_picker: ^0.1.1
+  awesome_datetime_picker: ^0.2.0
 ```
+
 ```dart
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
 ```
 
+Requires Dart 3.3.1 or newer.
+
 ## Quick start
+
+Every parameter is optional. Without limits, a picker offers dates from 1900 to 2100 and starts on today (or the closest allowed value).
+
+**In your layout:**
+
 ```dart
 AwesomeDatePicker(
   onChanged: (AwesomeDate date) => print(date),
 )
 ```
-Every parameter is optional. The pickers start on the current date/time, clamped into the `min*`/`max*` range if you set one.
 
-## Pickers
-
-### Date Picker
-<p align="center" width="100%">
-    <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/images/date_picker.jpg?raw=true" height="200">
-</p>
-
-```dart
-AwesomeDatePicker(
-    AwesomeDate? minDate; // The minimum selectable date (default 1/1/1900).
-    AwesomeDate? maxDate; // The maximum selectable date (default 31/12/2100).
-    AwesomeDate? initialDate; // The initially selected date (default today).
-    LocaleType locale; // The language of the month names (default en).
-    String? localeName; // Any locale known by intl (e.g. 'pt_BR', 'ja'); replaces locale and localizes digits.
-    AwesomeDateFormat dateFormat; // The wheels to display and their order.
-    List<int>? excludedWeekdays; // Weekdays that cannot be selected (1 = Monday ... 7 = Sunday).
-    List<AwesomeDate>? excludedDates; // Specific dates that cannot be selected (holidays, booked days).
-    bool Function(AwesomeDate)? selectableDayPredicate; // Return false to exclude a date.
-    bool showWeekday; // Show the weekday on the day wheel, e.g. "Mon 12" (default false).
-    bool showDisabledValues; // Keep excluded values visible, dimmed, instead of removing them (default false).
-    TextStyle? disabledTextStyle; // Text style of the dimmed values.
-    AwesomeDatePickerController? controller; // Read and change the selected date from code (see Controllers).
-    AwesomeDatePickerTheme? theme; // Per-wheel customization.
-    ValueChanged<AwesomeDate>? onChanged; // Called when the selected date changes.
-    Color? backgroundColor; // Background color of the wheels.
-    Color? selectorColor; // Color of the selected item indicator.
-    bool? fadeEffect; // Whether to fade the items at the top and bottom edges (default true).
-    TextStyle? selectedTextStyle; // Text style for the selected item.
-    TextStyle? unselectedTextStyle; // Text style for unselected items.
-    int? visibleItemCount; // Number of items visible at a time (odd number, at least 3; default 5).
-    double? itemHeight; // Height of each item.
-    double? itemWidth; // Width of each wheel.
-    bool looping; // Wheels wrap around from the last item to the first (default false; year and AM/PM never loop).
-    bool enableHapticFeedback; // Light haptic tick while dragging a wheel (default false).
-    AwesomeWheelStyle? wheelStyle; // Curvature, magnification and selector shape of the wheels.
-)
-```
-
-### Time Picker
-<p align="center" width="100%">
-    <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/images/time_picker.jpg?raw=true" height="200">
-</p>
-
-```dart
-AwesomeTimePicker(
-    AwesomeTime? minTime; // The minimum selectable time (default 00:00).
-    AwesomeTime? maxTime; // The maximum selectable time (default 23:59).
-    AwesomeTime? initialTime; // The initially selected time (default now).
-    AwesomeTimeFormat timeFormat; // 24-hour (Hm) or 12-hour with AM/PM (hm), with or without seconds.
-    String? localeName; // Any locale known by intl (e.g. 'ja', 'fa'); localizes AM/PM and digits.
-    List<int>? excludedHours; // Hours that cannot be selected (0-23).
-    int minuteInterval; // Distance between selectable minutes: a divisor of 60 such as 5, 15 or 30 (default 1).
-    int secondInterval; // Distance between selectable seconds (default 1). Only for formats with seconds.
-    bool showDisabledValues; // Keep excluded hours visible, dimmed, instead of removing them (default false).
-    TextStyle? disabledTextStyle; // Text style of the dimmed values.
-    AwesomeTimePickerController? controller; // Read and change the selected time from code (see Controllers).
-    AwesomeTimePickerTheme? theme; // Per-wheel customization.
-    ValueChanged<AwesomeTime>? onChanged; // Called when the selected time changes (always 24-hour).
-    Color? backgroundColor; // Background color of the wheels.
-    Color? selectorColor; // Color of the selected item indicator.
-    bool? fadeEffect; // Whether to fade the items at the top and bottom edges (default true).
-    TextStyle? selectedTextStyle; // Text style for the selected item.
-    TextStyle? unselectedTextStyle; // Text style for unselected items.
-    int? visibleItemCount; // Number of items visible at a time (odd number, at least 3; default 5).
-    double? itemHeight; // Height of each item.
-    double? itemWidth; // Width of each wheel.
-    bool looping; // Wheels wrap around from the last item to the first (default false; year and AM/PM never loop).
-    bool enableHapticFeedback; // Light haptic tick while dragging a wheel (default false).
-    AwesomeWheelStyle? wheelStyle; // Curvature, magnification and selector shape of the wheels.
-)
-```
-
-### DateTime Picker
-<p align="center" width="100%">
-    <img src="https://github.com/inesachour/awesome_datetime_picker/blob/master/images/datetime_picker.jpg?raw=true" height="200">
-</p>
-
-```dart
-AwesomeDateTimePicker(
-    AwesomeDateTime? minDateTime; // The minimum selectable date and time (default 1/1/1900 00:00).
-    AwesomeDateTime? maxDateTime; // The maximum selectable date and time (default 31/12/2100 23:59).
-    AwesomeDateTime? initialDateTime; // The initially selected date and time (default now).
-    LocaleType locale; // The language of the month names (default en).
-    String? localeName; // Any locale known by intl (e.g. 'pt_BR', 'ja'); replaces locale and localizes digits.
-    AwesomeDateFormat dateFormat; // The date wheels to display and their order.
-    AwesomeTimeFormat timeFormat; // 24-hour (Hm) or 12-hour with AM/PM (hm).
-    List<int>? excludedWeekdays; // Weekdays that cannot be selected (1 = Monday ... 7 = Sunday).
-    List<AwesomeDate>? excludedDates; // Specific dates that cannot be selected (holidays, booked days).
-    bool Function(AwesomeDate)? selectableDayPredicate; // Return false to exclude a date.
-    List<int>? excludedHours; // Hours that cannot be selected (0-23).
-    int minuteInterval; // Distance between selectable minutes: a divisor of 60 such as 5, 15 or 30 (default 1).
-    int secondInterval; // Distance between selectable seconds (default 1). Only for formats with seconds.
-    bool showWeekday; // Show the weekday on the day wheel, e.g. "Mon 12" (default false).
-    bool showDisabledValues; // Keep excluded values visible, dimmed, instead of removing them (default false).
-    TextStyle? disabledTextStyle; // Text style of the dimmed values.
-    AwesomeDateTimePickerController? controller; // Read and change the selected date-time from code (see Controllers).
-    AwesomeDateTimePickerTheme? theme; // Per-wheel customization.
-    ValueChanged<AwesomeDateTime>? onChanged; // Called when the date or time changes.
-    Color? backgroundColor; // Background color of the wheels.
-    Color? selectorColor; // Color of the selected item indicator.
-    bool? fadeEffect; // Whether to fade the items at the top and bottom edges (default true).
-    TextStyle? selectedTextStyle; // Text style for the selected item.
-    TextStyle? unselectedTextStyle; // Text style for unselected items.
-    int? visibleItemCount; // Number of items visible at a time (odd number, at least 3; default 5).
-    double? itemHeight; // Height of each item.
-    double? itemWidth; // Width of each wheel.
-    bool looping; // Wheels wrap around from the last item to the first (default false; year and AM/PM never loop).
-    bool enableHapticFeedback; // Light haptic tick while dragging a wheel (default false).
-    AwesomeWheelStyle? wheelStyle; // Curvature, magnification and selector shape of the wheels.
-)
-```
-The selectable times depend on the selected date: on the day of `minDateTime` only times from its time are offered, on the day of `maxDateTime` only times up to its time, and any time on the days in between.
-
-### Date Range Picker
-Select a start and an end date. The two pickers stay consistent: the end date is never before the start date, and moving the start past the end moves the end along.
-
-```dart
-AwesomeDateRangePicker(
-    AwesomeDate? minDate; // The earliest selectable date (default 1/1/1900).
-    AwesomeDate? maxDate; // The latest selectable date (default 31/12/2100).
-    AwesomeDateRange? initialRange; // The initially selected range (default: today, lasting minLength days).
-    AwesomeDateRangePickerController? controller; // Read and change the selected range from code.
-    ValueChanged<AwesomeDateRange>? onChanged; // Called when the range changes.
-    int minLength; // Minimum days between start and end (default 0: a single day is allowed).
-    int? maxLength; // Maximum days between start and end (default unlimited).
-    Widget? startLabel; // Shown above the start picker, e.g. Text('Check-in').
-    Widget? endLabel; // Shown above the end picker, e.g. Text('Check-out').
-    Axis direction; // One above the other (vertical, default) or side by side (horizontal).
-    double spacing; // Space between the two pickers (default 8).
-    // plus the options of AwesomeDatePicker, applied to both pickers: locale, localeName,
-    // dateFormat, excludedWeekdays, excludedDates, selectableDayPredicate, showWeekday,
-    // showDisabledValues, disabledTextStyle, theme, backgroundColor, selectorColor, fadeEffect,
-    // selectedTextStyle, unselectedTextStyle, visibleItemCount, itemHeight, itemWidth,
-    // looping, enableHapticFeedback and wheelStyle.
-)
-```
-`AwesomeDateRange` has a `start` and an `end`, and `lengthInDays` (0 for a single day, 1 for consecutive days, e.g. one night) and `contains(date)`.
-
-```dart
-AwesomeDateRangePicker(
-  minDate: AwesomeDate(year: 2025, month: 1, day: 1),
-  maxDate: AwesomeDate(year: 2025, month: 12, day: 31),
-  minLength: 1, // at least one night
-  maxLength: 14, // at most two weeks
-  startLabel: Text('Check-in'),
-  endLabel: Text('Check-out'),
-  onChanged: (range) => print('${range.start} to ${range.end} (${range.lengthInDays} nights)'),
-)
-```
-- `minLength` and `maxLength` limit the distance between the two dates. When the start moves so that the end would break a limit, the end follows it.
-- The exclusions apply to both dates. If they leave a start date without any selectable end date, the picker moves to the nearest start that has one.
-- `onChanged` is called with the whole range whenever the user changes it, including when the end moves because of the start, so the last reported value is always the range shown.
-- Like the other pickers it accepts a controller (`AwesomeDateRangePickerController`) and keeps the current range, adjusted, when its rules change.
-
-## Showing a picker in a modal
-`showAwesomeDatePicker`, `showAwesomeTimePicker`, `showAwesomeDateTimePicker` and `showAwesomeDateRangePicker` open the picker in a bottom sheet or a dialog with Cancel and Done buttons, and return the value the user confirmed, or `null` if they cancelled or dismissed it:
+**In a bottom sheet**, which returns the chosen value (or `null` if the user cancels):
 
 ```dart
 final date = await showAwesomeDatePicker(
@@ -183,22 +96,123 @@ final date = await showAwesomeDatePicker(
   title: Text('Birthday'),
   maxDate: AwesomeDate(year: 2025, month: 12, day: 31),
 );
-if (date != null) { /* ... */ }
-
-final time = await showAwesomeTimePicker(context, timeFormat: AwesomeTimeFormat.hm, minuteInterval: 15);
-final range = await showAwesomeDateRangePicker(context, minLength: 1, presentation: AwesomePickerPresentation.dialog);
 ```
-Each function accepts the usual options of its picker (range, formats, locale, exclusions, `looping`, `wheelStyle`, ...) and these modal options:
+
+**Driven from code** with a controller:
+
+```dart
+final controller = AwesomeTimePickerController(
+  initialValue: AwesomeTime(hour: 9, minute: 30),
+);
+
+AwesomeTimePicker(controller: controller, minuteInterval: 15);
+
+controller.value = AwesomeTime(hour: 14, minute: 0); // the wheels move
+print(controller.value); // always what the wheels show
+```
+
+## The pickers
+
+| Widget | Selects | Value type | In a modal |
+|--------|---------|-----------|------------|
+| `AwesomeDatePicker` | a date | `AwesomeDate` | `showAwesomeDatePicker` |
+| `AwesomeTimePicker` | a time of day | `AwesomeTime` | `showAwesomeTimePicker` |
+| `AwesomeDateTimePicker` | a date and a time | `AwesomeDateTime` | `showAwesomeDateTimePicker` |
+| `AwesomeDateRangePicker` | a start and an end date | `AwesomeDateRange` | `showAwesomeDateRangePicker` |
+
+The value types are small immutable classes: `AwesomeDate(year:, month:, day:)`, `AwesomeTime(hour:, minute:, second:)` (24-hour clock, `second` defaults to 0), `AwesomeDateTime(date:, time:)` and `AwesomeDateRange(start:, end:)`. All have `copyWith`, `==`, and `toDateTime()` where it makes sense; `AwesomeDateRange` also has `lengthInDays` and `contains(date)`.
+
+### The date-time picker
+
+The times offered depend on the selected date: on the day of `minDateTime` only times from its time are offered, on the day of `maxDateTime` only times up to its time, and any time in between.
+
+```dart
+AwesomeDateTimePicker(
+  minDateTime: AwesomeDateTime(
+    date: AwesomeDate(year: 2025, month: 12, day: 1),
+    time: AwesomeTime(hour: 8, minute: 0),
+  ),
+  maxDateTime: AwesomeDateTime(
+    date: AwesomeDate(year: 2025, month: 12, day: 31),
+    time: AwesomeTime(hour: 18, minute: 0),
+  ),
+  timeFormat: AwesomeTimeFormat.hm,
+  onChanged: (dateTime) => print(dateTime),
+)
+```
+
+### The date-range picker
+
+Two date pickers that stay consistent: the end is never before the start, and moving the start past the end moves the end along.
+
+```dart
+AwesomeDateRangePicker(
+  minLength: 1, // at least one night
+  maxLength: 14, // at most two weeks
+  startLabel: Text('Check-in'),
+  endLabel: Text('Check-out'),
+  onChanged: (range) => print('${range.start} to ${range.end}'),
+)
+```
+
+- `minLength` and `maxLength` limit the number of days between the two dates. When the start moves so that the end would break a limit, the end follows it.
+- Exclusions apply to both dates. If they leave a start date without any selectable end date, the picker moves to the nearest start that has one.
+- `onChanged` receives the whole range every time the user changes it, including when the end moved because of the start, so the last reported value is always the range shown.
+- `direction: Axis.horizontal` puts the two pickers side by side.
+
+### Options
+
+A ✓ means the picker has the option. The API documentation describes each one in detail.
+
+| Option | Date | Time | Date-time | Range | What it does |
+|--------|:----:|:----:|:---------:|:-----:|--------------|
+| `initialDate`, `initialTime`, `initialDateTime`, `initialRange` | ✓ | ✓ | ✓ | ✓ | Value shown first (default: now, within the limits). Read once. |
+| `minDate`/`maxDate`, `minTime`/`maxTime`, `minDateTime`/`maxDateTime` | ✓ | ✓ | ✓ | ✓ | Limits (the range picker uses `minDate`/`maxDate`). |
+| `controller` | ✓ | ✓ | ✓ | ✓ | Read and set the value from code. |
+| `onChanged` | ✓ | ✓ | ✓ | ✓ | Called when the *user* changes the value. |
+| `dateFormat` | ✓ | | ✓ | ✓ | Which date wheels, in which order. |
+| `timeFormat` | | ✓ | ✓ | | 12 or 24-hour, with or without seconds. |
+| `locale`, `localeName` | ✓ | `localeName` | ✓ | ✓ | Language of month names, weekdays, AM/PM and digits. |
+| `excludedWeekdays`, `excludedDates`, `selectableDayPredicate` | ✓ | | ✓ | ✓ | Dates that cannot be selected. |
+| `excludedHours` | | ✓ | ✓ | | Hours that cannot be selected. |
+| `showDisabledValues`, `disabledTextStyle` | ✓ | ✓ | ✓ | ✓ | Show excluded values dimmed instead of removing them. |
+| `showWeekday` | ✓ | | ✓ | ✓ | "Mon 12" on the day wheel. |
+| `minuteInterval`, `secondInterval` | | ✓ | ✓ | | Only offer every n-th minute or second. |
+| `minLength`, `maxLength`, `startLabel`, `endLabel`, `direction`, `spacing` | | | | ✓ | Range rules and layout. |
+| `theme` | ✓ | ✓ | ✓ | ✓ | Per-wheel styling. |
+| `backgroundColor`, `selectorColor`, `fadeEffect`, `selectedTextStyle`, `unselectedTextStyle` | ✓ | ✓ | ✓ | ✓ | Colors and text. |
+| `visibleItemCount`, `itemHeight`, `itemWidth` | ✓ | ✓ | ✓ | ✓ | Size of the wheels. |
+| `looping`, `enableHapticFeedback`, `wheelStyle` | ✓ | ✓ | ✓ | ✓ | Wrap-around, haptics, curvature and selector shape. |
+
+## Showing a picker in a modal
+
+`showAwesomeDatePicker`, `showAwesomeTimePicker`, `showAwesomeDateTimePicker` and `showAwesomeDateRangePicker` open the picker in a bottom sheet or a dialog with Cancel and Done buttons. They return the value the user confirmed, or `null` if they cancelled or dismissed it.
+
+```dart
+final time = await showAwesomeTimePicker(
+  context,
+  timeFormat: AwesomeTimeFormat.hm,
+  minuteInterval: 15,
+);
+
+final range = await showAwesomeDateRangePicker(
+  context,
+  minLength: 1,
+  presentation: AwesomePickerPresentation.dialog,
+);
+```
+
+Each function takes the options of its picker and these modal options:
 
 | Option | Meaning |
 |--------|---------|
 | `title` | Widget shown between the buttons |
-| `confirmText`, `cancelText` | Button texts (default: the localized `MaterialLocalizations` ones) |
+| `confirmText`, `cancelText` | Button texts (default: the localized ones of `MaterialLocalizations`) |
 | `presentation` | `AwesomePickerPresentation.bottomSheet` (default) or `.dialog` |
-| `useRootNavigator`, `barrierDismissible`, `barrierColor`, `routeSettings` | As in `showModalBottomSheet` / `showDialog` |
+| `useRootNavigator`, `barrierDismissible`, `barrierColor`, `routeSettings` | As in `showModalBottomSheet` and `showDialog` |
 | `backgroundColor`, `shape` | Appearance of the sheet or dialog |
 
-For any option that is not listed, use the generic `showAwesomePicker`: you create the controller and build the picker, and it provides the sheet or dialog and returns `controller.value` on Done:
+For an option the shortcuts do not list, use `showAwesomePicker`: you create the controller and build the picker, and it provides the sheet or dialog and returns `controller.value` on Done.
 
 ```dart
 final controller = AwesomeDatePickerController();
@@ -212,199 +226,44 @@ final date = await showAwesomePicker<AwesomeDate>(
 );
 controller.dispose();
 ```
-If the user cancels, your controller is set back to the value it had when the modal opened.
 
-## Behavior
+If the user cancels, your controller is put back to the value it had when the modal opened.
 
-### Controllers
-Each picker accepts an optional controller, in the same spirit as `TextEditingController`. A controller is a `ValueNotifier`, so you can read `value`, assign it, listen to it, and `dispose` it:
-
-```dart
-final controller = AwesomeDatePickerController(
-  initialValue: AwesomeDate(year: 2025, month: 6, day: 15),
-);
-
-AwesomeDatePicker(controller: controller);
-
-controller.value = AwesomeDate(year: 2025, month: 12, day: 25); // the wheels move
-print(controller.value); // always the date shown by the wheels
-controller.reset(); // back to the initial value
-controller.addListener(() => print(controller.value)); // every change
-```
+## Controllers
 
 | Picker | Controller | `value` type |
 |--------|------------|--------------|
 | `AwesomeDatePicker` | `AwesomeDatePickerController` | `AwesomeDate` |
 | `AwesomeTimePicker` | `AwesomeTimePickerController` | `AwesomeTime` |
 | `AwesomeDateTimePicker` | `AwesomeDateTimePickerController` | `AwesomeDateTime` |
+| `AwesomeDateRangePicker` | `AwesomeDateRangePickerController` | `AwesomeDateRange` |
 
-- The picker starts at `controller.value`, so pass either `controller` or `initial*`, not both.
-- `value` always matches what the wheels show. If you assign something the picker cannot select (outside the range, on an excluded weekday or hour, off the `minuteInterval`), the closest selectable value is shown and `value` is updated to it.
-- `onChanged` is only called for changes made by the user. Changes made through the controller do not call it; listen to the controller to be notified of everything.
-- The controller is optional: without one the pickers work exactly as before.
+A controller is a `ValueNotifier`: read `value`, assign it, listen to it, `reset()` it to its initial value, and `dispose()` it. It is optional.
 
-### Changing properties after the first build
-Changing `minDate`/`maxDate`/`locale`/`excludedWeekdays` (date picker), `minTime`/`maxTime`/`excludedHours` (time picker) or `minDateTime`/`maxDateTime` (date-time picker) updates the wheels and **keeps the current selection**, clamped into the new range. If the clamping changes the value, `onChanged` is called with the new one.
+- The picker starts at `controller.value`, so pass either `controller` or `initial...`, not both.
+- `value` always matches what the wheels show. If you assign something the picker cannot select (outside the limits, on an excluded date, off the minute interval...), the closest selectable value is shown and `value` is updated to it.
+- `onChanged` is only called for changes made by the user, like `TextField`. Changes made through the controller do not call it; listen to the controller to be told about everything.
 
-The `initial*` value is only read once. To move the selection programmatically, give the picker a new `Key`.
+## Excluding values
 
-### Light and dark mode
-Colors and text styles follow the brightness of your app's `Theme`. You can override any of them; the precedence, highest first, is:
-
-1. the per-wheel `ItemTheme` passed through `theme`,
-2. the options on the picker (`backgroundColor`, `selectorColor`, `selectedTextStyle`, `unselectedTextStyle`, `itemHeight`, `itemWidth`, `wheelStyle`),
-3. the built-in light/dark defaults.
-
-## Customization
-### LocaleType
-The following table lists the currently supported locales for the month names of the date and date-time pickers:
-
-| Locale Code | Language         |
-|-------------|------------------|
-| en          | English          |
-| fr          | French           |
-| es          | Spanish          |
-| de          | German           |
-| it          | Italian          |
-| ar          | Arabic           |
-
-```dart
-    locale: LocaleType.fr
-```
-
-### Any language with `intl`
-For every other language, pass the name of any locale known by [`intl`](https://pub.dev/packages/intl) as `localeName`:
-
-```dart
-AwesomeDatePicker(localeName: 'pt_BR')
-AwesomeTimePicker(timeFormat: AwesomeTimeFormat.hm, localeName: 'ja')
-AwesomeDateTimePicker(localeName: Localizations.localeOf(context).toString()) // follow the app
-```
-`localeName` replaces `locale` and localizes:
-
-- the month names (`janvier`, `1月`, ...) and, with `showWeekday`, the weekday names,
-- the AM/PM markers of the 12-hour formats (`午前` / `午後`),
-- the digits of the wheels, for the locales that do not use 0-9 (for example `'fa'`, `'bn'`, `'mr'` or `'ar_EG'` show `۱۵` or `١٥`).
-
-The values returned by the pickers and the controllers are always plain numbers (`AwesomeDate`, `AwesomeTime`); only what is displayed changes. A name `intl` has no data for falls back to the closest language (`fr_CH` to `fr`) and to English if there is none. `LocaleType` keeps working and its names are unchanged.
-
-Using `localeName` needs no setup (no `initializeDateFormatting` call). Note that the package depends on `intl` (`>=0.19.0 <1.0.0`, which includes the version pinned by `flutter_localizations`) and includes its embedded date data for every locale in your app.
-
-### AwesomeDateFormat
-The date format only changes how the date is displayed. The value returned by the pickers is always an `AwesomeDate`.
-
-| Date Format | Example           |
-|-------------|-------------------|
-| dMy         | 1/1/2025          |
-| dMMy        | 1 January 2025    |
-| yMd         | 2025/1/1          |
-| yMMd        | 2025 January 1    |
-| My          | 1/2025            |
-| MMy         | January 2025      |
-| yM          | 2025/1            |
-| yMM         | 2025 January      |
-
-The last four formats have no day wheel, so they select a whole month: the returned `AwesomeDate` is the first day of the chosen month, `minDate` and `maxDate` count as whole months, and day exclusions (`excludedWeekdays`, `excludedDates`, `selectableDayPredicate`, `showWeekday`) do not apply. `AwesomeDateTimePicker` needs a format with a day wheel.
-
-```dart
-    dateFormat: AwesomeDateFormat.dMMy,
-```
-
-### AwesomeTimeFormat
-The time format only changes how the time is displayed. The value returned by the pickers is always on a 24-hour clock.
-
-| Time Format | Example        |
-|-------------|----------------|
-| Hm          | 13:00          |
-| hm          | 1:00 PM        |
-| Hms         | 13:00:30       |
-| hms         | 1:00:30 PM     |
-
-```dart
-    timeFormat: AwesomeTimeFormat.hm,
-```
-
-### Minute interval
-Offer only every 5, 10, 15 or 30 minutes (any divisor of 60):
-```dart
-AwesomeTimePicker(minuteInterval: 15) // 00, 15, 30, 45
-```
-`minTime` and `maxTime` are moved onto the grid (the minimum up, the maximum down) and the initial time is rounded to the nearest step, so the picker never shows or reports an off-grid time.
-
-### Looping wheels
-```dart
-AwesomeTimePicker(looping: true) // 59 -> 00 -> 01 ...
-```
-Looping applies to the day, month, hour and minute wheels. It does not carry over: going from minute 59 to 00 keeps the same hour. The year and AM/PM wheels never loop.
-
-### Haptic feedback
-```dart
-AwesomeDatePicker(enableHapticFeedback: true)
-```
-A light tick plays each time dragging moves a wheel to another item. It stays silent for programmatic changes and screen-reader actions.
-
-### Wheel style
-`AwesomeWheelStyle` customizes the look of the wheels of a picker:
-
-```dart
-class AwesomeWheelStyle {
-    double? diameterRatio; // Wheel diameter relative to its height; larger is flatter (default 1.5).
-    double? perspective; // Curvature, from 0 (flat) to 0.01 (default 0.01).
-    double? magnification; // Scale of the selected item (default 1).
-    double? squeeze; // Packing of the items; above 1 shows more items (default 1).
-    double? overAndUnderCenterOpacity; // Opacity of the items around the selected one, 0 to 1 (default 1).
-    BorderRadius? selectorBorderRadius; // Corner radius of the selector highlight.
-    Decoration? selectorDecoration; // Fully custom selector; replaces selectorColor and the radius.
-}
-```
-```dart
-AwesomeTimePicker(
-  wheelStyle: AwesomeWheelStyle(
-    diameterRatio: 2.5,
-    magnification: 1.15,
-    selectorBorderRadius: BorderRadius.circular(12),
-  ),
-)
-```
-The style applies to every wheel of the picker; use `ItemTheme` to style one wheel.
-
-### Seconds
-Use `AwesomeTimeFormat.Hms` (24-hour) or `AwesomeTimeFormat.hms` (12-hour) to add a seconds wheel:
-```dart
-AwesomeTimePicker(
-  timeFormat: AwesomeTimeFormat.Hms,
-  secondInterval: 15, // 00, 15, 30, 45
-  onChanged: (AwesomeTime time) => print('${time.hour}:${time.minute}:${time.second}'),
-)
-```
-`AwesomeTime` has an optional `second` (default 0), so existing code is unaffected. Without a seconds wheel the seconds are always 0: an input such as `10:07:45` is rounded to the nearest minute. `minTime` and `maxTime` may have seconds when the format shows them. The `secondTheme` of `AwesomeTimePickerTheme` styles the seconds wheel (it falls back to `minuteTheme`).
-
-### Weekday labels
-```dart
-AwesomeDatePicker(showWeekday: true) // "Mon 12", "Tue 13", ...
-```
-The weekday names follow `locale`. The value returned by the picker is still a plain `AwesomeDate`.
-
-### Excluding values
-```dart
-AwesomeDatePicker(excludedWeekdays: [DateTime.saturday, DateTime.sunday])
-AwesomeTimePicker(excludedHours: [12, 13])
-```
-If the selected value lands on an excluded one, the picker moves to the nearest valid value, never leaving the min/max range. Excluding everything fails an assert in debug mode.
-
-#### Excluding specific dates
-Holidays, booked days or any other rule, alone or combined with `excludedWeekdays`:
 ```dart
 AwesomeDatePicker(
   excludedWeekdays: [DateTime.saturday, DateTime.sunday],
   excludedDates: [AwesomeDate(year: 2025, month: 12, day: 25)],
   selectableDayPredicate: (date) => !holidays.contains(date), // e.g. loaded from an API
 )
-```
-The predicate is called for many dates while the wheels are built, so keep it fast. Pass a stable function (a method or a top-level function) rather than a new closure on every build: a different function re-applies the rules and rebuilds the wheels.
 
-#### Showing excluded values dimmed
-By default excluded values are removed from the wheels. With `showDisabledValues: true` they stay visible but dimmed, so users can see why a value is missing:
+AwesomeTimePicker(excludedHours: [12, 13]) // lunch break
+```
+
+The three date rules combine. If the selection lands on an excluded value, the picker moves to the nearest valid one without leaving the limits. Excluding everything fails an assert in debug mode.
+
+The predicate is called for many dates while the wheels are built, so keep it fast, and pass a stable function (a method or a top-level function) rather than a new closure on every build: a different function re-applies the rules and rebuilds the wheels.
+
+### Showing excluded values dimmed
+
+By default excluded values disappear from the wheels. With `showDisabledValues: true` they stay visible but dimmed, so users can see *why* a value is missing:
+
 ```dart
 AwesomeDatePicker(
   excludedWeekdays: [DateTime.saturday, DateTime.sunday],
@@ -412,55 +271,85 @@ AwesomeDatePicker(
   disabledTextStyle: TextStyle(color: Colors.grey), // optional
 )
 ```
-Dimmed values cannot be selected: when a drag settles on one, the wheel moves to the nearest selectable value (in the direction of the drag if two are equally close), and `onChanged` is never called for a dimmed value. A wheel can also be styled through `ItemTheme.disabledTextStyle`.
 
-### Themes
-Themes customize each wheel separately (year, month, day, hour, minute and AM/PM).
+Dimmed values cannot be selected: when a drag settles on one, the wheel eases to the nearest selectable value (in the direction of the drag if two are equally close), and `onChanged` is never called for a dimmed value. A single wheel can be styled with `ItemTheme.disabledTextStyle`.
 
-#### AwesomeDatePickerTheme
+## Time: formats, seconds and intervals
+
+| `AwesomeTimeFormat` | Example |
+|---------------------|---------|
+| `Hm` (default) | 13:00 |
+| `hm` | 1:00 PM |
+| `Hms` | 13:00:30 |
+| `hms` | 1:00:30 PM |
+
+The value is always on a 24-hour clock, whatever is displayed.
+
 ```dart
-class AwesomeDatePickerTheme {
-    ItemTheme? yearTheme; // Theme for the year wheel.
-    ItemTheme? monthTheme; // Theme for the month wheel.
-    ItemTheme? dayTheme; // Theme for the day wheel.
-}
+AwesomeTimePicker(
+  timeFormat: AwesomeTimeFormat.Hms,
+  minuteInterval: 15, // 00, 15, 30, 45
+  secondInterval: 10, // 00, 10, 20, ...
+)
 ```
 
-#### AwesomeTimePickerTheme
+- An interval must divide 60. The minimum and maximum times are moved onto the grid (the minimum up, the maximum down) and the initial time is rounded to the nearest step, so the picker never shows or reports a time that is not offered.
+- Without a seconds wheel the seconds are always 0: an input such as `10:07:45` is rounded to the nearest minute.
+- Minutes, seconds and 24-hour hours are zero-padded.
+
+## Date formats and weekday labels
+
+| `AwesomeDateFormat` | Example | Value |
+|---------------------|---------|-------|
+| `dMy` (default) | 1 / 1 / 2025 | the date |
+| `dMMy` | 1 January 2025 | the date |
+| `yMd` | 2025 / 1 / 1 | the date |
+| `yMMd` | 2025 January 1 | the date |
+| `My`, `MMy` | 1 / 2025, January 2025 | the 1st of the month |
+| `yM`, `yMM` | 2025 / 1, 2025 January | the 1st of the month |
+
+The formats without a day wheel select a whole month (card expiry, billing month): the limits count as whole months, and day exclusions do not apply. `AwesomeDateTimePicker` and `AwesomeDateRangePicker` need a format with a day wheel.
+
+`showWeekday: true` shows the weekday on the day wheel (`Mon 12`). The value is still a plain `AwesomeDate`.
+
+## Localization
+
+Six languages are built in, as `LocaleType.en`, `fr`, `es`, `de`, `it` and `ar`:
+
 ```dart
-class AwesomeTimePickerTheme {
-    ItemTheme? hourTheme; // Theme for the hour wheel.
-    ItemTheme? minuteTheme; // Theme for the minute wheel.
-    ItemTheme? secondTheme; // Theme for the second wheel (defaults to minuteTheme).
-    ItemTheme? ampmTheme; // Theme for the AM/PM wheel (defaults to hourTheme).
-}
+AwesomeDatePicker(locale: LocaleType.fr)
 ```
 
-#### AwesomeDateTimePickerTheme
+For any other language, pass the name of a locale known by [`intl`](https://pub.dev/packages/intl) as `localeName`:
+
 ```dart
-class AwesomeDateTimePickerTheme {
-    AwesomeDatePickerTheme? datePickerTheme; // Theme for the date wheels.
-    AwesomeTimePickerTheme? timePickerTheme; // Theme for the time wheels.
-}
+AwesomeDatePicker(localeName: 'pt_BR')
+AwesomeTimePicker(timeFormat: AwesomeTimeFormat.hm, localeName: 'ja')
+AwesomeDateTimePicker(localeName: Localizations.localeOf(context).toString()) // follow the app
 ```
 
-#### ItemTheme
-`ItemTheme` describes one wheel.
-```dart
-class ItemTheme {
-    double? width; // Width of the wheel.
-    double? height; // Height of one item.
-    Color? backgroundColor; // Background color of the wheel.
-    TextStyle? selectedTextStyle; // Text style of the selected item.
-    TextStyle? unselectedTextStyle; // Text style of the other items.
-    TextStyle? disabledTextStyle; // Text style of the dimmed values (see showDisabledValues).
-    Widget? title; // Widget shown above the wheel (e.g. a label).
-    EdgeInsets? padding; // Padding inside the wheel.
-    EdgeInsets? margin; // Margin around the wheel.
-}
-```
+`localeName` replaces `locale` and localizes:
 
-Example: a labelled, wider year wheel.
+- the month names and, with `showWeekday`, the weekday names,
+- the AM/PM markers of the 12-hour formats,
+- the digits of the wheels for the locales that do not use 0-9 (for example `'fa'`, `'bn'`, `'mr'` or `'ar_EG'` show `۱۵` or `١٥`).
+
+The values returned by the pickers and the controllers are always plain numbers; only what is displayed changes. A name `intl` has no data for falls back to the closest language (`fr_CH` to `fr`) and to English if there is none. No setup is needed (no `initializeDateFormatting` call).
+
+The package depends on `intl` (`>=0.19.0 <1.0.0`, which includes the version pinned by `flutter_localizations`) and therefore includes its embedded date data for every locale in your app.
+
+## Appearance
+
+### Light and dark
+
+Colors and text styles follow the brightness of your `Theme`; nothing to configure. When you do customize, the precedence is, from highest:
+
+1. the per-wheel `ItemTheme` (through `theme`),
+2. the options on the picker (`backgroundColor`, `selectorColor`, `selectedTextStyle`, `unselectedTextStyle`, `disabledTextStyle`, `itemHeight`, `itemWidth`, `wheelStyle`),
+3. the built-in light or dark defaults.
+
+### Per-wheel themes
+
 ```dart
 AwesomeDatePicker(
   theme: AwesomeDatePickerTheme(
@@ -473,17 +362,90 @@ AwesomeDatePicker(
 )
 ```
 
+| Theme | Wheels |
+|-------|--------|
+| `AwesomeDatePickerTheme` | `yearTheme`, `monthTheme`, `dayTheme` |
+| `AwesomeTimePickerTheme` | `hourTheme`, `minuteTheme`, `secondTheme` (falls back to `minuteTheme`), `ampmTheme` (falls back to `hourTheme`) |
+| `AwesomeDateTimePickerTheme` | `datePickerTheme`, `timePickerTheme` |
+
+`ItemTheme` describes one wheel: `width`, `height`, `backgroundColor`, `selectedTextStyle`, `unselectedTextStyle`, `disabledTextStyle`, `title` (a widget above the wheel), `padding` and `margin`.
+
+### Wheel style
+
+`AwesomeWheelStyle` shapes the wheels of a picker:
+
+```dart
+AwesomeTimePicker(
+  wheelStyle: AwesomeWheelStyle(
+    diameterRatio: 2.5,
+    magnification: 1.15,
+    overAndUnderCenterOpacity: 0.6,
+    selectorBorderRadius: BorderRadius.circular(12),
+  ),
+)
+```
+
+| Property | Effect |
+|----------|--------|
+| `diameterRatio` | Wheel diameter relative to its height; larger is flatter (default 1.5) |
+| `perspective` | Curvature, from 0 (flat) to 0.01 (default) |
+| `magnification` | Scale of the selected item (default 1) |
+| `squeeze` | Packing of the items; above 1 shows more of them (default 1) |
+| `overAndUnderCenterOpacity` | Opacity of the items around the selection, 0 to 1 (default 1) |
+| `selectorBorderRadius` | Corner radius of the selector |
+| `selectorDecoration` | Fully custom selector; replaces `selectorColor` and the radius |
+
+### Behavior options
+
+- `looping: true` makes the day, month, hour, minute and second wheels wrap around. It does not carry over (59 to 00 keeps the same hour). The year and AM/PM wheels never loop.
+- `enableHapticFeedback: true` plays a light tick while the user drags a wheel. It stays silent for programmatic changes and screen-reader actions.
+- Wheels have a default width that depends on the screen (bounded, wider for month names); `itemWidth` or `ItemTheme.width` overrides it.
+
+## Behavior to know about
+
+- **Changing properties later.** Changing a limit, an exclusion, an interval or the language after the first build updates the wheels and keeps the current selection, adjusted to the new rules. If the adjustment changes the value, `onChanged` is called with the new one. The `initial...` value is only read once: to move the selection later, use a controller or give the picker a new `Key`.
+- **`onChanged` is for the user.** It is not called for changes made through a controller, nor when nothing changed. (The range picker also reports the other date moving as a consequence, see above.)
+- **Checks while developing.** In debug mode, an invalid configuration fails an assert with a message: reversed limits, an interval that does not divide 60, exclusions that leave nothing selectable, both a controller and an initial value, an impossible date or time, and so on.
+- **Layout.** A picker is as tall as its wheels (`itemHeight` times `visibleItemCount`, 200 by default) and as wide as its wheels together.
+
+## Accessibility and platforms
+
+- Each wheel is exposed to screen readers as one adjustable value: it announces the selected item and supports the increase and decrease actions, skipping dimmed values. It does not announce a label such as "Day" or "Month" yet.
+- On the web and on desktop the wheels can be dragged with a mouse or trackpad as well as with touch.
+- Not yet supported: keyboard navigation between and within wheels.
+
+## Upgrading from 0.1.x
+
+The API is backward compatible, but a few defaults changed on purpose:
+
+- With no `initial...` value, pickers now start on **today** (within the limits), as documented, instead of on the minimum.
+- Minutes (and 24-hour hours) are shown **zero-padded**: `09:05`, not `9:5`.
+- The default wheel width is bounded (56 to 90 logical pixels, and 110 to 160 for month names) and wheels no longer stretch to fill a tall parent: `Center(child: AwesomeDatePicker())` now really centers it.
+- `AwesomeTimePickerTheme.ampmTheme` is now applied to the AM/PM wheel (it falls back to `hourTheme`, so existing themes keep working).
+- Default colors follow the theme brightness; the light look is unchanged.
+- A picker no longer reports `onChanged` when the value did not change.
+- Debug-mode asserts are stricter (see above).
+- `AwesomeTime` has a `second` (default 0), and `AwesomeDateFormat`, `AwesomeTimeFormat` gained values: a `switch` over these enums in your code needs the new cases.
+- The package now depends on `intl`.
+
 ## Contributing
-The code lives in `lib/src`, grouped by feature:
 
-| Folder      | Content |
-|-------------|---------|
-| `core/`     | Models (`AwesomeDate`, `AwesomeTime`, `AwesomeDateTime`, `AwesomeDateRange`), formats, locales, utils and validation |
-| `shared/`   | The wheel widget, `ItemTheme`, `AwesomeWheelStyle` and the helper that builds a wheel |
-| `date/`     | `AwesomeDatePicker`, its public controller, its theme and `DatePickerLogic` |
-| `time/`     | `AwesomeTimePicker`, its public controller, its theme and `TimePickerLogic` |
-| `datetime/` | `AwesomeDateTimePicker`, its public controller, its theme and `DateTimePickerLogic` |
-| `range/`    | `AwesomeDateRangePicker` and its public controller |
-| `modal/`    | `showAwesomePicker` and the `showAwesome...Picker` functions |
+The code is in `lib/src`, grouped by feature:
 
-The `*PickerLogic` classes hold all the logic (clamping, exclusions, the items of each wheel) and have no widget code, so they can be unit-tested directly. The public `Awesome*PickerController` classes are the small, stable API for users. Run `flutter test` and `flutter analyze` before opening a pull request; every public member must have a doc comment.
+| Folder | Content |
+|--------|---------|
+| `core/` | Models (`AwesomeDate`, `AwesomeTime`, `AwesomeDateTime`, `AwesomeDateRange`), formats, locales, utils and validation |
+| `shared/` | The wheel widget, `ItemTheme`, `AwesomeWheelStyle` and the helper that builds a wheel |
+| `date/`, `time/`, `datetime/` | One folder per picker: the widget, its public controller, its theme and its `...PickerLogic` |
+| `range/` | `AwesomeDateRangePicker` and its controller |
+| `modal/` | `showAwesomePicker` and the `showAwesome...Picker` functions |
+
+The `...PickerLogic` classes hold the rules (clamping, exclusions, the items of each wheel) and have no widget code, so they are unit-tested directly. The public `Awesome...PickerController` classes are the small, stable API.
+
+```sh
+flutter test                                       # run the tests
+flutter analyze                                    # every public member needs a doc comment
+flutter test tool/generate_screenshots_test.dart   # regenerate doc/images
+```
+
+Run the screenshot command whenever the look of a picker changes, and commit the new images.

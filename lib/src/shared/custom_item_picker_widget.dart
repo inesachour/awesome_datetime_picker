@@ -254,6 +254,9 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
     }
 
     return Column(
+      // Only as tall as the wheel: a bounded parent (a Center, a sized box)
+      // must not stretch the picker.
+      mainAxisSize: MainAxisSize.min,
       children: [
         widget.style.theme?.title ?? const SizedBox.shrink(),
         Semantics(

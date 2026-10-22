@@ -4,6 +4,27 @@ version: 0.1.1
 homepage: https://github.com/inesachour/awesome_datetime_picker
 repository: https://github.com/inesachour/awesome_datetime_picker
 issue_tracker: https://github.com/inesachour/awesome_datetime_picker/issues
+screenshots:
+  - description: 'A date-time picker being scrolled.'
+    path: doc/images/demo.gif
+  - description: 'Date picker with month names.'
+    path: doc/images/date_picker.png
+  - description: '12-hour time picker with 5-minute steps.'
+    path: doc/images/time_picker.png
+  - description: 'Date-time picker.'
+    path: doc/images/datetime_picker.png
+  - description: 'Date-range picker with check-in and check-out labels.'
+    path: doc/images/date_range_picker.png
+  - description: 'A date-range picker in a bottom sheet with Cancel and OK.'
+    path: doc/images/modal_sheet.png
+  - description: 'The date-time picker in dark mode.'
+    path: doc/images/dark_mode.png
+  - description: 'Weekends shown dimmed, with weekday labels.'
+    path: doc/images/disabled_values.png
+  - description: 'A time picker with a custom selector and curved wheels.'
+    path: doc/images/wheel_style.png
+  - description: 'Date pickers in French, Spanish and German.'
+    path: doc/images/localization.png
 topics:
   - datetime-picker
   - date-picker
