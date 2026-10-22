@@ -69,3 +69,7 @@
 ## 0.2.1
 
 * Fix the README images not showing on pub.dev: pub.dev drops relative image paths inside HTML, so the images now use absolute URLs.
+
+## 0.2.2
+
+* Documentation: the README is now only for people who use the package. The sections for contributors (code layout, release checks, screenshots, the live demo setup) moved to `CONTRIBUTING.md` on GitHub.

@@ -49,7 +49,7 @@ iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-ti
   </tr>
 </table>
 
-<sub>The images are rendered from the real widgets by `tool/generate_screenshots_test.dart`, with the Roboto font bundled with Flutter (an iOS device shows the system font).</sub>
+<sub>The screenshots use the Roboto font; an iOS device shows the system font.</sub>
 
 ## Contents
 
@@ -66,7 +66,6 @@ iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-ti
 - [Behavior to know about](#behavior-to-know-about)
 - [Accessibility and platforms](#accessibility-and-platforms)
 - [Upgrading from 0.1.x](#upgrading-from-01x)
-- [Contributing](#contributing)
 
 ## Installation
 
@@ -567,43 +566,6 @@ The API is backward compatible, but a few defaults changed on purpose:
 - `AwesomeTime` has a `second` (default 0), and `AwesomeDateFormat`, `AwesomeTimeFormat` gained values: a `switch` over these enums in your code needs the new cases.
 - The package now depends on `intl`.
 
-## Contributing
+## Feedback
 
-The code is in `lib/src`, grouped by feature:
-
-| Folder | Content |
-|--------|---------|
-| `core/` | Models (`AwesomeDate`, `AwesomeTime`, `AwesomeDateTime`, `AwesomeDateRange`), formats, locales, utils and validation |
-| `shared/` | The wheel widget, `ItemTheme`, `AwesomeWheelStyle`, `AwesomePickerThemeData`, `AwesomeSemanticLabels` and the helper that builds a wheel |
-| `date/`, `time/`, `datetime/` | One folder per picker: the widget, its public controller, its theme and its `...PickerLogic` |
-| `range/` | `AwesomeDateRangePicker` and its controller |
-| `duration/` | `AwesomeDurationPicker`, its controller, its theme and `DurationPickerLogic` |
-| `modal/` | `showAwesomePicker` and the `showAwesome...Picker` functions |
-
-The `...PickerLogic` classes hold the rules (clamping, exclusions, the items of each wheel) and have no widget code, so they are unit-tested directly. The public `Awesome...PickerController` classes are the small, stable API.
-
-```sh
-flutter test                                       # run the tests
-flutter analyze                                    # every public member needs a doc comment
-flutter test tool/generate_screenshots_test.dart   # regenerate doc/images
-```
-
-Run the screenshot command whenever the look of a picker changes, and commit the new images.
-
-To try your changes, run the example app (`cd example && flutter run`, or `flutter run -d chrome` for the web version). It is also the live demo above.
-
-### Checks before a release
-
-Run these from the package folder; each should pass:
-
-```sh
-dart format --output=none --set-exit-if-changed lib test tool example/lib example/test
-flutter analyze && flutter test
-(cd example && flutter analyze && flutter test)
-flutter pub downgrade && flutter analyze && flutter test   # the lowest dependency versions; then: flutter pub upgrade
-flutter pub publish --dry-run                              # what pub.dev validates
-```
-
-### The live demo
-
-The demo is deployed to GitHub Pages by `.github/workflows/pages.yml` on every push to `master`. Enable it once in the repository: *Settings > Pages > Build and deployment > Source: GitHub Actions*.
+Found a bug, or want a feature? [Open an issue](https://github.com/inesachour/awesome_datetime_picker/issues). Contributions are welcome: see [CONTRIBUTING.md](https://github.com/inesachour/awesome_datetime_picker/blob/master/CONTRIBUTING.md).
