@@ -22,7 +22,7 @@
 
 * Add asserts.
 
-## Unreleased
+## 0.2.0
 
 * Dark mode: default colors follow the app theme brightness; explicit colors still take precedence.
 * The pickers react to changed `min*`, `max*`, `locale` and excluded values and keep the selection (clamped).
