@@ -38,3 +38,7 @@ export 'package:awesome_datetime_picker/src/range/awesome_date_range_picker.dart
 export 'package:awesome_datetime_picker/src/range/awesome_date_range_picker_controller.dart';
 export 'package:awesome_datetime_picker/src/modal/awesome_picker_modal.dart';
 export 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';
+export 'package:awesome_datetime_picker/src/shared/awesome_picker_theme_data.dart';
+export 'package:awesome_datetime_picker/src/duration/awesome_duration_picker.dart';
+export 'package:awesome_datetime_picker/src/duration/awesome_duration_picker_controller.dart';
+export 'package:awesome_datetime_picker/src/duration/awesome_duration_picker_theme.dart';

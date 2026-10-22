@@ -82,8 +82,14 @@ void main() {
     for (final scale in [1.0, 1.5, 2.0, 3.0]) {
       await t.pumpWidget(
           app(const AwesomeDateTimePicker(), scaler: TextScaler.linear(scale)));
-      // an overflow would be reported as an exception
       expect(t.takeException(), isNull, reason: 'text scale $scale');
+      // the wheels are drawn inside the screen (a picker too wide for it is
+      // shrunk, which raises no error, so the position is what to check)
+      final wheels = find.byType(ListWheelScrollView);
+      expect(t.getTopLeft(wheels.first).dx, greaterThanOrEqualTo(-0.5),
+          reason: 'text scale $scale');
+      expect(t.getBottomRight(wheels.last).dx, lessThanOrEqualTo(390.5),
+          reason: 'text scale $scale');
     }
   });
 

@@ -1,30 +1,60 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:example/main.dart';
-
+/// The demo has a screen listening to a controller and switches that change
+/// the options of the pickers while they are on screen: flipping each of them
+/// must neither throw nor overflow.
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('every switch can be flipped, twice, without errors',
+      (tester) async {
+    tester.view.physicalSize = const Size(390 * 3, 3200 * 3);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    const switches = [
+      'Global picker theme (ThemeExtension)',
+      'Dark mode',
+      'Exclude weekends (changes props at runtime)',
+      'Looping wheels',
+      'Haptic feedback',
+      '15-minute interval',
+      'Show excluded values dimmed',
+      'Weekday labels',
+      'Seconds',
+    ];
+    for (var round = 0; round < 2; round++) {
+      for (final label in switches) {
+        await tester.tap(find.text(label));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull,
+            reason: 'after flipping "$label"');
+      }
+    }
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('the language can be changed', (tester) async {
+    tester.view.physicalSize = const Size(390 * 3, 3200 * 3);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.tap(find.byType(DropdownButton<String?>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Français').last);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    // some month name around the selected one is now French
+    const french = [
+      'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août',
+      'septembre', 'octobre', 'novembre', 'décembre', //
+    ];
+    expect(
+      find.byWidgetPredicate((w) => w is Text && french.contains(w.data)),
+      findsWidgets,
+    );
   });
 }

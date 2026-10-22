@@ -126,6 +126,50 @@ class AwesomeWheelStyle {
         ),
         focusColor = null;
 
+  /// This style where a property is null filled in from [base]: the
+  /// properties set here win. Used to put the style of a picker over the one
+  /// of the theme.
+  AwesomeWheelStyle mergedOver(AwesomeWheelStyle base) {
+    return AwesomeWheelStyle(
+      diameterRatio: diameterRatio ?? base.diameterRatio,
+      perspective: perspective ?? base.perspective,
+      magnification: magnification ?? base.magnification,
+      squeeze: squeeze ?? base.squeeze,
+      overAndUnderCenterOpacity:
+          overAndUnderCenterOpacity ?? base.overAndUnderCenterOpacity,
+      selectorBorderRadius: selectorBorderRadius ?? base.selectorBorderRadius,
+      selectorDecoration: selectorDecoration ?? base.selectorDecoration,
+      focusColor: focusColor ?? base.focusColor,
+    );
+  }
+
+  /// Linear interpolation between two styles, used when the theme changes
+  /// with an animation. A property that is set in only one of them switches
+  /// halfway.
+  static AwesomeWheelStyle? lerp(
+      AwesomeWheelStyle? a, AwesomeWheelStyle? b, double t) {
+    if (a == null && b == null) return null;
+    if (identical(a, b)) return a;
+    double? number(double? x, double? y) {
+      if (x == null || y == null) return t < 0.5 ? x : y;
+      return x + (y - x) * t;
+    }
+
+    return AwesomeWheelStyle(
+      diameterRatio: number(a?.diameterRatio, b?.diameterRatio),
+      perspective: number(a?.perspective, b?.perspective),
+      magnification: number(a?.magnification, b?.magnification),
+      squeeze: number(a?.squeeze, b?.squeeze),
+      overAndUnderCenterOpacity:
+          number(a?.overAndUnderCenterOpacity, b?.overAndUnderCenterOpacity),
+      selectorBorderRadius: BorderRadius.lerp(
+          a?.selectorBorderRadius, b?.selectorBorderRadius, t),
+      selectorDecoration:
+          Decoration.lerp(a?.selectorDecoration, b?.selectorDecoration, t),
+      focusColor: Color.lerp(a?.focusColor, b?.focusColor, t),
+    );
+  }
+
   /// Creates a copy of this style with the given properties replaced.
   ///
   /// A property that is not given keeps its value; a value cannot be reset to

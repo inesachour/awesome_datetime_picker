@@ -14,26 +14,56 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.light;
+  bool _globalTheme = false;
+
+  /// The look of every picker of the app, set once (see the switch below).
+  /// A picker's own options still win: the date picker below sets a
+  /// `selectorBorderRadius` that is merged into this wheel style.
+  static const _pickerTheme = AwesomePickerThemeData(
+    selectedTextStyle: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w700,
+      color: Color(0xFF3949AB),
+    ),
+    wheelStyle: AwesomeWheelStyle.ios(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Awesome DateTime Picker',
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData(brightness: Brightness.dark),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        extensions: [if (_globalTheme) _pickerTheme],
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        extensions: [if (_globalTheme) _pickerTheme],
+      ),
       themeMode: _themeMode,
       home: Demo(
         isDark: _themeMode == ThemeMode.dark,
         onThemeChanged: (dark) => setState(
             () => _themeMode = dark ? ThemeMode.dark : ThemeMode.light),
+        globalTheme: _globalTheme,
+        onGlobalThemeChanged: (v) => setState(() => _globalTheme = v),
       ),
     );
   }
 }
 
 class Demo extends StatefulWidget {
-  const Demo({super.key, required this.isDark, required this.onThemeChanged});
+  const Demo({
+    super.key,
+    required this.isDark,
+    required this.onThemeChanged,
+    required this.globalTheme,
+    required this.onGlobalThemeChanged,
+  });
+
+  final bool globalTheme;
+  final ValueChanged<bool> onGlobalThemeChanged;
 
   final bool isDark;
   final ValueChanged<bool> onThemeChanged;
@@ -55,6 +85,7 @@ class _DemoState extends State<Demo> {
   bool _seconds = false;
   String? _localeName;
   String _modalResult = '-';
+  String _duration = '-';
   final _dateController = AwesomeDatePickerController();
 
   @override
@@ -95,6 +126,11 @@ class _DemoState extends State<Demo> {
               ],
               onChanged: (v) => setState(() => _localeName = v),
             ),
+          ),
+          SwitchListTile(
+            title: const Text('Global picker theme (ThemeExtension)'),
+            value: widget.globalTheme,
+            onChanged: widget.onGlobalThemeChanged,
           ),
           SwitchListTile(
             title: const Text('Dark mode'),
@@ -248,6 +284,21 @@ class _DemoState extends State<Demo> {
             ),
           ),
           _Section(
+            title: 'Duration picker',
+            value: _duration,
+            child: AwesomeDurationPicker(
+              format: _seconds
+                  ? AwesomeDurationFormat.hms
+                  : AwesomeDurationFormat.hm,
+              minuteInterval: _fifteenMinutes ? 15 : 1,
+              maxDuration: const Duration(hours: 12),
+              looping: _looping,
+              enableHapticFeedback: _haptics,
+              localeName: _localeName,
+              onChanged: (d) => setState(() => _duration = d.toString()),
+            ),
+          ),
+          _Section(
             title: 'Date-time picker',
             value: _dateTime,
             child: AwesomeDateTimePicker(
@@ -255,7 +306,9 @@ class _DemoState extends State<Demo> {
               enableHapticFeedback: _haptics,
               minuteInterval: _fifteenMinutes ? 15 : 1,
               localeName: _localeName,
-              dateFormat: AwesomeDateFormat.dMMy,
+              // Numeric month: with weekday labels five wheels with month names
+              // would not fit a phone.
+              dateFormat: AwesomeDateFormat.dMy,
               timeFormat:
                   _seconds ? AwesomeTimeFormat.Hms : AwesomeTimeFormat.Hm,
               showDisabledValues: _showDisabled,

@@ -2,6 +2,7 @@
 // Internal implementation file: it is not exported by the package, so its
 // members are documented at class level only.
 
+import 'package:awesome_datetime_picker/src/shared/awesome_picker_theme_data.dart';
 import 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
 import 'package:awesome_datetime_picker/src/shared/custom_item_picker_style.dart';
 import 'package:flutter/gestures.dart';
@@ -92,6 +93,13 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
   /// from the item the wheel has not left yet.
   int? _pendingRaw;
 
+  /// True while the wheel moves itself to the item its parent asked for. That
+  /// is not a choice of the user, so the selection changes it causes are not
+  /// reported.
+  bool _ignoreSelectionReports = false;
+
+  bool _jumpScheduled = false;
+
   @override
   void initState() {
     super.initState();
@@ -130,12 +138,30 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
         _selectedIndex = 0;
       }
 
-      // Jump to the new index if scroll controller is attached
       _pendingRaw = null;
-      if (_scrollController.hasClients) {
-        _scrollController.jumpToItem(_selectedIndex);
-      }
+      _jumpToSelectedAfterLayout();
     }
+  }
+
+  /// Moves the wheel to the selected item once this frame is laid out.
+  ///
+  /// Not at once: during a rebuild the scroll position still has the extent of
+  /// the old list. Jumping then lands on the wrong item when the list grew
+  /// (the position is clamped to the old end), and tells the parent about that
+  /// wrong item in the middle of its build.
+  void _jumpToSelectedAfterLayout() {
+    if (_jumpScheduled) return;
+    _jumpScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _jumpScheduled = false;
+      if (!mounted || !_scrollController.hasClients) return;
+      _ignoreSelectionReports = true;
+      try {
+        _scrollController.jumpToItem(_selectedIndex);
+      } finally {
+        _ignoreSelectionReports = false;
+      }
+    });
   }
 
   /// Signed distance from the selected item to the nearest item that can be
@@ -225,7 +251,11 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
   }
 
   /// How many items Page Up and Page Down move: one page of the wheel.
-  int get _pageSize => (widget.visibleItemCount ?? defaultVisibleItemCount) - 1;
+  int get _pageSize => _visibleItemCount - 1;
+
+  /// Number of visible items of the last build (the option of the picker, or
+  /// the one of the theme).
+  int _visibleItemCount = defaultVisibleItemCount;
 
   KeyEventResult _onKeyEvent(FocusNode node, KeyEvent event) {
     if (event is KeyUpEvent) return KeyEventResult.ignored;
@@ -338,32 +368,45 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
   Widget build(BuildContext context) {
     // The default item height follows the text size setting; sizes set by the
     // app (itemHeight, itemWidth, ItemTheme) are used as they are.
+    //
+    // Precedence of every setting: the ItemTheme of the wheel, the option of
+    // the picker, the AwesomePickerThemeData of the app, the default.
+    final appTheme = AwesomePickerThemeData.maybeOf(context);
     final double textScale = _textScale(context);
     final double itemHeight = widget.style.theme?.height ??
         widget.style.itemHeight ??
+        appTheme?.itemHeight ??
         defaultItemHeight * textScale;
-    final double pickerHeight =
-        itemHeight * (widget.visibleItemCount ?? defaultVisibleItemCount);
+    _visibleItemCount = widget.visibleItemCount ??
+        appTheme?.visibleItemCount ??
+        defaultVisibleItemCount;
+    final double pickerHeight = itemHeight * _visibleItemCount;
 
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final defaults = _PickerDefaults(isDark: isDark);
 
     final selectedStyle = widget.style.theme?.selectedTextStyle ??
         widget.style.selectedTextStyle ??
+        appTheme?.selectedTextStyle ??
         defaults.selectedTextStyle;
 
     final unselectedStyle = widget.style.theme?.unselectedTextStyle ??
         widget.style.unselectedTextStyle ??
+        appTheme?.unselectedTextStyle ??
         defaults.unselectedTextStyle;
 
-    final disabledStyle =
-        widget.style.theme?.disabledTextStyle ?? widget.style.disabledTextStyle;
+    final disabledStyle = widget.style.theme?.disabledTextStyle ??
+        widget.style.disabledTextStyle ??
+        appTheme?.disabledTextStyle;
 
     final backgroundColor = widget.style.theme?.backgroundColor ??
         widget.style.backgroundColor ??
+        appTheme?.backgroundColor ??
         defaults.backgroundColor;
 
-    final wheelStyle = widget.style.wheelStyle ?? const AwesomeWheelStyle();
+    // Property by property: the picker's wheel style over the theme's.
+    final wheelStyle = (widget.style.wheelStyle ?? const AwesomeWheelStyle())
+        .mergedOver(appTheme?.wheelStyle ?? const AwesomeWheelStyle());
     final magnification = wheelStyle.magnification ?? 1.0;
 
     // The outline of the keyboard focus is only drawn when the keyboard is
@@ -428,6 +471,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                 height: pickerHeight,
                 width: widget.style.theme?.width ??
                     widget.style.itemWidth ??
+                    appTheme?.itemWidth ??
                     _defaultWidth(context),
                 margin: widget.style.theme?.margin,
                 padding: widget.style.theme?.padding,
@@ -452,6 +496,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                           decoration: wheelStyle.selectorDecoration ??
                               BoxDecoration(
                                 color: widget.style.selectorColor ??
+                                    appTheme?.selectorColor ??
                                     defaults.selectorColor,
                                 borderRadius: wheelStyle.selectorBorderRadius ??
                                     BorderRadius.zero,
@@ -505,6 +550,9 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                               _lastDirection =
                                   rawIndex >= _lastRawIndex ? 1 : -1;
                               _lastRawIndex = rawIndex;
+                              // The wheel moving itself to the item its
+                              // parent asked for is not a selection.
+                              if (_ignoreSelectionReports) return;
                               // Only update if index actually changed
                               if (_selectedIndex != index) {
                                 setState(() {
@@ -537,7 +585,9 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                     ),
 
                     // Fade effects
-                    if (widget.style.fadeEffect ?? true) ...[
+                    if (widget.style.fadeEffect ??
+                        appTheme?.fadeEffect ??
+                        true) ...[
                       _FadeGradient(
                         height: itemHeight,
                         isTop: true,

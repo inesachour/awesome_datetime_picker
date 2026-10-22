@@ -526,36 +526,41 @@ class _AwesomeDateRangePickerState extends State<AwesomeDateRangePicker> {
       localeName: widget.localeName,
       custom: widget.semanticLabels,
     );
-    return Flex(
-      direction: widget.direction,
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _part(
-          widget.startLabel,
-          _picker(
-            key: const ValueKey('start'),
-            controller: _startController,
-            minDate: _minDate,
-            maxDate: _lastStart,
-            semanticLabels: labels.prefixed(labels.startDate!),
+    // Wider than its parent (many or wide wheels on a narrow screen)? Shrink
+    // to fit instead of overflowing. A picker that fits is not scaled.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Flex(
+        direction: widget.direction,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _part(
+            widget.startLabel,
+            _picker(
+              key: const ValueKey('start'),
+              controller: _startController,
+              minDate: _minDate,
+              maxDate: _lastStart,
+              semanticLabels: labels.prefixed(labels.startDate!),
+            ),
           ),
-        ),
-        SizedBox(
-          width: widget.direction == Axis.horizontal ? widget.spacing : 0,
-          height: widget.direction == Axis.vertical ? widget.spacing : 0,
-        ),
-        _part(
-          widget.endLabel,
-          _picker(
-            key: ValueKey(_endRangeKey),
-            controller: _endController,
-            minDate: endMin,
-            maxDate: endMax,
-            semanticLabels: labels.prefixed(labels.endDate!),
+          SizedBox(
+            width: widget.direction == Axis.horizontal ? widget.spacing : 0,
+            height: widget.direction == Axis.vertical ? widget.spacing : 0,
           ),
-        ),
-      ],
+          _part(
+            widget.endLabel,
+            _picker(
+              key: ValueKey(_endRangeKey),
+              controller: _endController,
+              minDate: endMin,
+              maxDate: endMax,
+              semanticLabels: labels.prefixed(labels.endDate!),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

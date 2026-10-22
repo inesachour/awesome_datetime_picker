@@ -190,6 +190,46 @@ void main() {
     );
   });
 
+  testWidgets('duration pickers', (t) async {
+    Widget labelled(String label, Widget picker) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [_Label(label), picker],
+          ),
+        );
+    await _shot(
+      t,
+      'duration_picker',
+      Column(mainAxisSize: MainAxisSize.min, children: [
+        labelled(
+          'hm, every 5 minutes',
+          AwesomeDurationPicker(
+            minuteInterval: 5,
+            initialDuration: const Duration(hours: 1, minutes: 30),
+            theme: const AwesomeDurationPickerTheme(
+              hourTheme: ItemTheme(title: Text('hours')),
+              minuteTheme: ItemTheme(title: Text('min')),
+            ),
+          ),
+        ),
+        labelled(
+          'ms, up to 2 hours',
+          AwesomeDurationPicker(
+            format: AwesomeDurationFormat.ms,
+            maxDuration: const Duration(minutes: 120),
+            initialDuration: const Duration(minutes: 45, seconds: 20),
+            theme: const AwesomeDurationPickerTheme(
+              minuteTheme: ItemTheme(title: Text('min')),
+              secondTheme: ItemTheme(title: Text('sec')),
+            ),
+          ),
+        ),
+      ]),
+      height: 1100,
+    );
+  });
+
   testWidgets('modal sheet', (t) async {
     _phone(t);
     final boundary = GlobalKey();

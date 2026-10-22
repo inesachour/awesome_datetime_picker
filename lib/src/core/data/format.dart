@@ -115,3 +115,22 @@ enum AwesomeTimeFormat {
   /// Creates a time format from the ordered list of wheels it displays.
   const AwesomeTimeFormat(this.value);
 }
+
+/// Enum representing which wheels an [AwesomeDurationPicker] displays.
+enum AwesomeDurationFormat {
+  /// Hours and minutes (e.g., 1 h 30 min). The seconds are 0.
+  hm,
+
+  /// Minutes and seconds (e.g., 12 min 30 s). The minutes are not limited to
+  /// 59: they count the whole duration, up to [AwesomeDurationPicker.maxDuration].
+  ms,
+
+  /// Hours, minutes and seconds (e.g., 1 h 30 min 15 s).
+  hms;
+
+  /// Whether this format shows an hours wheel.
+  bool get hasHours => this != ms;
+
+  /// Whether this format shows a seconds wheel.
+  bool get hasSeconds => this != hm;
+}

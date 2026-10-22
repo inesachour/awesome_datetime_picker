@@ -10,6 +10,9 @@ import 'package:awesome_datetime_picker/src/date/awesome_date_picker_theme.dart'
 import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker.dart';
 import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_controller.dart';
 import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_theme.dart';
+import 'package:awesome_datetime_picker/src/duration/awesome_duration_picker.dart';
+import 'package:awesome_datetime_picker/src/duration/awesome_duration_picker_controller.dart';
+import 'package:awesome_datetime_picker/src/duration/awesome_duration_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/range/awesome_date_range_picker.dart';
 import 'package:awesome_datetime_picker/src/range/awesome_date_range_picker_controller.dart';
 import 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';
@@ -52,8 +55,8 @@ enum AwesomePickerPresentation {
 /// ```
 ///
 /// For the common cases, [showAwesomeDatePicker], [showAwesomeTimePicker],
-/// [showAwesomeDateTimePicker] and [showAwesomeDateRangePicker] do this for
-/// you.
+/// [showAwesomeDateTimePicker], [showAwesomeDateRangePicker] and
+/// [showAwesomeDurationPicker] do this for you.
 ///
 /// The button texts default to the localized ones of
 /// [MaterialLocalizations]; [title] is shown between the buttons.
@@ -415,6 +418,78 @@ Future<AwesomeDateRange?> showAwesomeDateRangePicker(
       theme: theme,
       startLabel: startLabel,
       endLabel: endLabel,
+      looping: looping,
+      enableHapticFeedback: enableHapticFeedback,
+      wheelStyle: wheelStyle,
+      semanticLabels: semanticLabels,
+    ),
+    title: title,
+    confirmText: confirmText,
+    cancelText: cancelText,
+    presentation: presentation,
+    useRootNavigator: useRootNavigator,
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor,
+    routeSettings: routeSettings,
+    backgroundColor: backgroundColor,
+    shape: shape,
+  );
+}
+
+/// Shows an [AwesomeDurationPicker] in a bottom sheet or a dialog and returns
+/// the duration the user confirmed, or null if they cancelled.
+///
+/// The picker options are the ones of [AwesomeDurationPicker]; the remaining
+/// parameters are the ones of [showAwesomePicker]. For options not listed
+/// here, use [showAwesomePicker] with your own [AwesomeDurationPicker].
+///
+/// ```dart
+/// final duration = await showAwesomeDurationPicker(
+///   context,
+///   title: Text('Timer'),
+///   format: AwesomeDurationFormat.hms,
+///   minDuration: const Duration(seconds: 5),
+/// );
+/// ```
+Future<Duration?> showAwesomeDurationPicker(
+  BuildContext context, {
+  Duration? initialDuration,
+  Duration? minDuration,
+  Duration? maxDuration,
+  AwesomeDurationFormat format = AwesomeDurationFormat.hm,
+  int minuteInterval = 1,
+  int secondInterval = 1,
+  String? localeName,
+  AwesomeDurationPickerTheme? theme,
+  bool looping = false,
+  bool enableHapticFeedback = false,
+  AwesomeWheelStyle? wheelStyle,
+  AwesomeSemanticLabels? semanticLabels,
+  Widget? title,
+  String? confirmText,
+  String? cancelText,
+  AwesomePickerPresentation presentation =
+      AwesomePickerPresentation.bottomSheet,
+  bool useRootNavigator = false,
+  bool barrierDismissible = true,
+  Color? barrierColor,
+  RouteSettings? routeSettings,
+  Color? backgroundColor,
+  ShapeBorder? shape,
+}) {
+  return _showOwned<Duration, AwesomeDurationPickerController>(
+    context,
+    createController: () => AwesomeDurationPickerController(
+        initialValue: initialDuration ?? minDuration ?? Duration.zero),
+    pickerBuilder: (context, controller) => AwesomeDurationPicker(
+      controller: controller,
+      minDuration: minDuration,
+      maxDuration: maxDuration,
+      format: format,
+      minuteInterval: minuteInterval,
+      secondInterval: secondInterval,
+      localeName: localeName,
+      theme: theme,
       looping: looping,
       enableHapticFeedback: enableHapticFeedback,
       wheelStyle: wheelStyle,

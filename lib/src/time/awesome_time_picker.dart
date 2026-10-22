@@ -362,12 +362,17 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(widget.timeFormat.value.length, (index) {
-        final type = widget.timeFormat.value[index];
-        return _buildPicker(type);
-      }),
+    // Wider than its parent (many or wide wheels on a narrow screen)? Shrink
+    // to fit instead of overflowing. A picker that fits is not scaled.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(widget.timeFormat.value.length, (index) {
+          final type = widget.timeFormat.value[index];
+          return _buildPicker(type);
+        }),
+      ),
     );
   }
 
