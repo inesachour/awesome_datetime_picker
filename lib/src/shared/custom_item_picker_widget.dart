@@ -38,6 +38,9 @@ class CustomItemPicker extends StatefulWidget {
   /// wheel to another item.
   final bool hapticFeedback;
 
+  /// What a screen reader announces before the selected value ("Day").
+  final String? semanticLabel;
+
   const CustomItemPicker({
     super.key,
     required this.items,
@@ -50,6 +53,7 @@ class CustomItemPicker extends StatefulWidget {
     this.wide = false,
     this.looping = false,
     this.hapticFeedback = false,
+    this.semanticLabel,
   }) : assert(visibleItemCount == null ||
             visibleItemCount >= 3 && visibleItemCount % 2 == 1);
 
@@ -76,6 +80,18 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
 
   bool get _loops => widget.looping && widget.items.length > 1;
 
+  /// Receives the keyboard: Tab reaches it, and the arrow keys, Page Up,
+  /// Page Down, Home and End move its selection.
+  late final FocusNode _focusNode = FocusNode(
+    debugLabel: 'AwesomeDateTimePicker wheel',
+    onKeyEvent: _onKeyEvent,
+  );
+
+  /// Raw index the wheel is animating to after a key press: the next key press
+  /// starts from there, so that quick presses add up instead of all starting
+  /// from the item the wheel has not left yet.
+  int? _pendingRaw;
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +101,17 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
       initialItem: _selectedIndex,
     );
     _lastRawIndex = _selectedIndex;
+    _focusNode.addListener(_onFocusChanged);
+    FocusManager.instance.addHighlightModeListener(_onHighlightModeChanged);
+  }
+
+  void _onFocusChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _onHighlightModeChanged(FocusHighlightMode mode) {
+    // The outline only shows for keyboard use, not after a touch.
+    if (mounted && _focusNode.hasFocus) setState(() {});
   }
 
   @override
@@ -104,6 +131,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
       }
 
       // Jump to the new index if scroll controller is attached
+      _pendingRaw = null;
       if (_scrollController.hasClients) {
         _scrollController.jumpToItem(_selectedIndex);
       }
@@ -129,18 +157,103 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
     return null;
   }
 
-  /// Moves the selection by one selectable item in [direction] (used by
-  /// screen-reader actions). Disabled items are skipped.
-  void _step(int direction) {
+  /// Raw index of the item the wheel is on, or is moving to after a key press.
+  /// For a looping wheel it is not bounded: the scroll position keeps counting.
+  int get _currentRaw => _pendingRaw ?? _scrollController.selectedItem;
+
+  /// Raw index reached by moving [count] selectable items from [fromRaw] in
+  /// [direction], skipping disabled items. A wheel that does not loop stops at
+  /// its end. Null when the wheel cannot move at all.
+  int? _targetFrom(int fromRaw, int direction, int count) {
+    final n = widget.items.length;
+    if (n == 0) return null;
+    bool enabled(int raw) =>
+        !widget.disabledIndices.contains(_loops ? raw % n : raw);
+
+    var target = fromRaw;
+    var moved = 0;
+    for (var d = 1; d <= n * count && moved < count; d++) {
+      final candidate = fromRaw + direction * d;
+      if (!_loops && (candidate < 0 || candidate >= n)) break;
+      if (enabled(candidate)) {
+        target = candidate;
+        moved++;
+      }
+    }
+    return moved == 0 ? null : target;
+  }
+
+  /// Moves the selection by [count] selectable items in [direction]: used by
+  /// screen-reader actions and by the keyboard. Disabled items are skipped.
+  ///
+  /// A single step is animated; a bigger one (Page Up/Down) jumps, so that the
+  /// items in between are not reported one by one.
+  void _moveBy(int direction, {int count = 1, bool animate = true}) {
     if (!_scrollController.hasClients) return;
-    final target = _nextEnabled(direction);
-    if (target == _selectedIndex) return;
-    // A looping wheel has no ends: its scroll position keeps counting.
-    _scrollController.animateToItem(
-      _scrollController.selectedItem + (target - _selectedIndex),
-      duration: const Duration(milliseconds: 150),
-      curve: Curves.easeOut,
-    );
+    final target = _targetFrom(_currentRaw, direction, count);
+    if (target == null) return;
+    _goToRaw(target, animate: animate);
+  }
+
+  void _goToRaw(int target, {required bool animate}) {
+    if (animate) {
+      _pendingRaw = target;
+      _scrollController.animateToItem(
+        target,
+        duration: const Duration(milliseconds: 120),
+        curve: Curves.easeOut,
+      );
+    } else {
+      _pendingRaw = null;
+      _scrollController.jumpToItem(target);
+    }
+  }
+
+  /// Moves to the first or last selectable item.
+  void _goToEdge({required bool last}) {
+    if (!_scrollController.hasClients) return;
+    final n = widget.items.length;
+    final enabled = [
+      for (var i = 0; i < n; i++)
+        if (!widget.disabledIndices.contains(i)) i,
+    ];
+    if (enabled.isEmpty) return;
+    final raw = _currentRaw;
+    final index = _loops ? raw % n : raw;
+    _goToRaw(raw + (last ? enabled.last : enabled.first) - index,
+        animate: false);
+  }
+
+  /// How many items Page Up and Page Down move: one page of the wheel.
+  int get _pageSize => (widget.visibleItemCount ?? defaultVisibleItemCount) - 1;
+
+  KeyEventResult _onKeyEvent(FocusNode node, KeyEvent event) {
+    if (event is KeyUpEvent) return KeyEventResult.ignored;
+    final key = event.logicalKey;
+    if (key == LogicalKeyboardKey.arrowDown) {
+      _moveBy(1);
+    } else if (key == LogicalKeyboardKey.arrowUp) {
+      _moveBy(-1);
+    } else if (key == LogicalKeyboardKey.pageDown) {
+      _moveBy(1, count: _pageSize, animate: false);
+    } else if (key == LogicalKeyboardKey.pageUp) {
+      _moveBy(-1, count: _pageSize, animate: false);
+    } else if (key == LogicalKeyboardKey.home) {
+      _goToEdge(last: false);
+    } else if (key == LogicalKeyboardKey.end) {
+      _goToEdge(last: true);
+    } else if (key == LogicalKeyboardKey.arrowLeft) {
+      return node.focusInDirection(TraversalDirection.left)
+          ? KeyEventResult.handled
+          : KeyEventResult.ignored;
+    } else if (key == LogicalKeyboardKey.arrowRight) {
+      return node.focusInDirection(TraversalDirection.right)
+          ? KeyEventResult.handled
+          : KeyEventResult.ignored;
+    } else {
+      return KeyEventResult.ignored;
+    }
+    return KeyEventResult.handled;
   }
 
   /// When a drag settles on a disabled item, eases to the nearest selectable
@@ -195,17 +308,40 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
         : (screenWidth * 0.15).clamp(56.0, 90.0);
   }
 
+  /// How much the default item height grows with the user's text size setting:
+  /// 1 at the normal size or smaller, up to [_maxTextScale]. Widths are not
+  /// scaled: several wheels have to keep fitting the screen, so text that
+  /// does not fit its wheel shrinks instead. It is measured
+  /// on the size of the default selected text, so that non-linear text
+  /// scaling (as on recent Android versions) is followed too.
+  static double _textScale(BuildContext context) {
+    const reference = 20.0;
+    final factor =
+        MediaQuery.textScalerOf(context).scale(reference) / reference;
+    return factor.clamp(1.0, _maxTextScale);
+  }
+
+  /// Upper bound of [_textScale]: beyond it the wheels would take most of the
+  /// screen. The text itself keeps scaling.
+  static const double _maxTextScale = 2.0;
+
   @override
   void dispose() {
+    FocusManager.instance.removeHighlightModeListener(_onHighlightModeChanged);
+    _focusNode.removeListener(_onFocusChanged);
+    _focusNode.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // The default item height follows the text size setting; sizes set by the
+    // app (itemHeight, itemWidth, ItemTheme) are used as they are.
+    final double textScale = _textScale(context);
     final double itemHeight = widget.style.theme?.height ??
         widget.style.itemHeight ??
-        defaultItemHeight;
+        defaultItemHeight * textScale;
     final double pickerHeight =
         itemHeight * (widget.visibleItemCount ?? defaultVisibleItemCount);
 
@@ -230,19 +366,30 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
     final wheelStyle = widget.style.wheelStyle ?? const AwesomeWheelStyle();
     final magnification = wheelStyle.magnification ?? 1.0;
 
+    // The outline of the keyboard focus is only drawn when the keyboard is
+    // being used, not after a touch.
+    final showFocus = _focusNode.hasFocus &&
+        FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+    final focusColor =
+        wheelStyle.focusColor ?? Theme.of(context).colorScheme.primary;
+
     Widget buildItem(int index) {
       final isSelected = index == _selectedIndex;
       final isDisabled = widget.disabledIndices.contains(index);
-      final text = Text(
-        _labelOf(index),
-        style: isDisabled
-            ? (disabledStyle ?? unselectedStyle)
-            : isSelected
-                ? selectedStyle
-                : unselectedStyle,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        softWrap: false,
+      final text = FittedBox(
+        // Text too big for the wheel (large system font, long names) shrinks
+        // to fit instead of being cut.
+        fit: BoxFit.scaleDown,
+        child: Text(
+          _labelOf(index),
+          style: isDisabled
+              ? (disabledStyle ?? unselectedStyle)
+              : isSelected
+                  ? selectedStyle
+                  : unselectedStyle,
+          maxLines: 1,
+          softWrap: false,
+        ),
       );
       return Center(
         // Without an explicit style, disabled values are the unselected style
@@ -259,128 +406,152 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
       mainAxisSize: MainAxisSize.min,
       children: [
         widget.style.theme?.title ?? const SizedBox.shrink(),
-        Semantics(
-          container: true,
-          value: _itemAt(_selectedIndex),
-          increasedValue: _itemAt(_nextEnabled(1)),
-          decreasedValue: _itemAt(_nextEnabled(-1)),
-          onIncrease: _hasEnabledBeyond(1) ? () => _step(1) : null,
-          onDecrease: _hasEnabledBeyond(-1) ? () => _step(-1) : null,
-          child: Container(
-            height: pickerHeight,
-            width: widget.style.theme?.width ??
-                widget.style.itemWidth ??
-                _defaultWidth(context),
-            margin: widget.style.theme?.margin,
-            padding: widget.style.theme?.padding,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(0),
-            ),
-            child: Stack(
-              children: [
-                // Selector highlight
-                Positioned.fill(
-                  child: Center(
-                    child: Container(
-                      height: itemHeight,
-                      decoration: wheelStyle.selectorDecoration ??
-                          BoxDecoration(
-                            color: widget.style.selectorColor ??
-                                defaults.selectorColor,
-                            borderRadius: wheelStyle.selectorBorderRadius ??
-                                BorderRadius.zero,
-                          ),
-                    ),
-                  ),
+        Focus(
+          focusNode: _focusNode,
+          // A mouse click focuses the wheel so that the keys work on it (a
+          // touch does not: it must not take the focus from a text field).
+          child: Listener(
+            onPointerDown: (event) {
+              if (event.kind == PointerDeviceKind.mouse) {
+                _focusNode.requestFocus();
+              }
+            },
+            child: Semantics(
+              container: true,
+              label: widget.semanticLabel,
+              value: _itemAt(_selectedIndex),
+              increasedValue: _itemAt(_nextEnabled(1)),
+              decreasedValue: _itemAt(_nextEnabled(-1)),
+              onIncrease: _hasEnabledBeyond(1) ? () => _moveBy(1) : null,
+              onDecrease: _hasEnabledBeyond(-1) ? () => _moveBy(-1) : null,
+              child: Container(
+                height: pickerHeight,
+                width: widget.style.theme?.width ??
+                    widget.style.itemWidth ??
+                    _defaultWidth(context),
+                margin: widget.style.theme?.margin,
+                padding: widget.style.theme?.padding,
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.circular(0),
                 ),
-
-                // Scrollable list. Mouse and trackpad dragging is enabled
-                // explicitly (Flutter only allows touch by default), and the
-                // individual items are hidden from screen readers because the
-                // wheel exposes a single adjustable value instead.
-                ExcludeSemantics(
-                  child: ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context).copyWith(
-                      dragDevices: PointerDeviceKind.values.toSet(),
-                      scrollbars: false,
-                    ),
-                    child: NotificationListener<ScrollNotification>(
-                      onNotification: (notification) {
-                        if (notification is ScrollStartNotification) {
-                          _userScrolling = notification.dragDetails != null;
-                        } else if (notification is ScrollEndNotification) {
-                          _userScrolling = false;
-                          // Not synchronously: the scroll position is still
-                          // swapping its activity, and a new animation started
-                          // now would be disposed with the old one.
-                          Future.microtask(() {
-                            if (mounted) _snapToEnabled();
-                          });
-                        }
-                        return false;
-                      },
-                      child: ListWheelScrollView.useDelegate(
-                        controller: _scrollController,
-                        itemExtent: itemHeight,
-                        perspective: wheelStyle.perspective ?? 0.01,
-                        diameterRatio: wheelStyle.diameterRatio ?? 1.5,
-                        useMagnifier: magnification != 1.0,
-                        magnification: magnification,
-                        squeeze: wheelStyle.squeeze ?? 1.0,
-                        overAndUnderCenterOpacity:
-                            wheelStyle.overAndUnderCenterOpacity ?? 1.0,
-                        physics: const FixedExtentScrollPhysics(),
-                        onSelectedItemChanged: (rawIndex) {
-                          // A looping wheel reports an ever-growing index.
-                          final index = _loops
-                              ? rawIndex % widget.items.length
-                              : rawIndex;
-                          _lastDirection = rawIndex >= _lastRawIndex ? 1 : -1;
-                          _lastRawIndex = rawIndex;
-                          // Only update if index actually changed
-                          if (_selectedIndex != index) {
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                            if (widget.hapticFeedback && _userScrolling) {
-                              HapticFeedback.selectionClick();
-                            }
-                            // Disabled values are only passed through: the
-                            // wheel moves on when the drag settles.
-                            if (!widget.disabledIndices.contains(index)) {
-                              widget.onSelectedItemChanged(widget.items[index]);
-                            }
-                          }
-                        },
-                        childDelegate: _loops
-                            ? ListWheelChildLoopingListDelegate(
-                                children: List.generate(
-                                    widget.items.length, buildItem),
-                              )
-                            : ListWheelChildBuilderDelegate(
-                                childCount: widget.items.length,
-                                builder: (context, index) => buildItem(index),
+                child: Stack(
+                  children: [
+                    // Selector highlight
+                    Positioned.fill(
+                      child: Center(
+                        child: Container(
+                          height: itemHeight,
+                          foregroundDecoration: showFocus
+                              ? BoxDecoration(
+                                  border:
+                                      Border.all(color: focusColor, width: 2),
+                                  borderRadius: wheelStyle.selectorBorderRadius,
+                                )
+                              : null,
+                          decoration: wheelStyle.selectorDecoration ??
+                              BoxDecoration(
+                                color: widget.style.selectorColor ??
+                                    defaults.selectorColor,
+                                borderRadius: wheelStyle.selectorBorderRadius ??
+                                    BorderRadius.zero,
                               ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
 
-                // Fade effects
-                if (widget.style.fadeEffect ?? true) ...[
-                  _FadeGradient(
-                    height: itemHeight,
-                    isTop: true,
-                    color: backgroundColor,
-                  ),
-                  _FadeGradient(
-                    height: itemHeight,
-                    isTop: false,
-                    color: backgroundColor,
-                  ),
-                ],
-              ],
+                    // Scrollable list. Mouse and trackpad dragging is enabled
+                    // explicitly (Flutter only allows touch by default), and the
+                    // individual items are hidden from screen readers because the
+                    // wheel exposes a single adjustable value instead.
+                    ExcludeSemantics(
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                          dragDevices: PointerDeviceKind.values.toSet(),
+                          scrollbars: false,
+                        ),
+                        child: NotificationListener<ScrollNotification>(
+                          onNotification: (notification) {
+                            if (notification is ScrollStartNotification) {
+                              _userScrolling = notification.dragDetails != null;
+                            } else if (notification is ScrollEndNotification) {
+                              _userScrolling = false;
+                              _pendingRaw = null;
+                              // Not synchronously: the scroll position is still
+                              // swapping its activity, and a new animation started
+                              // now would be disposed with the old one.
+                              Future.microtask(() {
+                                if (mounted) _snapToEnabled();
+                              });
+                            }
+                            return false;
+                          },
+                          child: ListWheelScrollView.useDelegate(
+                            controller: _scrollController,
+                            itemExtent: itemHeight,
+                            perspective: wheelStyle.perspective ?? 0.01,
+                            diameterRatio: wheelStyle.diameterRatio ?? 1.5,
+                            useMagnifier: magnification != 1.0,
+                            magnification: magnification,
+                            squeeze: wheelStyle.squeeze ?? 1.0,
+                            overAndUnderCenterOpacity:
+                                wheelStyle.overAndUnderCenterOpacity ?? 1.0,
+                            physics: const FixedExtentScrollPhysics(),
+                            onSelectedItemChanged: (rawIndex) {
+                              // A looping wheel reports an ever-growing index.
+                              final index = _loops
+                                  ? rawIndex % widget.items.length
+                                  : rawIndex;
+                              _lastDirection =
+                                  rawIndex >= _lastRawIndex ? 1 : -1;
+                              _lastRawIndex = rawIndex;
+                              // Only update if index actually changed
+                              if (_selectedIndex != index) {
+                                setState(() {
+                                  _selectedIndex = index;
+                                });
+                                if (widget.hapticFeedback && _userScrolling) {
+                                  HapticFeedback.selectionClick();
+                                }
+                                // Disabled values are only passed through: the
+                                // wheel moves on when the drag settles.
+                                if (!widget.disabledIndices.contains(index)) {
+                                  widget.onSelectedItemChanged(
+                                      widget.items[index]);
+                                }
+                              }
+                            },
+                            childDelegate: _loops
+                                ? ListWheelChildLoopingListDelegate(
+                                    children: List.generate(
+                                        widget.items.length, buildItem),
+                                  )
+                                : ListWheelChildBuilderDelegate(
+                                    childCount: widget.items.length,
+                                    builder: (context, index) =>
+                                        buildItem(index),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Fade effects
+                    if (widget.style.fadeEffect ?? true) ...[
+                      _FadeGradient(
+                        height: itemHeight,
+                        isTop: true,
+                        color: backgroundColor,
+                      ),
+                      _FadeGradient(
+                        height: itemHeight,
+                        isTop: false,
+                        color: backgroundColor,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),

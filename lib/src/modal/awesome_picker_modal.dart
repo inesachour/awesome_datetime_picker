@@ -12,6 +12,7 @@ import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_con
 import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/range/awesome_date_range_picker.dart';
 import 'package:awesome_datetime_picker/src/range/awesome_date_range_picker_controller.dart';
+import 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';
 import 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
 import 'package:awesome_datetime_picker/src/time/awesome_time_picker.dart';
 import 'package:awesome_datetime_picker/src/time/awesome_time_picker_controller.dart';
@@ -131,6 +132,7 @@ Future<AwesomeDate?> showAwesomeDatePicker(
   bool looping = false,
   bool enableHapticFeedback = false,
   AwesomeWheelStyle? wheelStyle,
+  AwesomeSemanticLabels? semanticLabels,
   Widget? title,
   String? confirmText,
   String? cancelText,
@@ -163,6 +165,7 @@ Future<AwesomeDate?> showAwesomeDatePicker(
       looping: looping,
       enableHapticFeedback: enableHapticFeedback,
       wheelStyle: wheelStyle,
+      semanticLabels: semanticLabels,
     ),
     title: title,
     confirmText: confirmText,
@@ -206,6 +209,7 @@ Future<AwesomeTime?> showAwesomeTimePicker(
   bool looping = false,
   bool enableHapticFeedback = false,
   AwesomeWheelStyle? wheelStyle,
+  AwesomeSemanticLabels? semanticLabels,
   Widget? title,
   String? confirmText,
   String? cancelText,
@@ -236,6 +240,7 @@ Future<AwesomeTime?> showAwesomeTimePicker(
       looping: looping,
       enableHapticFeedback: enableHapticFeedback,
       wheelStyle: wheelStyle,
+      semanticLabels: semanticLabels,
     ),
     title: title,
     confirmText: confirmText,
@@ -288,6 +293,7 @@ Future<AwesomeDateTime?> showAwesomeDateTimePicker(
   bool looping = false,
   bool enableHapticFeedback = false,
   AwesomeWheelStyle? wheelStyle,
+  AwesomeSemanticLabels? semanticLabels,
   Widget? title,
   String? confirmText,
   String? cancelText,
@@ -324,6 +330,7 @@ Future<AwesomeDateTime?> showAwesomeDateTimePicker(
       looping: looping,
       enableHapticFeedback: enableHapticFeedback,
       wheelStyle: wheelStyle,
+      semanticLabels: semanticLabels,
     ),
     title: title,
     confirmText: confirmText,
@@ -374,6 +381,7 @@ Future<AwesomeDateRange?> showAwesomeDateRangePicker(
   bool looping = false,
   bool enableHapticFeedback = false,
   AwesomeWheelStyle? wheelStyle,
+  AwesomeSemanticLabels? semanticLabels,
   Widget? title,
   String? confirmText,
   String? cancelText,
@@ -410,6 +418,7 @@ Future<AwesomeDateRange?> showAwesomeDateRangePicker(
       looping: looping,
       enableHapticFeedback: enableHapticFeedback,
       wheelStyle: wheelStyle,
+      semanticLabels: semanticLabels,
     ),
     title: title,
     confirmText: confirmText,

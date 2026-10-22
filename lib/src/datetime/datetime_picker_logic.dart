@@ -92,11 +92,9 @@ class DateTimePickerLogic extends ChangeNotifier {
   /// The current date and time, used when no initial value is given
   /// (it is clamped into the min/max range right after).
   static AwesomeDateTime _now() {
-    final now = DateTime.now();
-    return AwesomeDateTime(
-      date: AwesomeDate(year: now.year, month: now.month, day: now.day),
-      time: AwesomeTime(hour: now.hour, minute: now.minute),
-    );
+    final now = AwesomeDateTime.now();
+    // Whole minutes: the seconds of "now" are noise for a default value.
+    return now.copyWith(time: now.time.copyWith(second: 0));
   }
 
   // Central update method

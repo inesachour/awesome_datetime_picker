@@ -33,20 +33,13 @@ class AwesomeTimePickerController extends ValueNotifier<AwesomeTime> {
   /// Creates a controller starting at [initialValue] (default: the current
   /// time).
   AwesomeTimePickerController({AwesomeTime? initialValue})
-      : this._(initialValue ?? _now());
+      : this._(initialValue ?? AwesomeTime.now());
 
-  AwesomeTimePickerController._(AwesomeTime initialValue)
-      : initialValue = initialValue,
-        super(initialValue);
+  AwesomeTimePickerController._(super.value) : initialValue = value;
 
   /// The time this controller started with, restored by [reset].
   final AwesomeTime initialValue;
 
   /// Sets [value] back to [initialValue].
   void reset() => value = initialValue;
-
-  static AwesomeTime _now() {
-    final now = DateTime.now();
-    return AwesomeTime(hour: now.hour, minute: now.minute);
-  }
 }

@@ -33,9 +33,7 @@ class AwesomeDateRangePickerController extends ValueNotifier<AwesomeDateRange> {
   AwesomeDateRangePickerController({AwesomeDateRange? initialValue})
       : this._(initialValue ?? _today());
 
-  AwesomeDateRangePickerController._(AwesomeDateRange initialValue)
-      : initialValue = initialValue,
-        super(initialValue);
+  AwesomeDateRangePickerController._(super.value) : initialValue = value;
 
   /// The range this controller started with, restored by [reset].
   final AwesomeDateRange initialValue;
@@ -44,8 +42,7 @@ class AwesomeDateRangePickerController extends ValueNotifier<AwesomeDateRange> {
   void reset() => value = initialValue;
 
   static AwesomeDateRange _today() {
-    final now = DateTime.now();
-    final today = AwesomeDate(year: now.year, month: now.month, day: now.day);
+    final today = AwesomeDate.today();
     return AwesomeDateRange(start: today, end: today);
   }
 }

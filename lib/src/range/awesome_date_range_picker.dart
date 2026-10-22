@@ -7,6 +7,7 @@ import 'package:awesome_datetime_picker/src/date/awesome_date_picker.dart';
 import 'package:awesome_datetime_picker/src/date/awesome_date_picker_controller.dart';
 import 'package:awesome_datetime_picker/src/date/awesome_date_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/range/awesome_date_range_picker_controller.dart';
+import 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';
 import 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,7 @@ class AwesomeDateRangePicker extends StatefulWidget {
     this.selectableDayPredicate,
     this.showWeekday = false,
     this.showDisabledValues = false,
+    this.semanticLabels,
     this.disabledTextStyle,
     this.theme,
     this.startLabel,
@@ -93,8 +95,8 @@ class AwesomeDateRangePicker extends StatefulWidget {
   })  : assert(minLength >= 0, 'minLength cannot be negative'),
         assert(maxLength == null || maxLength >= minLength,
             'maxLength must not be smaller than minLength'),
-        assert(dateFormat.hasDay,
-            'AwesomeDateRangePicker needs a date format with a day wheel'),
+        assert(dateFormat.hasDay && dateFormat.hasYear,
+            'AwesomeDateRangePicker needs a date format with a day and a year wheel'),
         assert(
           ValidationUtils.isValidDateRange(minDate: minDate, maxDate: maxDate),
           'minDate must be before maxDate',
@@ -170,6 +172,17 @@ class AwesomeDateRangePicker extends StatefulWidget {
 
   /// Text style of the dimmed values shown with [showDisabledValues].
   final TextStyle? disabledTextStyle;
+
+  /// The words a screen reader announces for each wheel before its value,
+  /// such as "Day, 15". By default they are in the language of [locale] (or
+  /// [localeName]) when it is one of the built-in languages, and in English
+  /// otherwise. The properties you give replace the built-in words. See
+  /// [AwesomeSemanticLabels].
+  ///
+  /// Each wheel is announced with a prefix saying which date it belongs to:
+  /// "Start date, Day" and "End date, Day" (see
+  /// [AwesomeSemanticLabels.startDate] and [AwesomeSemanticLabels.endDate]).
+  final AwesomeSemanticLabels? semanticLabels;
 
   /// The theme of the wheels (year, month and day), applied to both dates.
   final AwesomeDatePickerTheme? theme;
@@ -359,8 +372,7 @@ class _AwesomeDateRangePickerState extends State<AwesomeDateRangePicker> {
   }
 
   AwesomeDateRange _today(int length) {
-    final now = DateTime.now();
-    final today = AwesomeDate(year: now.year, month: now.month, day: now.day);
+    final today = AwesomeDate.today();
     return AwesomeDateRange(start: today, end: _addDays(today, length));
   }
 
@@ -508,6 +520,12 @@ class _AwesomeDateRangePickerState extends State<AwesomeDateRangePicker> {
   @override
   Widget build(BuildContext context) {
     final (endMin, endMax) = _endBounds(_start);
+    // Each wheel says which date it belongs to: "Start date, Day".
+    final labels = AwesomeSemanticLabels.resolve(
+      locale: widget.locale,
+      localeName: widget.localeName,
+      custom: widget.semanticLabels,
+    );
     return Flex(
       direction: widget.direction,
       mainAxisSize: MainAxisSize.min,
@@ -520,6 +538,7 @@ class _AwesomeDateRangePickerState extends State<AwesomeDateRangePicker> {
             controller: _startController,
             minDate: _minDate,
             maxDate: _lastStart,
+            semanticLabels: labels.prefixed(labels.startDate!),
           ),
         ),
         SizedBox(
@@ -533,6 +552,7 @@ class _AwesomeDateRangePickerState extends State<AwesomeDateRangePicker> {
             controller: _endController,
             minDate: endMin,
             maxDate: endMax,
+            semanticLabels: labels.prefixed(labels.endDate!),
           ),
         ),
       ],
@@ -549,8 +569,10 @@ class _AwesomeDateRangePickerState extends State<AwesomeDateRangePicker> {
     required AwesomeDatePickerController controller,
     required AwesomeDate minDate,
     required AwesomeDate maxDate,
+    required AwesomeSemanticLabels semanticLabels,
   }) {
     return AwesomeDatePicker(
+      semanticLabels: semanticLabels,
       key: key,
       controller: controller,
       minDate: minDate,

@@ -1,6 +1,4 @@
-import 'package:awesome_datetime_picker/src/core/models/awesome_date.dart';
 import 'package:awesome_datetime_picker/src/core/models/awesome_datetime.dart';
-import 'package:awesome_datetime_picker/src/core/models/awesome_time.dart';
 import 'package:flutter/foundation.dart';
 
 /// Reads and drives the selection of an [AwesomeDateTimePicker] from code.
@@ -35,23 +33,13 @@ import 'package:flutter/foundation.dart';
 class AwesomeDateTimePickerController extends ValueNotifier<AwesomeDateTime> {
   /// Creates a controller starting at [initialValue] (default: now).
   AwesomeDateTimePickerController({AwesomeDateTime? initialValue})
-      : this._(initialValue ?? _now());
+      : this._(initialValue ?? AwesomeDateTime.now());
 
-  AwesomeDateTimePickerController._(AwesomeDateTime initialValue)
-      : initialValue = initialValue,
-        super(initialValue);
+  AwesomeDateTimePickerController._(super.value) : initialValue = value;
 
   /// The date-time this controller started with, restored by [reset].
   final AwesomeDateTime initialValue;
 
   /// Sets [value] back to [initialValue].
   void reset() => value = initialValue;
-
-  static AwesomeDateTime _now() {
-    final now = DateTime.now();
-    return AwesomeDateTime(
-      date: AwesomeDate(year: now.year, month: now.month, day: now.day),
-      time: AwesomeTime(hour: now.hour, minute: now.minute),
-    );
-  }
 }

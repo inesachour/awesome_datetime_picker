@@ -31,20 +31,13 @@ import 'package:flutter/foundation.dart';
 class AwesomeDatePickerController extends ValueNotifier<AwesomeDate> {
   /// Creates a controller starting at [initialValue] (default: today).
   AwesomeDatePickerController({AwesomeDate? initialValue})
-      : this._(initialValue ?? _today());
+      : this._(initialValue ?? AwesomeDate.today());
 
-  AwesomeDatePickerController._(AwesomeDate initialValue)
-      : initialValue = initialValue,
-        super(initialValue);
+  AwesomeDatePickerController._(super.value) : initialValue = value;
 
   /// The date this controller started with, restored by [reset].
   final AwesomeDate initialValue;
 
   /// Sets [value] back to [initialValue].
   void reset() => value = initialValue;
-
-  static AwesomeDate _today() {
-    final now = DateTime.now();
-    return AwesomeDate(year: now.year, month: now.month, day: now.day);
-  }
 }

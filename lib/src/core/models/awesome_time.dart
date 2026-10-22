@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show TimeOfDay;
 
 /// An immutable time of day (hour, minute and optionally second) on a 24-hour
 /// clock.
@@ -27,6 +28,25 @@ class AwesomeTime implements Comparable<AwesomeTime> {
   })  : assert(hour >= 0 && hour <= 23, 'hour must be between 0 and 23'),
         assert(minute >= 0 && minute <= 59, 'minute must be between 0 and 59'),
         assert(second >= 0 && second <= 59, 'second must be between 0 and 59');
+
+  /// Creates the time of day of [dateTime], with its seconds (its date is
+  /// ignored).
+  factory AwesomeTime.fromDateTime(DateTime dateTime) => AwesomeTime(
+        hour: dateTime.hour,
+        minute: dateTime.minute,
+        second: dateTime.second,
+      );
+
+  /// Creates the time of day of Flutter's [timeOfDay], with 0 seconds.
+  factory AwesomeTime.fromTimeOfDay(TimeOfDay timeOfDay) =>
+      AwesomeTime(hour: timeOfDay.hour, minute: timeOfDay.minute);
+
+  /// Creates the current time of day, in the local time zone.
+  factory AwesomeTime.now() => AwesomeTime.fromDateTime(DateTime.now());
+
+  /// Converts to Flutter's [TimeOfDay]. A [TimeOfDay] has no seconds, so
+  /// [second] is dropped.
+  TimeOfDay toTimeOfDay() => TimeOfDay(hour: hour, minute: minute);
 
   /// Create a copy with optional field updates
   AwesomeTime copyWith({

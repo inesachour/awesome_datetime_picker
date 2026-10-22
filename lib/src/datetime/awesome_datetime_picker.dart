@@ -1,9 +1,17 @@
-import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+import 'package:awesome_datetime_picker/src/core/data/format.dart';
+import 'package:awesome_datetime_picker/src/core/data/locale.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_date.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_datetime.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/core/utils/validation_utils.dart';
-import 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
+import 'package:awesome_datetime_picker/src/date/awesome_date_picker.dart';
 import 'package:awesome_datetime_picker/src/date/awesome_date_picker_controller.dart';
 import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_controller.dart';
+import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_theme.dart';
 import 'package:awesome_datetime_picker/src/datetime/datetime_picker_logic.dart';
+import 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';
+import 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
+import 'package:awesome_datetime_picker/src/time/awesome_time_picker.dart';
 import 'package:awesome_datetime_picker/src/time/awesome_time_picker_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -66,6 +74,7 @@ class AwesomeDateTimePicker extends StatefulWidget {
     this.excludedWeekdays,
     this.showWeekday = false,
     this.showDisabledValues = false,
+    this.semanticLabels,
     this.localeName,
     this.disabledTextStyle,
     this.excludedDates,
@@ -176,6 +185,13 @@ class AwesomeDateTimePicker extends StatefulWidget {
   /// theme's `disabledTextStyle` of the wheel.
   final TextStyle? disabledTextStyle;
 
+  /// The words a screen reader announces for each wheel before its value,
+  /// such as "Day, 15". By default they are in the language of [locale] (or
+  /// [localeName]) when it is one of the built-in languages, and in English
+  /// otherwise. The properties you give replace the built-in words. See
+  /// [AwesomeSemanticLabels].
+  final AwesomeSemanticLabels? semanticLabels;
+
   /// Name of any locale known by `package:intl` (e.g. `'pt_BR'`, `'ja'`,
   /// `'ar_EG'`). It replaces [locale] and localizes the month names, the
   /// weekday names of [showWeekday], the AM/PM markers and the digits of the
@@ -249,9 +265,9 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
   void initState() {
     super.initState();
     assert(
-      widget.dateFormat.hasDay,
-      'AwesomeDateTimePicker needs a date format with a day wheel; '
-      'use AwesomeDatePicker for month and year only',
+      widget.dateFormat.hasDay && widget.dateFormat.hasYear,
+      'AwesomeDateTimePicker needs a date format with a day and a year wheel; '
+      'use AwesomeDatePicker for formats without one',
     );
     assert(
       ValidationUtils.isValidDateTimeRange(
@@ -339,12 +355,12 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
   DateTimePickerLogic _createLogic({AwesomeDateTime? initialDateTime}) {
     return DateTimePickerLogic(
       minDateTime: widget.minDateTime ??
-          AwesomeDateTime(
+          const AwesomeDateTime(
               date: AwesomeDate(year: 1900, month: 1, day: 1),
-              time: const AwesomeTime(hour: 0, minute: 0)),
+              time: AwesomeTime(hour: 0, minute: 0)),
       maxDateTime: widget.maxDateTime ??
           AwesomeDateTime(
-              date: AwesomeDate(year: 2100, month: 12, day: 31),
+              date: const AwesomeDate(year: 2100, month: 12, day: 31),
               time: AwesomeTime(
                   hour: 23,
                   minute: 59,
@@ -432,6 +448,12 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
 
   @override
   Widget build(BuildContext context) {
+    // Resolved here, once, so that both halves announce the same language.
+    final semanticLabels = AwesomeSemanticLabels.resolve(
+      locale: widget.locale,
+      localeName: widget.localeName,
+      custom: widget.semanticLabels,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -455,6 +477,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           showDisabledValues: widget.showDisabledValues,
           disabledTextStyle: widget.disabledTextStyle,
           localeName: widget.localeName,
+          semanticLabels: semanticLabels,
           excludedDates: widget.excludedDates,
           selectableDayPredicate: widget.selectableDayPredicate,
           looping: widget.looping,
@@ -483,6 +506,7 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           showDisabledValues: widget.showDisabledValues,
           disabledTextStyle: widget.disabledTextStyle,
           localeName: widget.localeName,
+          semanticLabels: semanticLabels,
           looping: widget.looping,
           enableHapticFeedback: widget.enableHapticFeedback,
           wheelStyle: widget.wheelStyle,

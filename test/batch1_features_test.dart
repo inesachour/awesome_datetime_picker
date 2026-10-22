@@ -336,8 +336,8 @@ void main() {
     });
 
     testWidgets('is passed through by the date-time picker', (t) async {
-      await t.pumpWidget(wrap(AwesomeDateTimePicker(
-        wheelStyle: const AwesomeWheelStyle(diameterRatio: 4),
+      await t.pumpWidget(wrap(const AwesomeDateTimePicker(
+        wheelStyle: AwesomeWheelStyle(diameterRatio: 4),
       )));
       for (final wheel in t
           .widgetList<ListWheelScrollView>(find.byType(ListWheelScrollView))) {

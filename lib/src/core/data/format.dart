@@ -25,6 +25,7 @@ enum AwesomeDateFormat {
   ///
   /// The selected date is the first day of the chosen month. Day exclusions
   /// do not apply.
+  // ignore: constant_identifier_names
   MMy([PickerType.month_text, PickerType.year]),
 
   /// Year, Month (number) format without a day wheel (e.g., 2023/05).
@@ -37,7 +38,37 @@ enum AwesomeDateFormat {
   ///
   /// The selected date is the first day of the chosen month. Day exclusions
   /// do not apply.
-  yMM([PickerType.year, PickerType.month_text]);
+  yMM([PickerType.year, PickerType.month_text]),
+
+  /// Day, Month (number) format without a year wheel (e.g., 12/05).
+  ///
+  /// For birthdays and dates that repeat every year. The year stays the one of
+  /// the initial date (2000, a leap year, when there is none) so that
+  /// 29 February can be selected. Limits and day exclusions do not apply.
+  dM([PickerType.day, PickerType.month_number]),
+
+  /// Day, Month (text) format without a year wheel (e.g., 12 May).
+  ///
+  /// For birthdays and dates that repeat every year. The year stays the one of
+  /// the initial date (2000, a leap year, when there is none) so that
+  /// 29 February can be selected. Limits and day exclusions do not apply.
+  dMM([PickerType.day, PickerType.month_text]),
+
+  /// Month (number), Day format without a year wheel (e.g., 05/12).
+  ///
+  /// For birthdays and dates that repeat every year. The year stays the one of
+  /// the initial date (2000, a leap year, when there is none) so that
+  /// 29 February can be selected. Limits and day exclusions do not apply.
+  // ignore: constant_identifier_names
+  Md([PickerType.month_number, PickerType.day]),
+
+  /// Month (text), Day format without a year wheel (e.g., May 12).
+  ///
+  /// For birthdays and dates that repeat every year. The year stays the one of
+  /// the initial date (2000, a leap year, when there is none) so that
+  /// 29 February can be selected. Limits and day exclusions do not apply.
+  // ignore: constant_identifier_names
+  MMd([PickerType.month_text, PickerType.day]);
 
   /// The wheels to display, in order from left to right.
   final List<PickerType> value;
@@ -45,6 +76,10 @@ enum AwesomeDateFormat {
   /// Whether this format shows a day wheel. Formats without one select whole
   /// months: the value is the first day of the chosen month.
   bool get hasDay => value.contains(PickerType.day);
+
+  /// Whether this format shows a year wheel. Formats without one (`dM`, `dMM`,
+  /// `Md`, `MMd`) pick a day of the year that repeats: the year stays fixed.
+  bool get hasYear => value.contains(PickerType.year);
 
   /// Creates a date format from the ordered list of wheels it displays.
   const AwesomeDateFormat(this.value);
@@ -56,6 +91,7 @@ enum AwesomeTimeFormat {
   hm([PickerType.hour_12, PickerType.minute, PickerType.am_pm]),
 
   /// 24-hour time format (hour and minute) (e.g., 14:30).
+  // ignore: constant_identifier_names
   Hm([PickerType.hour_24, PickerType.minute]),
 
   /// 12-hour time format with seconds (e.g., 2:30:15 PM).

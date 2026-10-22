@@ -86,11 +86,11 @@ void main() {
   });
 
   testWidgets('AwesomeDateTimePicker asserts on a reversed range', (t) async {
-    await t.pumpWidget(wrap(AwesomeDateTimePicker(
-      minDateTime: const AwesomeDateTime(
+    await t.pumpWidget(wrap(const AwesomeDateTimePicker(
+      minDateTime: AwesomeDateTime(
           date: AwesomeDate(year: 2025, month: 12, day: 31),
           time: AwesomeTime(hour: 0, minute: 0)),
-      maxDateTime: const AwesomeDateTime(
+      maxDateTime: AwesomeDateTime(
           date: AwesomeDate(year: 2025, month: 1, day: 1),
           time: AwesomeTime(hour: 0, minute: 0)),
     )));
@@ -123,7 +123,7 @@ void layoutTests() {
       t.view.physicalSize = const Size(1170, 2532);
       t.view.devicePixelRatio = 3;
       addTearDown(t.view.reset);
-      await t.pumpWidget(wrap(AwesomeDateTimePicker()));
+      await t.pumpWidget(wrap(const AwesomeDateTimePicker()));
       expect(t.getSize(find.byType(AwesomeDateTimePicker)).height, 200);
     });
   });

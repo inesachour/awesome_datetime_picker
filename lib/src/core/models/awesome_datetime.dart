@@ -19,6 +19,15 @@ class AwesomeDateTime {
     required this.time,
   });
 
+  /// Creates the date and time of [dateTime], with its seconds.
+  factory AwesomeDateTime.fromDateTime(DateTime dateTime) => AwesomeDateTime(
+        date: AwesomeDate.fromDateTime(dateTime),
+        time: AwesomeTime.fromDateTime(dateTime),
+      );
+
+  /// Creates the current date and time, in the local time zone.
+  factory AwesomeDateTime.now() => AwesomeDateTime.fromDateTime(DateTime.now());
+
   /// Create a copy with optional field updates
   AwesomeDateTime copyWith({
     AwesomeDate? date,

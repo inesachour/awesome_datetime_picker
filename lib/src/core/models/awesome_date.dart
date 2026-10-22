@@ -22,6 +22,17 @@ class AwesomeDate {
   })  : assert(month >= 1 && month <= 12, 'month must be between 1 and 12'),
         assert(day >= 1 && day <= 31, 'day must be between 1 and 31');
 
+  /// Creates the date of the calendar day of [dateTime] (its time of day is
+  /// ignored).
+  factory AwesomeDate.fromDateTime(DateTime dateTime) => AwesomeDate(
+        year: dateTime.year,
+        month: dateTime.month,
+        day: dateTime.day,
+      );
+
+  /// Creates today's date, in the local time zone.
+  factory AwesomeDate.today() => AwesomeDate.fromDateTime(DateTime.now());
+
   /// Create a copy with optional field updates
   AwesomeDate copyWith({
     int? year,

@@ -118,7 +118,7 @@ void main() {
 
     testWidgets('the date-time picker needs a day wheel', (t) async {
       await t.pumpWidget(
-          wrap(AwesomeDateTimePicker(dateFormat: AwesomeDateFormat.My)));
+          wrap(const AwesomeDateTimePicker(dateFormat: AwesomeDateFormat.My)));
       expect(t.takeException(), isA<AssertionError>());
     });
   });

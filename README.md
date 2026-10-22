@@ -13,11 +13,11 @@ iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-ti
 - **Five pickers**: date, time, date-time, date range, and the `showAwesome...Picker` functions that open any of them in a bottom sheet or a dialog with Cancel and Done.
 - **Limits and exclusions**: minimum and maximum, excluded weekdays, specific dates (holidays), hours, or any rule through a predicate. Excluded values are removed from the wheels, or shown dimmed.
 - **Time your way**: 12-hour or 24-hour clock, optional seconds, and minute and second intervals (every 5, 15, 30 minutes...).
-- **More date formats**: day-month-year in any order, month and year only (card expiry), weekday labels ("Mon 12").
+- **More date formats**: day-month-year in any order, month and year only (card expiry), day and month only (birthdays), weekday labels ("Mon 12").
 - **Localization**: six built-in languages, and any language of [`intl`](https://pub.dev/packages/intl) with its own digits (`fa`, `ar_EG`, ...).
-- **Light and dark** automatically; per-wheel themes, wheel curvature, magnification, custom selector, looping wheels, haptic feedback.
+- **Light and dark** automatically; per-wheel themes, style presets (`ios`, `material`, `minimal`), wheel curvature, magnification, custom selector, looping wheels, haptic feedback, large-text support.
 - **Controllers** (like `TextEditingController`) to read and set the selection from code.
-- **Accessible and cross-platform**: screen readers can adjust each wheel, and wheels can be dragged with a mouse or trackpad on the web and on desktop.
+- **Accessible and cross-platform**: screen readers announce and adjust each wheel ("Day, 15"), the keyboard works on every wheel, and wheels can be dragged with a mouse or trackpad on the web and on desktop.
 
 ## Gallery
 
@@ -41,6 +41,10 @@ iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-ti
   <tr>
     <td align="center"><img src="doc/images/time_picker_seconds.png" alt="Time picker with seconds" width="260"><br><sub>With seconds</sub></td>
     <td align="center"><img src="doc/images/localization.png" alt="Date pickers in French, Spanish and German" width="260"><br><sub>Localization</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="doc/images/wheel_presets.png" alt="The default look and the ios, material and minimal presets" width="260"><br><sub>Style presets</sub></td>
+    <td></td>
   </tr>
 </table>
 
@@ -122,6 +126,16 @@ print(controller.value); // always what the wheels show
 
 The value types are small immutable classes: `AwesomeDate(year:, month:, day:)`, `AwesomeTime(hour:, minute:, second:)` (24-hour clock, `second` defaults to 0), `AwesomeDateTime(date:, time:)` and `AwesomeDateRange(start:, end:)`. All have `copyWith`, `==`, and `toDateTime()` where it makes sense; `AwesomeDateRange` also has `lengthInDays` and `contains(date)`.
 
+They convert to and from Flutter's own types:
+
+```dart
+AwesomeDate.today();                         AwesomeDate.fromDateTime(DateTime.now());
+AwesomeTime.now();                           AwesomeTime.fromDateTime(dateTime);
+AwesomeTime.fromTimeOfDay(timeOfDay);        awesomeTime.toTimeOfDay();      // drops the seconds
+AwesomeDateTime.now();                       AwesomeDateTime.fromDateTime(dateTime);
+awesomeDate.toDateTime();                    awesomeDateTime.toDateTime();
+```
+
 ### The date-time picker
 
 The times offered depend on the selected date: on the day of `minDateTime` only times from its time are offered, on the day of `maxDateTime` only times up to its time, and any time in between.
@@ -183,6 +197,7 @@ A ✓ means the picker has the option. The API documentation describes each one 
 | `backgroundColor`, `selectorColor`, `fadeEffect`, `selectedTextStyle`, `unselectedTextStyle` | ✓ | ✓ | ✓ | ✓ | Colors and text. |
 | `visibleItemCount`, `itemHeight`, `itemWidth` | ✓ | ✓ | ✓ | ✓ | Size of the wheels. |
 | `looping`, `enableHapticFeedback`, `wheelStyle` | ✓ | ✓ | ✓ | ✓ | Wrap-around, haptics, curvature and selector shape. |
+| `semanticLabels` | ✓ | ✓ | ✓ | ✓ | What screen readers announce for each wheel ("Day", "Hour"...). |
 
 ## Showing a picker in a modal
 
@@ -307,8 +322,12 @@ AwesomeTimePicker(
 | `yMMd` | 2025 January 1 | the date |
 | `My`, `MMy` | 1 / 2025, January 2025 | the 1st of the month |
 | `yM`, `yMM` | 2025 / 1, 2025 January | the 1st of the month |
+| `dM`, `dMM` | 12 / 5, 12 May | a day of a fixed year |
+| `Md`, `MMd` | 5 / 12, May 12 | a day of a fixed year |
 
-The formats without a day wheel select a whole month (card expiry, billing month): the limits count as whole months, and day exclusions do not apply. `AwesomeDateTimePicker` and `AwesomeDateRangePicker` need a format with a day wheel.
+- The formats **without a day wheel** select a whole month (card expiry, billing month): the limits count as whole months, and day exclusions do not apply.
+- The formats **without a year wheel** pick a day that repeats every year, such as a birthday. The year of the value stays the one of the initial date (or of the controller), and is 2000, a leap year, when there is none, so that 29 February can be selected. Limits, day exclusions and `showWeekday` do not apply, since they depend on the year.
+- `AwesomeDateTimePicker` and `AwesomeDateRangePicker` need a format with both a day and a year wheel.
 
 `showWeekday: true` shows the weekday on the day wheel (`Mon 12`). The value is still a plain `AwesomeDate`.
 
@@ -394,12 +413,29 @@ AwesomeTimePicker(
 | `overAndUnderCenterOpacity` | Opacity of the items around the selection, 0 to 1 (default 1) |
 | `selectorBorderRadius` | Corner radius of the selector |
 | `selectorDecoration` | Fully custom selector; replaces `selectorColor` and the radius |
+| `focusColor` | Color of the outline of the wheel that has the keyboard focus (default: the theme's primary color) |
+
+Three presets are a ready-made starting point, and `copyWith` adjusts them:
+
+```dart
+AwesomeDatePicker(wheelStyle: AwesomeWheelStyle.ios())          // curved wheel, rounded selector
+AwesomeDatePicker(wheelStyle: AwesomeWheelStyle.material())     // flat wheel, pill selector
+AwesomeDatePicker(wheelStyle: AwesomeWheelStyle.minimal())      // flat wheel, a line above and below
+AwesomeDatePicker(wheelStyle: AwesomeWheelStyle.ios().copyWith(magnification: 1.2))
+```
+
+<p align="center">
+  <img src="doc/images/wheel_presets.png" alt="The default look and the ios, material and minimal presets" width="300">
+</p>
+
+`ios()` uses the values of Flutter's `CupertinoPicker`. `copyWith` replaces the properties you give; it cannot reset one to "unset".
 
 ### Behavior options
 
 - `looping: true` makes the day, month, hour, minute and second wheels wrap around. It does not carry over (59 to 00 keeps the same hour). The year and AM/PM wheels never loop.
 - `enableHapticFeedback: true` plays a light tick while the user drags a wheel. It stays silent for programmatic changes and screen-reader actions.
 - Wheels have a default width that depends on the screen (bounded, wider for month names); `itemWidth` or `ItemTheme.width` overrides it.
+- **Large text**: when the user raises the system font size, the default item height grows with it (up to 2x) so the numbers are not clipped. Widths do not grow, so that several wheels keep fitting the screen; text that is too big for its wheel shrinks to fit instead of being cut. A size you set (`itemHeight`, `itemWidth`, `ItemTheme`) is used as it is.
 
 ## Behavior to know about
 
@@ -410,9 +446,38 @@ AwesomeTimePicker(
 
 ## Accessibility and platforms
 
-- Each wheel is exposed to screen readers as one adjustable value: it announces the selected item and supports the increase and decrease actions, skipping dimmed values. It does not announce a label such as "Day" or "Month" yet.
+### Screen readers
+
+Each wheel is one adjustable control. A screen reader announces its name and its value ("Day, 15", "Hour, 09"), and supports the increase and decrease actions, which skip dimmed values. The date-range picker says which date a wheel belongs to ("Start date, Day").
+
+The names are built in for English, French, German, Spanish, Italian and Arabic, following the picker's `locale` or `localeName`; any other language is announced in English. Pass `semanticLabels` for other words or languages: the labels you leave out keep the built-in ones.
+
+```dart
+AwesomeDatePicker(
+  localeName: 'pt_BR',
+  semanticLabels: AwesomeSemanticLabels(day: 'Dia', month: 'Mês', year: 'Ano'),
+)
+```
+
+(The built-in translations were written without a native speaker's review for every language: please tell us if a word should be better.)
+
+### Keyboard
+
+Every wheel can be used without a mouse or a touch screen. Tab (and Shift+Tab) moves between the wheels, and the focused wheel is outlined.
+
+| Key | Action |
+|-----|--------|
+| Up / Down | Previous / next value |
+| Page Up / Page Down | One page (visible items minus one) backward / forward |
+| Home / End | First / last value |
+| Left / Right | Move the focus to the wheel on the left / right |
+
+Dimmed values are skipped, a looping wheel wraps around, and quick presses add up. A mouse click focuses the wheel it lands on; a touch does not, so scrolling a picker never takes the focus away from a text field.
+
+### Platforms
+
 - On the web and on desktop the wheels can be dragged with a mouse or trackpad as well as with touch.
-- Not yet supported: keyboard navigation between and within wheels.
+- The keyboard behavior is covered by automated tests with simulated key events. It has not been tried on every browser and desktop operating system.
 
 ## Upgrading from 0.1.x
 
@@ -420,6 +485,7 @@ The API is backward compatible, but a few defaults changed on purpose:
 
 - With no `initial...` value, pickers now start on **today** (within the limits), as documented, instead of on the minimum.
 - Minutes (and 24-hour hours) are shown **zero-padded**: `09:05`, not `9:5`.
+- The default item height now follows the system text size (up to 2x), and text too big for its wheel shrinks to fit instead of being cut with "...".
 - The default wheel width is bounded (56 to 90 logical pixels, and 110 to 160 for month names) and wheels no longer stretch to fill a tall parent: `Center(child: AwesomeDatePicker())` now really centers it.
 - `AwesomeTimePickerTheme.ampmTheme` is now applied to the AM/PM wheel (it falls back to `hourTheme`, so existing themes keep working).
 - Default colors follow the theme brightness; the light look is unchanged.

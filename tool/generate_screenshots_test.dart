@@ -159,6 +159,37 @@ void main() {
         ));
   });
 
+  testWidgets('wheel style presets', (t) async {
+    Widget preset(String name, AwesomeWheelStyle? style) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            _Label(name),
+            AwesomeTimePicker(
+              timeFormat: AwesomeTimeFormat.hm,
+              initialTime: const AwesomeTime(hour: 9, minute: 41),
+              itemWidth: 48,
+              wheelStyle: style,
+            ),
+          ]),
+        );
+    await _shot(
+      t,
+      'wheel_presets',
+      Column(mainAxisSize: MainAxisSize.min, children: [
+        Row(mainAxisSize: MainAxisSize.min, children: [
+          preset('default', null),
+          preset('ios()', const AwesomeWheelStyle.ios()),
+        ]),
+        const SizedBox(height: 16),
+        Row(mainAxisSize: MainAxisSize.min, children: [
+          preset('material()', const AwesomeWheelStyle.material()),
+          preset('minimal()', const AwesomeWheelStyle.minimal()),
+        ]),
+      ]),
+      height: 1000,
+    );
+  });
+
   testWidgets('modal sheet', (t) async {
     _phone(t);
     final boundary = GlobalKey();
@@ -251,18 +282,18 @@ void main() {
 
 // ===== Pickers shown in several images =====
 
-Widget _dateTimePicker() => AwesomeDateTimePicker(
+Widget _dateTimePicker() => const AwesomeDateTimePicker(
       dateFormat: AwesomeDateFormat.dMy,
       timeFormat: AwesomeTimeFormat.Hm,
-      minDateTime: const AwesomeDateTime(
+      minDateTime: AwesomeDateTime(
         date: AwesomeDate(year: 2020, month: 1, day: 1),
         time: AwesomeTime(hour: 0, minute: 0),
       ),
-      maxDateTime: const AwesomeDateTime(
+      maxDateTime: AwesomeDateTime(
         date: AwesomeDate(year: 2030, month: 12, day: 31),
         time: AwesomeTime(hour: 23, minute: 59),
       ),
-      initialDateTime: const AwesomeDateTime(
+      initialDateTime: AwesomeDateTime(
         date: AwesomeDate(year: 2025, month: 3, day: 14),
         time: AwesomeTime(hour: 10, minute: 25),
       ),
@@ -313,8 +344,9 @@ Future<void> _shot(
   String name,
   Widget picker, {
   bool dark = false,
+  double height = 844,
 }) async {
-  _phone(t);
+  _phone(t, height: height);
   final boundary = GlobalKey();
   final background = dark ? _darkBackground : _lightBackground;
   await t.pumpWidget(_app(

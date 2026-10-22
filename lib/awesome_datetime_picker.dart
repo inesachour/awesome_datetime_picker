@@ -37,3 +37,4 @@ export 'package:awesome_datetime_picker/src/core/models/awesome_date_range.dart'
 export 'package:awesome_datetime_picker/src/range/awesome_date_range_picker.dart';
 export 'package:awesome_datetime_picker/src/range/awesome_date_range_picker_controller.dart';
 export 'package:awesome_datetime_picker/src/modal/awesome_picker_modal.dart';
+export 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';

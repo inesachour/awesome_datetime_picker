@@ -1,6 +1,7 @@
 import 'package:awesome_datetime_picker/src/time/awesome_time_picker_controller.dart';
 import 'package:awesome_datetime_picker/src/time/time_picker_logic.dart';
 import 'package:awesome_datetime_picker/src/core/data/format.dart';
+import 'package:awesome_datetime_picker/src/core/data/locale.dart';
 import 'package:awesome_datetime_picker/src/core/data/picker_type.dart';
 import 'package:awesome_datetime_picker/src/core/models/awesome_time.dart';
 import 'package:awesome_datetime_picker/src/time/awesome_time_picker_theme.dart';
@@ -8,6 +9,7 @@ import 'package:awesome_datetime_picker/src/shared/item_theme.dart';
 import 'package:awesome_datetime_picker/src/core/utils/awesome_intl.dart';
 import 'package:awesome_datetime_picker/src/core/utils/awesome_time_utils.dart';
 import 'package:awesome_datetime_picker/src/core/utils/validation_utils.dart';
+import 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';
 import 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
 import 'package:awesome_datetime_picker/src/shared/custom_item_picker_style.dart';
 import 'package:awesome_datetime_picker/src/shared/picker_wheel.dart';
@@ -67,6 +69,7 @@ class AwesomeTimePicker extends StatefulWidget {
     this.excludedHours,
     this.minuteInterval = 1,
     this.showDisabledValues = false,
+    this.semanticLabels,
     this.localeName,
     this.disabledTextStyle,
     this.secondInterval = 1,
@@ -158,6 +161,13 @@ class AwesomeTimePicker extends StatefulWidget {
   /// (default: the unselected style at reduced opacity). Overridden by the
   /// theme's `disabledTextStyle` of the wheel.
   final TextStyle? disabledTextStyle;
+
+  /// The words a screen reader announces for each wheel before its value,
+  /// such as "Day, 15". By default they are in the language of [localeName] when
+  /// it is one of the built-in languages, and in English otherwise. The
+  /// properties you give replace the built-in words. See
+  /// [AwesomeSemanticLabels].
+  final AwesomeSemanticLabels? semanticLabels;
 
   /// Name of any locale known by `package:intl` (e.g. `'ja'`, `'ar'`,
   /// `'fa'`). It localizes the AM/PM markers of the 12-hour formats and the
@@ -380,6 +390,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           theme: widget.theme?.hourTheme,
           onChanged: _logic.onSelectedAmPmHourChanged,
           canLoop: true,
+          semanticLabel: _semanticLabels.hour,
         );
       case PickerType.hour_24:
         return _buildItemPicker(
@@ -390,6 +401,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           theme: widget.theme?.hourTheme,
           onChanged: _logic.onSelectedHourChanged,
           canLoop: true,
+          semanticLabel: _semanticLabels.hour,
         );
       case PickerType.minute:
         return _buildItemPicker(
@@ -403,6 +415,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           theme: widget.theme?.minuteTheme,
           onChanged: _logic.onSelectedMinuteChanged,
           canLoop: true,
+          semanticLabel: _semanticLabels.minute,
         );
       case PickerType.second:
         return _buildItemPicker(
@@ -419,6 +432,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           theme: widget.theme?.secondTheme ?? widget.theme?.minuteTheme,
           onChanged: _logic.onSelectedSecondChanged,
           canLoop: true,
+          semanticLabel: _semanticLabels.second,
         );
       case PickerType.am_pm:
         return _buildItemPicker(
@@ -428,11 +442,18 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
           // Falls back to the hour theme so existing styling keeps applying.
           theme: widget.theme?.ampmTheme ?? widget.theme?.hourTheme,
           onChanged: _logic.onSelectedAmPmChanged,
+          semanticLabel: _semanticLabels.amPm,
         );
       default:
         return const SizedBox.shrink();
     }
   }
+
+  AwesomeSemanticLabels get _semanticLabels => AwesomeSemanticLabels.resolve(
+        locale: LocaleType.en,
+        localeName: widget.localeName,
+        custom: widget.semanticLabels,
+      );
 
   /// Localized AM/PM markers for the AM/PM wheel items, or null without a
   /// `localeName`.
@@ -460,6 +481,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
     required ValueChanged<String> onChanged,
     bool canLoop = false,
     Set<int> disabledIndices = const {},
+    String? semanticLabel,
   }) {
     return buildPickerWheel(
       key: key,
@@ -483,6 +505,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
       onChanged: onChanged,
       looping: canLoop && widget.looping,
       hapticFeedback: widget.enableHapticFeedback,
+      semanticLabel: semanticLabel,
     );
   }
 }

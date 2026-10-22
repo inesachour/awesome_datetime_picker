@@ -20,6 +20,7 @@ Widget buildPickerWheel({
   bool wide = false,
   bool looping = false,
   bool hapticFeedback = false,
+  String? semanticLabel,
 }) {
   return CustomItemPicker(
     key: key,
@@ -44,5 +45,6 @@ Widget buildPickerWheel({
     wide: wide,
     looping: looping,
     hapticFeedback: hapticFeedback,
+    semanticLabel: semanticLabel,
   );
 }

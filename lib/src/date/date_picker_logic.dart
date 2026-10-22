@@ -30,6 +30,19 @@ class DatePickerLogic extends ChangeNotifier {
   /// Whether the picker has a day wheel. Without one, whole months are
   /// selected and the selected date is always the first day of the month.
   final bool hasDayWheel;
+
+  /// Whether the picker has a year wheel. Without one the year never changes:
+  /// it is the year of the initial date, or [referenceYear] without one, and
+  /// the limits and the day exclusions do not apply.
+  final bool hasYearWheel;
+
+  /// The year used by a picker without a year wheel when there is no initial
+  /// date: a leap year, so that 29 February can be selected.
+  static const int referenceYear = 2000;
+
+  /// The fixed year of a picker without a year wheel; null otherwise.
+  final int? _pinnedYear;
+
   final List<int>? excludedWeekdays;
   final List<AwesomeDate>? excludedDates;
   final bool Function(AwesomeDate date)? selectableDayPredicate;
@@ -59,22 +72,33 @@ class DatePickerLogic extends ChangeNotifier {
     List<String>? monthNames,
     AwesomeDate? initialDate,
     this.hasDayWheel = true,
+    this.hasYearWheel = true,
     List<int>? excludedWeekdays,
     List<AwesomeDate>? excludedDates,
     bool Function(AwesomeDate date)? selectableDayPredicate,
   })  : _monthNames = monthNames ?? AwesomeDateUtils.getMonthNames(locale),
-        minDate = _firstOfMonthUnless(hasDayWheel, minDate),
-        maxDate = _firstOfMonthUnless(hasDayWheel, maxDate),
-        // Day exclusions have no meaning when there is no day to exclude.
-        excludedWeekdays = hasDayWheel ? excludedWeekdays : null,
-        excludedDates = hasDayWheel ? excludedDates : null,
-        selectableDayPredicate = hasDayWheel ? selectableDayPredicate : null,
+        _pinnedYear =
+            hasYearWheel ? null : (initialDate?.year ?? referenceYear),
+        minDate = _limit(hasDayWheel, hasYearWheel, initialDate, minDate,
+            last: false),
+        maxDate =
+            _limit(hasDayWheel, hasYearWheel, initialDate, maxDate, last: true),
+        // Day exclusions have no meaning when there is no day to exclude, or
+        // no year to know which weekday a date falls on.
+        excludedWeekdays =
+            hasDayWheel && hasYearWheel ? excludedWeekdays : null,
+        excludedDates = hasDayWheel && hasYearWheel ? excludedDates : null,
+        selectableDayPredicate =
+            hasDayWheel && hasYearWheel ? selectableDayPredicate : null,
         _selectedDate = _firstOfMonthUnless(
           hasDayWheel,
           _initialSelection(
             initialDate,
-            _firstOfMonthUnless(hasDayWheel, minDate),
-            _firstOfMonthUnless(hasDayWheel, maxDate),
+            _limit(hasDayWheel, hasYearWheel, initialDate, minDate,
+                last: false),
+            _limit(hasDayWheel, hasYearWheel, initialDate, maxDate, last: true),
+            pinnedYear:
+                hasYearWheel ? null : (initialDate?.year ?? referenceYear),
           ),
         ) {
     assert(
@@ -92,6 +116,23 @@ class DatePickerLogic extends ChangeNotifier {
     }
   }
 
+  /// The first or last date the picker can reach: the requested limit, moved
+  /// to the first day of its month without a day wheel, and to the first or
+  /// last day of the fixed year without a year wheel.
+  static AwesomeDate _limit(
+    bool hasDayWheel,
+    bool hasYearWheel,
+    AwesomeDate? initialDate,
+    AwesomeDate requested, {
+    required bool last,
+  }) {
+    if (!hasYearWheel) {
+      final year = initialDate?.year ?? referenceYear;
+      return AwesomeDate(year: year, month: last ? 12 : 1, day: last ? 31 : 1);
+    }
+    return _firstOfMonthUnless(hasDayWheel, requested);
+  }
+
   static AwesomeDate _firstOfMonthUnless(bool hasDayWheel, AwesomeDate date) =>
       hasDayWheel
           ? date
@@ -99,10 +140,13 @@ class DatePickerLogic extends ChangeNotifier {
 
   /// Uses [initialDate] (default: today), clamped into [min]..[max].
   static AwesomeDate _initialSelection(
-      AwesomeDate? initialDate, AwesomeDate min, AwesomeDate max) {
-    final now = DateTime.now();
+      AwesomeDate? initialDate, AwesomeDate min, AwesomeDate max,
+      {int? pinnedYear}) {
+    // Without a year wheel, "today" is today's month and day in the fixed year.
     final date = initialDate ??
-        AwesomeDate(year: now.year, month: now.month, day: now.day);
+        (pinnedYear == null
+            ? AwesomeDate.today()
+            : AwesomeDate.today().copyWith(year: pinnedYear));
     final dt = date.toDateTime();
     if (dt.isBefore(min.toDateTime())) return min;
     if (dt.isAfter(max.toDateTime())) return max;
@@ -163,6 +207,8 @@ class DatePickerLogic extends ChangeNotifier {
 
   /// Centralized setter
   void _setDate(int year, int month, int day) {
+    // Without a year wheel the year never changes.
+    year = _pinnedYear ?? year;
     final clampedDay = hasDayWheel ? _clampDayToMonth(year, month, day) : 1;
     var newDate = AwesomeDate(year: year, month: month, day: clampedDay);
 

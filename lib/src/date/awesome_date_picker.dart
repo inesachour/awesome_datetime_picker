@@ -9,6 +9,7 @@ import 'package:awesome_datetime_picker/src/shared/item_theme.dart';
 import 'package:awesome_datetime_picker/src/core/utils/awesome_date_utils.dart';
 import 'package:awesome_datetime_picker/src/core/utils/awesome_intl.dart';
 import 'package:awesome_datetime_picker/src/core/utils/validation_utils.dart';
+import 'package:awesome_datetime_picker/src/shared/awesome_semantic_labels.dart';
 import 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
 import 'package:awesome_datetime_picker/src/shared/custom_item_picker_style.dart';
 import 'package:awesome_datetime_picker/src/shared/picker_wheel.dart';
@@ -74,6 +75,7 @@ class AwesomeDatePicker extends StatefulWidget {
     this.excludedWeekdays,
     this.showWeekday = false,
     this.showDisabledValues = false,
+    this.semanticLabels,
     this.disabledTextStyle,
     this.excludedDates,
     this.selectableDayPredicate,
@@ -89,6 +91,7 @@ class AwesomeDatePicker extends StatefulWidget {
         ),
         assert(
           !dateFormat.hasDay ||
+              !dateFormat.hasYear ||
               ValidationUtils.hasSelectableDate(
                   minDate: minDate,
                   maxDate: maxDate,
@@ -125,7 +128,21 @@ class AwesomeDatePicker extends StatefulWidget {
   /// `Localizations.localeOf(context).toString()`.
   final String? localeName;
 
-  /// The format of the date to be displayed in the picker (default [AwesomeDateFormat.dMy]).
+  /// The wheels to display and their order (default [AwesomeDateFormat.dMy]).
+  ///
+  /// Two kinds of formats select less than a full date:
+  ///
+  /// - Without a day wheel ([AwesomeDateFormat.My] and the like) the picker
+  ///   selects a whole month and the value is the first day of that month.
+  /// - Without a year wheel ([AwesomeDateFormat.dM] and the like) the picker
+  ///   selects a day that repeats every year, for example a birthday. The year
+  ///   of the value stays the one of the initial date (or of the controller),
+  ///   and is 2000, a leap year, when there is none, so that 29 February can
+  ///   be selected.
+  ///
+  /// In both cases the day exclusions ([excludedWeekdays], [excludedDates] and
+  /// [selectableDayPredicate]) do not apply; without a year wheel, [minDate]
+  /// and [maxDate] and [showWeekday] do not apply either.
   final AwesomeDateFormat dateFormat;
 
   /// The theme for customizing the appearance of the date picker (year, month, day themes).
@@ -194,6 +211,13 @@ class AwesomeDatePicker extends StatefulWidget {
   /// (default: the unselected style at reduced opacity). Overridden by the
   /// theme's `disabledTextStyle` of the wheel.
   final TextStyle? disabledTextStyle;
+
+  /// The words a screen reader announces for each wheel before its value,
+  /// such as "Day, 15". By default they are in the language of [locale] when
+  /// it is one of the built-in languages, and in English otherwise. The
+  /// properties you give replace the built-in words. See
+  /// [AwesomeSemanticLabels].
+  final AwesomeSemanticLabels? semanticLabels;
 
   /// Specific dates that cannot be selected, e.g. public holidays or days
   /// that are fully booked. Combines with [excludedWeekdays] and
@@ -271,6 +295,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
         oldWidget.locale != widget.locale ||
         oldWidget.localeName != widget.localeName ||
         oldWidget.dateFormat.hasDay != widget.dateFormat.hasDay ||
+        oldWidget.dateFormat.hasYear != widget.dateFormat.hasYear ||
         !listEquals(oldWidget.excludedWeekdays, widget.excludedWeekdays) ||
         !listEquals(oldWidget.excludedDates, widget.excludedDates) ||
         oldWidget.selectableDayPredicate != widget.selectableDayPredicate;
@@ -296,13 +321,16 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
 
   DatePickerLogic _createLogic({AwesomeDate? initialDate}) {
     return DatePickerLogic(
-      minDate: widget.minDate ?? AwesomeDate(year: 1900, month: 1, day: 1),
-      maxDate: widget.maxDate ?? AwesomeDate(year: 2100, month: 12, day: 31),
+      minDate:
+          widget.minDate ?? const AwesomeDate(year: 1900, month: 1, day: 1),
+      maxDate:
+          widget.maxDate ?? const AwesomeDate(year: 2100, month: 12, day: 31),
       locale: widget.locale,
       monthNames:
           _intlLocale == null ? null : AwesomeIntl.monthNames(_intlLocale!),
       initialDate: initialDate,
       hasDayWheel: widget.dateFormat.hasDay,
+      hasYearWheel: widget.dateFormat.hasYear,
       excludedWeekdays: widget.excludedWeekdays,
       excludedDates: widget.excludedDates,
       selectableDayPredicate: widget.selectableDayPredicate,
@@ -367,6 +395,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           initialValue: _logic.selectedDate.year.toString(),
           theme: widget.theme?.yearTheme,
           onChanged: _logic.onSelectedYearChanged,
+          semanticLabel: _semanticLabels.year,
         );
       case PickerType.month_number:
         return _buildItemPicker(
@@ -375,6 +404,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           theme: widget.theme?.monthTheme,
           onChanged: _logic.onSelectedMonthNumberChanged,
           canLoop: true,
+          semanticLabel: _semanticLabels.month,
         );
       case PickerType.month_text:
         return _buildItemPicker(
@@ -384,6 +414,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           onChanged: _logic.onSelectedMonthNameChanged,
           wide: true,
           canLoop: true,
+          semanticLabel: _semanticLabels.month,
         );
       case PickerType.day:
         return _buildItemPicker(
@@ -395,7 +426,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           items: widget.showDisabledValues ? _logic.allDays : _logic.days,
           disabledIndices:
               widget.showDisabledValues ? _logic.disabledDayIndices : const {},
-          labels: widget.showWeekday
+          labels: widget.showWeekday && widget.dateFormat.hasYear
               ? _weekdayLabels(
                   widget.showDisabledValues ? _logic.allDays : _logic.days)
               : null,
@@ -403,7 +434,8 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
           theme: widget.theme?.dayTheme,
           onChanged: _logic.onSelectedDayChanged,
           canLoop: true,
-          wide: widget.showWeekday,
+          wide: widget.showWeekday && widget.dateFormat.hasYear,
+          semanticLabel: _semanticLabels.day,
         );
       default:
         return const SizedBox.shrink();
@@ -425,6 +457,12 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
     ];
   }
 
+  AwesomeSemanticLabels get _semanticLabels => AwesomeSemanticLabels.resolve(
+        locale: widget.locale,
+        localeName: widget.localeName,
+        custom: widget.semanticLabels,
+      );
+
   /// Labels showing the digits of [items] in the locale's own digits, or null
   /// when they are the usual 0-9.
   List<String>? _localizedDigits(List<String> items) {
@@ -443,6 +481,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
     required ValueChanged<String> onChanged,
     bool wide = false,
     bool canLoop = false,
+    String? semanticLabel,
   }) {
     return buildPickerWheel(
       key: key,
@@ -467,6 +506,7 @@ class _AwesomeDatePickerState extends State<AwesomeDatePicker> {
       wide: wide,
       looping: canLoop && widget.looping,
       hapticFeedback: widget.enableHapticFeedback,
+      semanticLabel: semanticLabel,
     );
   }
 }

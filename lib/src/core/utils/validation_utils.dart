@@ -80,15 +80,15 @@ class ValidationUtils {
 
     final dt = dateTime.toDateTime();
     final minDT = (minDateTime ??
-            AwesomeDateTime(
-              date: const AwesomeDate(year: 1900, month: 1, day: 1),
-              time: const AwesomeTime(hour: 0, minute: 0),
+            const AwesomeDateTime(
+              date: AwesomeDate(year: 1900, month: 1, day: 1),
+              time: AwesomeTime(hour: 0, minute: 0),
             ))
         .toDateTime();
     final maxDT = (maxDateTime ??
-            AwesomeDateTime(
-              date: const AwesomeDate(year: 2100, month: 12, day: 31),
-              time: const AwesomeTime(hour: 23, minute: 59, second: 59),
+            const AwesomeDateTime(
+              date: AwesomeDate(year: 2100, month: 12, day: 31),
+              time: AwesomeTime(hour: 23, minute: 59, second: 59),
             ))
         .toDateTime();
 

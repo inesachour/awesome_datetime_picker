@@ -196,7 +196,7 @@ class _DemoState extends State<Demo> {
               children: [
                 TextButton(
                   onPressed: () => _dateController.value =
-                      AwesomeDate(year: 2026, month: 12, day: 25),
+                      const AwesomeDate(year: 2026, month: 12, day: 25),
                   child: const Text('Go to 25/12/2026'),
                 ),
                 TextButton(
@@ -210,7 +210,7 @@ class _DemoState extends State<Demo> {
               localeName: _localeName,
               showDisabledValues: _showDisabled,
               showWeekday: _weekdays,
-              excludedDates: [
+              excludedDates: const [
                 AwesomeDate(year: 2026, month: 12, day: 25),
                 AwesomeDate(year: 2027, month: 1, day: 1),
               ],
@@ -219,8 +219,8 @@ class _DemoState extends State<Demo> {
               wheelStyle: const AwesomeWheelStyle(
                   selectorBorderRadius: BorderRadius.all(Radius.circular(10))),
               dateFormat: AwesomeDateFormat.dMMy,
-              minDate: AwesomeDate(year: 2024, month: 2, day: 15),
-              maxDate: AwesomeDate(year: 2030, month: 10, day: 10),
+              minDate: const AwesomeDate(year: 2024, month: 2, day: 15),
+              maxDate: const AwesomeDate(year: 2030, month: 10, day: 10),
               excludedWeekdays:
                   _weekdaysOnly ? [DateTime.saturday, DateTime.sunday] : null,
             ),
@@ -260,13 +260,13 @@ class _DemoState extends State<Demo> {
                   _seconds ? AwesomeTimeFormat.Hms : AwesomeTimeFormat.Hm,
               showDisabledValues: _showDisabled,
               showWeekday: _weekdays,
-              minDateTime: AwesomeDateTime(
+              minDateTime: const AwesomeDateTime(
                 date: AwesomeDate(year: 2025, month: 12, day: 1),
-                time: const AwesomeTime(hour: 8, minute: 0),
+                time: AwesomeTime(hour: 8, minute: 0),
               ),
-              maxDateTime: AwesomeDateTime(
+              maxDateTime: const AwesomeDateTime(
                 date: AwesomeDate(year: 2030, month: 12, day: 31),
-                time: const AwesomeTime(hour: 18, minute: 0),
+                time: AwesomeTime(hour: 18, minute: 0),
               ),
               excludedWeekdays:
                   _weekdaysOnly ? [DateTime.saturday, DateTime.sunday] : null,
