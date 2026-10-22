@@ -1,11 +1,17 @@
 # Awesome DateTime Picker
 
 [![pub package](https://img.shields.io/pub/v/awesome_datetime_picker.svg)](https://pub.dev/packages/awesome_datetime_picker)
+[![CI](https://github.com/inesachour/awesome_datetime_picker/actions/workflows/ci.yml/badge.svg)](https://github.com/inesachour/awesome_datetime_picker/actions/workflows/ci.yml)
 
-iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-time picker and a date-range picker, plus ready-made bottom sheets and dialogs. They work on every platform (iOS, Android, web, desktop), follow your light or dark theme, and can be customized down to the shape of the selector.
+iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-time picker, a date-range picker and a duration picker, plus ready-made bottom sheets and dialogs. They work on every platform (iOS, Android, web, desktop), follow your light or dark theme, and can be customized down to the shape of the selector.
 
 <p align="center">
   <img src="doc/images/demo.gif" alt="The date-time picker being scrolled" width="320">
+</p>
+
+<p align="center">
+  <b><a href="https://inesachour.github.io/awesome_datetime_picker/">Try it in your browser</a></b>
+  (the <a href="example">example app</a>, with switches for dark mode, languages, exclusions and more)
 </p>
 
 ## Features
@@ -23,28 +29,24 @@ iOS-style **wheel pickers** for Flutter: a date picker, a time picker, a date-ti
 
 <table>
   <tr>
-    <td align="center"><img src="doc/images/date_picker.png" alt="Date picker with month names" width="260"><br><sub>Date picker</sub></td>
-    <td align="center"><img src="doc/images/time_picker.png" alt="12-hour time picker with 5-minute steps" width="260"><br><sub>Time picker, 12-hour, 5-minute steps</sub></td>
+    <td align="center"><img src="doc/images/date_picker.png" alt="Date picker with month names" width="250"><br><sub>Date picker</sub></td>
+    <td align="center"><img src="doc/images/time_picker.png" alt="12-hour time picker with 5-minute steps" width="250"><br><sub>Time picker, 12-hour, 5-minute steps</sub></td>
+    <td align="center"><img src="doc/images/datetime_picker.png" alt="Date-time picker" width="250"><br><sub>Date-time picker</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="doc/images/datetime_picker.png" alt="Date-time picker" width="260"><br><sub>Date-time picker</sub></td>
-    <td align="center"><img src="doc/images/date_range_picker.png" alt="Date range picker with check-in and check-out" width="260"><br><sub>Date range picker</sub></td>
+    <td align="center"><img src="doc/images/date_range_picker.png" alt="Date range picker with check-in and check-out" width="250"><br><sub>Date range picker</sub></td>
+    <td align="center"><img src="doc/images/duration_picker.png" alt="Duration pickers: hours and minutes, and minutes and seconds" width="250"><br><sub>Duration pickers</sub></td>
+    <td align="center"><img src="doc/images/modal_sheet.png" alt="A date picker in a bottom sheet" width="250"><br><sub>In a bottom sheet</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="doc/images/modal_sheet.png" alt="Date range picker in a bottom sheet" width="260"><br><sub>In a bottom sheet</sub></td>
-    <td align="center"><img src="doc/images/dark_mode.png" alt="Date-time picker in dark mode" width="260"><br><sub>Dark mode</sub></td>
+    <td align="center"><img src="doc/images/dark_mode.png" alt="Date-time picker in dark mode" width="250"><br><sub>Dark mode</sub></td>
+    <td align="center"><img src="doc/images/disabled_values.png" alt="Weekends shown dimmed with weekday labels" width="250"><br><sub>Excluded weekends shown dimmed</sub></td>
+    <td align="center"><img src="doc/images/localization.png" alt="Date pickers in French, Spanish and German" width="250"><br><sub>Localization</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="doc/images/disabled_values.png" alt="Weekends shown dimmed with weekday labels" width="260"><br><sub>Excluded weekends shown dimmed</sub></td>
-    <td align="center"><img src="doc/images/wheel_style.png" alt="Time picker with a custom selector and curved wheels" width="260"><br><sub>Custom wheel style</sub></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="doc/images/time_picker_seconds.png" alt="Time picker with seconds" width="260"><br><sub>With seconds</sub></td>
-    <td align="center"><img src="doc/images/localization.png" alt="Date pickers in French, Spanish and German" width="260"><br><sub>Localization</sub></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="doc/images/wheel_presets.png" alt="The default look and the ios, material and minimal presets" width="260"><br><sub>Style presets</sub></td>
-    <td align="center"><img src="doc/images/duration_picker.png" alt="Duration pickers: hours and minutes, and minutes and seconds" width="260"><br><sub>Duration pickers</sub></td>
+    <td align="center"><img src="doc/images/time_picker_seconds.png" alt="Time picker with seconds" width="250"><br><sub>With seconds</sub></td>
+    <td align="center"><img src="doc/images/wheel_style.png" alt="Time picker with a custom selector and curved wheels" width="250"><br><sub>Custom wheel style</sub></td>
+    <td align="center"><img src="doc/images/wheel_presets.png" alt="The default look and the ios, material and minimal presets" width="250"><br><sub>Style presets</sub></td>
   </tr>
 </table>
 
@@ -573,9 +575,10 @@ The code is in `lib/src`, grouped by feature:
 | Folder | Content |
 |--------|---------|
 | `core/` | Models (`AwesomeDate`, `AwesomeTime`, `AwesomeDateTime`, `AwesomeDateRange`), formats, locales, utils and validation |
-| `shared/` | The wheel widget, `ItemTheme`, `AwesomeWheelStyle` and the helper that builds a wheel |
+| `shared/` | The wheel widget, `ItemTheme`, `AwesomeWheelStyle`, `AwesomePickerThemeData`, `AwesomeSemanticLabels` and the helper that builds a wheel |
 | `date/`, `time/`, `datetime/` | One folder per picker: the widget, its public controller, its theme and its `...PickerLogic` |
 | `range/` | `AwesomeDateRangePicker` and its controller |
+| `duration/` | `AwesomeDurationPicker`, its controller, its theme and `DurationPickerLogic` |
 | `modal/` | `showAwesomePicker` and the `showAwesome...Picker` functions |
 
 The `...PickerLogic` classes hold the rules (clamping, exclusions, the items of each wheel) and have no widget code, so they are unit-tested directly. The public `Awesome...PickerController` classes are the small, stable API.
@@ -587,3 +590,30 @@ flutter test tool/generate_screenshots_test.dart   # regenerate doc/images
 ```
 
 Run the screenshot command whenever the look of a picker changes, and commit the new images.
+
+To try your changes, run the example app (`cd example && flutter run`, or `flutter run -d chrome` for the web version). It is also the live demo above.
+
+### Continuous integration
+
+Every push and pull request runs, on GitHub Actions (`.github/workflows/ci.yml`):
+
+| Job | What it checks |
+|-----|----------------|
+| Test | Formatting (`dart format`), analysis and the tests, on Linux and macOS |
+| Example app | Analysis and the tests of the example app |
+| Lowest dependency versions | `flutter pub downgrade`, then analysis and tests: the check behind the *downgrade analysis* of pub.dev |
+| Web | The example builds for the web; the tests also run in Chrome |
+| Screenshots | The images of the README still generate (they are attached to the run) |
+| Publish dry run | `flutter pub publish --dry-run`, what pub.dev validates |
+
+To run the same checks yourself:
+
+```sh
+dart format --output=none --set-exit-if-changed lib test tool example/lib example/test
+flutter analyze && flutter test
+(cd example && flutter analyze && flutter test)
+flutter pub downgrade && flutter analyze && flutter test   # then: flutter pub upgrade
+flutter pub publish --dry-run
+```
+
+The demo is deployed to GitHub Pages by `.github/workflows/pages.yml` on every push to `master`. Enable it once in the repository: *Settings > Pages > Build and deployment > Source: GitHub Actions*.

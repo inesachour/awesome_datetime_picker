@@ -15,7 +15,7 @@ screenshots:
     path: doc/images/datetime_picker.png
   - description: 'Date-range picker with check-in and check-out labels.'
     path: doc/images/date_range_picker.png
-  - description: 'A date-range picker in a bottom sheet with Cancel and OK.'
+  - description: 'A date picker in a bottom sheet with Cancel and OK.'
     path: doc/images/modal_sheet.png
   - description: 'The date-time picker in dark mode.'
     path: doc/images/dark_mode.png

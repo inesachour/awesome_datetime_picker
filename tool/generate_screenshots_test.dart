@@ -25,6 +25,11 @@ const _outDir = 'doc/images';
 /// Logical width of the simulated phone.
 const _phoneWidth = 390.0;
 
+/// Every picture of the README gallery has the same shape: a square canvas of
+/// this logical size. A picker too tall for it is scaled down to fit, so the
+/// tiles of the gallery line up whatever their content.
+const _canvas = 390.0;
+
 const _lightBackground = Color(0xFFF2F2F7);
 const _darkBackground = Color(0xFF000000);
 
@@ -88,6 +93,7 @@ void main() {
         ),
         startLabel: const _Label('Check-in'),
         endLabel: const _Label('Check-out'),
+        visibleItemCount: 3,
       ),
     );
   });
@@ -186,7 +192,6 @@ void main() {
           preset('minimal()', const AwesomeWheelStyle.minimal()),
         ]),
       ]),
-      height: 1000,
     );
   });
 
@@ -205,6 +210,7 @@ void main() {
         labelled(
           'hm, every 5 minutes',
           AwesomeDurationPicker(
+            visibleItemCount: 3,
             minuteInterval: 5,
             initialDuration: const Duration(hours: 1, minutes: 30),
             theme: const AwesomeDurationPickerTheme(
@@ -216,6 +222,7 @@ void main() {
         labelled(
           'ms, up to 2 hours',
           AwesomeDurationPicker(
+            visibleItemCount: 3,
             format: AwesomeDurationFormat.ms,
             maxDuration: const Duration(minutes: 120),
             initialDuration: const Duration(minutes: 45, seconds: 20),
@@ -226,40 +233,33 @@ void main() {
           ),
         ),
       ]),
-      height: 1100,
     );
   });
 
   testWidgets('modal sheet', (t) async {
-    _phone(t);
+    _phone(t, height: _canvas);
     final boundary = GlobalKey();
     await t.pumpWidget(RepaintBoundary(
       key: boundary,
       child: _app(
         home: Scaffold(
-          appBar: AppBar(title: const Text('Booking')),
-          body: const Center(child: Text('Tap to choose your dates')),
+          appBar: AppBar(title: const Text('Profile')),
+          body: const Center(child: Text('Tap to choose your birthday')),
         ),
       ),
     ));
     final context = t.element(find.byType(Scaffold));
     // ignore: unawaited_futures
-    showAwesomeDateRangePicker(
+    showAwesomeDatePicker(
       context,
-      title: const Text('Dates'),
+      title: const Text('Birthday'),
       dateFormat: AwesomeDateFormat.dMMy,
-      minLength: 1,
-      startLabel: const _Label('Check-in'),
-      endLabel: const _Label('Check-out'),
-      minDate: const AwesomeDate(year: 2025, month: 1, day: 1),
+      minDate: const AwesomeDate(year: 1920, month: 1, day: 1),
       maxDate: const AwesomeDate(year: 2025, month: 12, day: 31),
-      initialRange: const AwesomeDateRange(
-        start: AwesomeDate(year: 2025, month: 6, day: 10),
-        end: AwesomeDate(year: 2025, month: 6, day: 17),
-      ),
+      initialDate: const AwesomeDate(year: 1994, month: 6, day: 10),
     );
     await t.pumpAndSettle();
-    await _savePng(t, boundary, 'modal_sheet', pixelRatio: 2);
+    await _savePng(t, boundary, 'modal_sheet');
   });
 
   testWidgets('demo animation', (t) async {
@@ -378,27 +378,36 @@ Widget _app({required Widget home, bool dark = false}) => MaterialApp(
       home: home,
     );
 
-/// Renders [picker] on a phone-wide background and saves it as [name].png.
+/// Renders [picker], centered on the square gallery canvas, and saves it as
+/// [name].png.
 Future<void> _shot(
   WidgetTester t,
   String name,
   Widget picker, {
   bool dark = false,
-  double height = 844,
 }) async {
-  _phone(t, height: height);
+  _phone(t, height: _canvas);
   final boundary = GlobalKey();
   final background = dark ? _darkBackground : _lightBackground;
   await t.pumpWidget(_app(
     dark: dark,
     home: Scaffold(
       backgroundColor: background,
-      body: Center(
-        child: RepaintBoundary(
-          key: boundary,
-          child: ColoredBox(
-            color: background,
-            child: Padding(padding: const EdgeInsets.all(24), child: picker),
+      body: RepaintBoundary(
+        key: boundary,
+        child: ColoredBox(
+          color: background,
+          child: SizedBox.expand(
+            child: Center(
+              // Content taller or wider than the canvas shrinks to fit it.
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: picker,
+                ),
+              ),
+            ),
           ),
         ),
       ),
