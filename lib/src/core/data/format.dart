@@ -12,10 +12,39 @@ enum AwesomeDateFormat {
   yMd([PickerType.year, PickerType.month_number, PickerType.day]),
 
   /// Year, Month (text), Day format (e.g., 2023 May 12).
-  yMMd([PickerType.year, PickerType.month_text, PickerType.day]);
+  yMMd([PickerType.year, PickerType.month_text, PickerType.day]),
+
+  /// Month (number), Year format without a day wheel (e.g., 05/2023).
+  ///
+  /// The selected date is the first day of the chosen month. Day exclusions
+  /// do not apply.
+  // ignore: constant_identifier_names
+  My([PickerType.month_number, PickerType.year]),
+
+  /// Month (text), Year format without a day wheel (e.g., May 2023).
+  ///
+  /// The selected date is the first day of the chosen month. Day exclusions
+  /// do not apply.
+  MMy([PickerType.month_text, PickerType.year]),
+
+  /// Year, Month (number) format without a day wheel (e.g., 2023/05).
+  ///
+  /// The selected date is the first day of the chosen month. Day exclusions
+  /// do not apply.
+  yM([PickerType.year, PickerType.month_number]),
+
+  /// Year, Month (text) format without a day wheel (e.g., 2023 May).
+  ///
+  /// The selected date is the first day of the chosen month. Day exclusions
+  /// do not apply.
+  yMM([PickerType.year, PickerType.month_text]);
 
   /// The wheels to display, in order from left to right.
   final List<PickerType> value;
+
+  /// Whether this format shows a day wheel. Formats without one select whole
+  /// months: the value is the first day of the chosen month.
+  bool get hasDay => value.contains(PickerType.day);
 
   /// Creates a date format from the ordered list of wheels it displays.
   const AwesomeDateFormat(this.value);
@@ -27,10 +56,25 @@ enum AwesomeTimeFormat {
   hm([PickerType.hour_12, PickerType.minute, PickerType.am_pm]),
 
   /// 24-hour time format (hour and minute) (e.g., 14:30).
-  Hm([PickerType.hour_24, PickerType.minute]);
+  Hm([PickerType.hour_24, PickerType.minute]),
+
+  /// 12-hour time format with seconds (e.g., 2:30:15 PM).
+  hms([
+    PickerType.hour_12,
+    PickerType.minute,
+    PickerType.second,
+    PickerType.am_pm
+  ]),
+
+  /// 24-hour time format with seconds (e.g., 14:30:15).
+  // ignore: constant_identifier_names
+  Hms([PickerType.hour_24, PickerType.minute, PickerType.second]);
 
   /// The wheels to display, in order from left to right.
   final List<PickerType> value;
+
+  /// Whether this format shows a seconds wheel.
+  bool get hasSeconds => value.contains(PickerType.second);
 
   /// Creates a time format from the ordered list of wheels it displays.
   const AwesomeTimeFormat(this.value);

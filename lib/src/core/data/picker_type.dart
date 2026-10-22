@@ -27,6 +27,9 @@ enum PickerType {
   /// Minute (0-59).
   minute,
 
+  /// Second (0-59).
+  second,
+
   /// Day period, "AM" or "PM".
   // ignore: constant_identifier_names
   am_pm,

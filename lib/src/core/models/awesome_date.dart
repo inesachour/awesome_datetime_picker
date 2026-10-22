@@ -19,7 +19,8 @@ class AwesomeDate {
     required this.year,
     required this.month,
     required this.day,
-  });
+  })  : assert(month >= 1 && month <= 12, 'month must be between 1 and 12'),
+        assert(day >= 1 && day <= 31, 'day must be between 1 and 31');
 
   /// Create a copy with optional field updates
   AwesomeDate copyWith({

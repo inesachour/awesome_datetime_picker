@@ -38,15 +38,14 @@ class AwesomeDateTime {
       date.day,
       time.hour,
       time.minute,
+      time.second,
     );
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is AwesomeDateTime &&
-        other.date == date &&
-        other.time == time;
+    return other is AwesomeDateTime && other.date == date && other.time == time;
   }
 
   @override

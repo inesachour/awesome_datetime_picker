@@ -3,12 +3,11 @@ import 'package:awesome_datetime_picker/src/shared/custom_item_picker_widget.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget wrap(Widget w, {ThemeData? theme}) => MaterialApp(
-    theme: theme, home: Scaffold(body: Center(child: w)));
+Widget wrap(Widget w, {ThemeData? theme}) =>
+    MaterialApp(theme: theme, home: Scaffold(body: Center(child: w)));
 
 void main() {
-  testWidgets('date picker clamps selection when the range shrinks',
-      (t) async {
+  testWidgets('date picker clamps selection when the range shrinks', (t) async {
     final events = <AwesomeDate>[];
     // initialDate only seeds the first build; later builds just change the range.
     Widget build(AwesomeDate max, {AwesomeDate? initial}) =>
@@ -41,8 +40,7 @@ void main() {
     expect(events, isEmpty);
   });
 
-  testWidgets('time picker clamps selection when the range shrinks',
-      (t) async {
+  testWidgets('time picker clamps selection when the range shrinks', (t) async {
     final events = <AwesomeTime>[];
     Widget build(AwesomeTime max) => wrap(AwesomeTimePicker(
           minTime: const AwesomeTime(hour: 0, minute: 0),
@@ -89,13 +87,11 @@ void main() {
   });
 
   testWidgets('explicit backgroundColor still wins in dark mode', (t) async {
-    await t.pumpWidget(wrap(
-        AwesomeTimePicker(backgroundColor: Colors.red),
+    await t.pumpWidget(wrap(AwesomeTimePicker(backgroundColor: Colors.red),
         theme: ThemeData(brightness: Brightness.dark)));
     final container = t.widget<Container>(find
         .descendant(
-            of: find.byType(CustomItemPicker),
-            matching: find.byType(Container))
+            of: find.byType(CustomItemPicker), matching: find.byType(Container))
         .first);
     expect((container.decoration as BoxDecoration).color, Colors.red);
   });

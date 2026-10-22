@@ -102,6 +102,33 @@ class AwesomeDateUtils {
     }
   }
 
+  /// Short weekday names for [locale], starting on Monday (index 0) to match
+  /// [DateTime.weekday] - 1.
+  static List<String> getWeekdayNames(LocaleType locale) {
+    switch (locale) {
+      case LocaleType.en:
+        return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      case LocaleType.fr:
+        return ['lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.', 'dim.'];
+      case LocaleType.de:
+        return ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+      case LocaleType.es:
+        return ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
+      case LocaleType.it:
+        return ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];
+      case LocaleType.ar:
+        return [
+          'الاثنين',
+          'الثلاثاء',
+          'الأربعاء',
+          'الخميس',
+          'الجمعة',
+          'السبت',
+          'الأحد'
+        ];
+    }
+  }
+
   static List<String> getMonthDays(int year, int month) {
     return List.generate(
       DateUtils.getDaysInMonth(year, month),

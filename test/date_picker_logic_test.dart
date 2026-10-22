@@ -1,9 +1,8 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/date/awesome_date_picker_controller.dart';
+import 'package:awesome_datetime_picker/src/date/date_picker_logic.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-AwesomeDatePickerController build({AwesomeDate? initial}) =>
-    AwesomeDatePickerController(
+DatePickerLogic build({AwesomeDate? initial}) => DatePickerLogic(
       minDate: const AwesomeDate(year: 2024, month: 2, day: 15),
       maxDate: const AwesomeDate(year: 2026, month: 10, day: 10),
       locale: LocaleType.en,
@@ -27,13 +26,14 @@ void main() {
   });
 
   test('defaults to today (clamped), not minDate', () {
-    final c = AwesomeDatePickerController(
+    final c = DatePickerLogic(
       minDate: const AwesomeDate(year: 1900, month: 1, day: 1),
       maxDate: const AwesomeDate(year: 2100, month: 12, day: 31),
       locale: LocaleType.en,
     );
     final now = DateTime.now();
-    expect(c.selectedDate, AwesomeDate(year: now.year, month: now.month, day: now.day));
+    expect(c.selectedDate,
+        AwesomeDate(year: now.year, month: now.month, day: now.day));
   });
 
   test('does not notify when the selection is unchanged', () {

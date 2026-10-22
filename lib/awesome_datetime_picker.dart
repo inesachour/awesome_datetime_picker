@@ -29,3 +29,11 @@ export 'package:awesome_datetime_picker/src/date/awesome_date_picker_theme.dart'
 export 'package:awesome_datetime_picker/src/time/awesome_time_picker_theme.dart';
 export 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_theme.dart';
 export 'package:awesome_datetime_picker/src/shared/item_theme.dart';
+export 'package:awesome_datetime_picker/src/shared/awesome_wheel_style.dart';
+export 'package:awesome_datetime_picker/src/date/awesome_date_picker_controller.dart';
+export 'package:awesome_datetime_picker/src/time/awesome_time_picker_controller.dart';
+export 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_controller.dart';
+export 'package:awesome_datetime_picker/src/core/models/awesome_date_range.dart';
+export 'package:awesome_datetime_picker/src/range/awesome_date_range_picker.dart';
+export 'package:awesome_datetime_picker/src/range/awesome_date_range_picker_controller.dart';
+export 'package:awesome_datetime_picker/src/modal/awesome_picker_modal.dart';

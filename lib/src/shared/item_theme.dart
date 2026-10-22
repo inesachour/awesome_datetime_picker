@@ -23,6 +23,10 @@ class ItemTheme {
   /// Text style of the items that are not selected.
   final TextStyle? unselectedTextStyle;
 
+  /// Text style of the values that cannot be selected, when the picker shows
+  /// them with `showDisabledValues` (default: the unselected style, dimmed).
+  final TextStyle? disabledTextStyle;
+
   /// Widget displayed above the wheel, for example a label such as "Year".
   final Widget? title;
 
@@ -39,6 +43,7 @@ class ItemTheme {
     this.backgroundColor,
     this.selectedTextStyle,
     this.unselectedTextStyle,
+    this.disabledTextStyle,
     this.title,
     this.padding,
     this.margin,
