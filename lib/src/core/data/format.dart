@@ -1,4 +1,4 @@
-import 'package:awesome_datetime_picker/src/data/picker_type.dart';
+import 'package:awesome_datetime_picker/src/core/data/picker_type.dart';
 
 /// Enum representing different date formats for the [AwesomeDatePicker] and [AwesomeDateTimePicker] widgets.
 enum AwesomeDateFormat {
@@ -14,8 +14,10 @@ enum AwesomeDateFormat {
   /// Year, Month (text), Day format (e.g., 2023 May 12).
   yMMd([PickerType.year, PickerType.month_text, PickerType.day]);
 
+  /// The wheels to display, in order from left to right.
   final List<PickerType> value;
 
+  /// Creates a date format from the ordered list of wheels it displays.
   const AwesomeDateFormat(this.value);
 }
 
@@ -27,7 +29,9 @@ enum AwesomeTimeFormat {
   /// 24-hour time format (hour and minute) (e.g., 14:30).
   Hm([PickerType.hour_24, PickerType.minute]);
 
+  /// The wheels to display, in order from left to right.
   final List<PickerType> value;
 
+  /// Creates a time format from the ordered list of wheels it displays.
   const AwesomeTimeFormat(this.value);
 }

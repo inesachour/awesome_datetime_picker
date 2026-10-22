@@ -1,7 +1,14 @@
-import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
+// ignore_for_file: public_member_api_docs
+// Internal implementation file: it is not exported by the package, so its
+// members are documented at class level only.
+
+import 'package:awesome_datetime_picker/src/core/models/awesome_time.dart';
+import 'package:awesome_datetime_picker/src/core/utils/awesome_time_utils.dart';
 import 'package:flutter/material.dart';
 
+/// Logic behind [AwesomeTimePicker]: holds the selected time, clamps it to the
+/// min/max range, applies hour exclusions and builds each wheel's items for
+/// both 12-hour and 24-hour formats.
 class AwesomeTimePickerController extends ChangeNotifier {
   final AwesomeTime minTime;
   final AwesomeTime maxTime;
@@ -26,22 +33,23 @@ class AwesomeTimePickerController extends ChangeNotifier {
     required this.maxTime,
     AwesomeTime? initialTime,
     this.excludedHours,
-  })  : _selectedTime = (initialTime != null &&
-                !initialTime.isBefore(minTime) &&
-                !initialTime.isAfter(maxTime))
-            ? initialTime
-            : minTime,
-        _selectedAmPm = AwesomeTimeUtils.getAmPm((initialTime != null &&
-                !initialTime.isBefore(minTime) &&
-                !initialTime.isAfter(maxTime))
-            ? initialTime.hour
-            : minTime.hour) {
+  })  : _selectedTime = _initialSelection(initialTime, minTime, maxTime),
+        _selectedAmPm = AwesomeTimeUtils.getAmPm(
+            _initialSelection(initialTime, minTime, maxTime).hour) {
     // Ensure initial time is valid regarding exclusions
     if (_isHourExcluded(_selectedTime.hour)) {
       final nextValid = _findNextValidTime(_selectedTime);
       _selectedTime = nextValid;
       _selectedAmPm = AwesomeTimeUtils.getAmPm(nextValid.hour);
     }
+  }
+
+  /// Uses [initialTime] (default: [minTime]), clamped into [min]..[max].
+  static AwesomeTime _initialSelection(
+      AwesomeTime? initialTime, AwesomeTime min, AwesomeTime max) {
+    if (initialTime == null || initialTime.isBefore(min)) return min;
+    if (initialTime.isAfter(max)) return max;
+    return initialTime;
   }
 
   bool _isHourExcluded(int hour) {

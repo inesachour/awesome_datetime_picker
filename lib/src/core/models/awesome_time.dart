@@ -1,10 +1,18 @@
 import 'package:flutter/foundation.dart';
 
+/// An immutable time of day (hour and minute) on a 24-hour clock.
+///
+/// Used to configure and read back the time pickers, e.g. `AwesomeTime(hour: 14, minute: 30)`.
+/// Times are [Comparable], ordered from 00:00 to 23:59.
 @immutable
 class AwesomeTime implements Comparable<AwesomeTime> {
+  /// The hour of the day, from 0 to 23.
   final int hour;
+
+  /// The minute of the hour, from 0 to 59.
   final int minute;
 
+  /// Creates a time from its [hour] (0-23) and [minute] (0-59).
   const AwesomeTime({
     required this.hour,
     required this.minute,

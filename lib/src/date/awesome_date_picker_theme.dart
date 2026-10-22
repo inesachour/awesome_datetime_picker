@@ -1,4 +1,4 @@
-import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
+import 'package:awesome_datetime_picker/src/shared/item_theme.dart';
 
 /// Theme for the date picker, allowing customization of the year, month, and day items.
 class AwesomeDatePickerTheme {
@@ -14,6 +14,7 @@ class AwesomeDatePickerTheme {
   /// It customizes the appearance of the day picker element.
   final ItemTheme? dayTheme;
 
+  /// Creates a date picker theme. Unset items use the picker defaults.
   const AwesomeDatePickerTheme(
       {this.yearTheme, this.monthTheme, this.dayTheme});
 }

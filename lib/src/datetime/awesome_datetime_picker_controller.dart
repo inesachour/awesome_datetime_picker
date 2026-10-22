@@ -1,6 +1,14 @@
-import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+// ignore_for_file: public_member_api_docs
+// Internal implementation file: it is not exported by the package, so its
+// members are documented at class level only.
+
+import 'package:awesome_datetime_picker/src/core/models/awesome_date.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_datetime.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_time.dart';
 import 'package:flutter/material.dart';
 
+/// Logic behind [AwesomeDateTimePicker]: holds the selected date-time and
+/// derives the time limits that apply to the currently selected date.
 class AwesomeDateTimePickerController extends ChangeNotifier {
   final AwesomeDateTime minDateTime;
   final AwesomeDateTime maxDateTime;
@@ -18,8 +26,18 @@ class AwesomeDateTimePickerController extends ChangeNotifier {
     required this.minDateTime,
     required this.maxDateTime,
     AwesomeDateTime? initialDateTime,
-  }) : _selectedDateTime = initialDateTime ?? minDateTime {
+  }) : _selectedDateTime = initialDateTime ?? _now() {
     _clampDateTime();
+  }
+
+  /// The current date and time, used when no initial value is given
+  /// (it is clamped into the min/max range right after).
+  static AwesomeDateTime _now() {
+    final now = DateTime.now();
+    return AwesomeDateTime(
+      date: AwesomeDate(year: now.year, month: now.month, day: now.day),
+      time: AwesomeTime(hour: now.hour, minute: now.minute),
+    );
   }
 
   // Central update method

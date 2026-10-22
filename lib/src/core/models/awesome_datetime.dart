@@ -1,12 +1,19 @@
-import 'package:awesome_datetime_picker/src/models/awesome_date.dart';
-import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_date.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_time.dart';
 import 'package:flutter/foundation.dart';
 
+/// An immutable combination of an [AwesomeDate] and an [AwesomeTime].
+///
+/// Used to configure and read back the date-time picker.
 @immutable
 class AwesomeDateTime {
+  /// The calendar date part.
   final AwesomeDate date;
+
+  /// The time of day part.
   final AwesomeTime time;
 
+  /// Creates a date-time from a [date] and a [time].
   const AwesomeDateTime({
     required this.date,
     required this.time,

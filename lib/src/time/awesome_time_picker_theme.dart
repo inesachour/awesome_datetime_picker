@@ -1,4 +1,4 @@
-import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
+import 'package:awesome_datetime_picker/src/shared/item_theme.dart';
 
 /// Theme for the time picker, allowing customization of hour and minute items.
 class AwesomeTimePickerTheme {
@@ -14,6 +14,7 @@ class AwesomeTimePickerTheme {
   /// It customizes the appearance of the AM/PM picker element.
   final ItemTheme? ampmTheme;
 
+  /// Creates a time picker theme. Unset items use the picker defaults.
   const AwesomeTimePickerTheme(
       {this.hourTheme, this.minuteTheme, this.ampmTheme});
 }

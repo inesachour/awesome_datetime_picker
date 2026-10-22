@@ -1,16 +1,50 @@
-import 'package:awesome_datetime_picker/src/controllers/awesome_time_picker_controller.dart';
-import 'package:awesome_datetime_picker/src/data/format.dart';
-import 'package:awesome_datetime_picker/src/data/picker_type.dart';
-import 'package:awesome_datetime_picker/src/models/awesome_time.dart';
-import 'package:awesome_datetime_picker/src/theme/awesome_time_picker_theme.dart';
-import 'package:awesome_datetime_picker/src/theme/item_theme.dart';
-import 'package:awesome_datetime_picker/src/utils/awesome_time_utils.dart';
-import 'package:awesome_datetime_picker/src/utils/validation_utils.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_style.dart';
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_widget.dart';
+import 'package:awesome_datetime_picker/src/time/awesome_time_picker_controller.dart';
+import 'package:awesome_datetime_picker/src/core/data/format.dart';
+import 'package:awesome_datetime_picker/src/core/data/picker_type.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_time.dart';
+import 'package:awesome_datetime_picker/src/time/awesome_time_picker_theme.dart';
+import 'package:awesome_datetime_picker/src/shared/item_theme.dart';
+import 'package:awesome_datetime_picker/src/core/utils/awesome_time_utils.dart';
+import 'package:awesome_datetime_picker/src/core/utils/validation_utils.dart';
+import 'package:awesome_datetime_picker/src/shared/custom_item_picker_style.dart';
+import 'package:awesome_datetime_picker/src/shared/picker_wheel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+/// An iOS-style wheel picker for selecting a time of day.
+///
+/// ```dart
+/// AwesomeTimePicker(
+///   timeFormat: AwesomeTimeFormat.hm, // 12-hour clock with AM/PM
+///   minTime: const AwesomeTime(hour: 8, minute: 0),
+///   maxTime: const AwesomeTime(hour: 18, minute: 30),
+///   excludedHours: [12, 13], // lunch break
+///   onChanged: (time) => debugPrint('$time'),
+/// )
+/// ```
+///
+/// The value reported to [onChanged] is always on a 24-hour clock, whatever
+/// [timeFormat] displays. The wheels only offer times between [minTime] and
+/// [maxTime] that are not in [excludedHours].
+///
+/// /// ## Styling
+///
+/// Colors and text styles follow the ambient [Theme] brightness (light or
+/// dark) unless overridden. Precedence, highest first: the per-wheel
+/// [ItemTheme] given through `theme`, then the options on this widget
+/// (`backgroundColor`, `selectorColor`, `selectedTextStyle`, ...), then the
+/// built-in defaults.
+///
+/// ## Changing properties after the first build
+///
+/// Changing [minTime], [maxTime] or [excludedHours] rebuilds the picker's rules and keeps the current selection, clamped into the new range. If the clamping changes the value, [onChanged] is called with the new one.
+///
+/// The `initial*` value is only read once; to move the selection later, give
+/// the picker a new [Key].
+///
+/// Throws an [AssertionError] in debug mode if [minTime] is after [maxTime].
 class AwesomeTimePicker extends StatefulWidget {
+  /// Creates a time picker. All parameters are optional.
   AwesomeTimePicker({
     super.key,
     this.minTime,
@@ -88,45 +122,79 @@ class AwesomeTimePicker extends StatefulWidget {
 }
 
 class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
-  late final AwesomeTimePickerController _controller;
+  late AwesomeTimePickerController _controller;
+
+  AwesomeTime get _minTime =>
+      widget.minTime ?? const AwesomeTime(hour: 0, minute: 0);
+  AwesomeTime get _maxTime =>
+      widget.maxTime ?? const AwesomeTime(hour: 23, minute: 59);
 
   @override
   void initState() {
     super.initState();
 
-    final minTime = widget.minTime ?? const AwesomeTime(hour: 0, minute: 0);
-    final maxTime = widget.maxTime ?? const AwesomeTime(hour: 23, minute: 59);
     final initialTime = widget.initialTime ??
         AwesomeTime(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
 
     // Debug warning for invalid initial time
     assert(() {
       if (!ValidationUtils.isValidInitialTime(
-          time: initialTime, minTime: minTime, maxTime: maxTime)) {
+          time: initialTime, minTime: _minTime, maxTime: _maxTime)) {
         debugPrint(
           '⚠️ AwesomeTimePicker: initialTime ($initialTime) is outside the valid range '
-          '(minTime: $minTime, maxTime: $maxTime). '
+          '(minTime: $_minTime, maxTime: $_maxTime). '
           'The time will be automatically clamped to the valid range.',
         );
       }
       return true;
     }());
 
-    _controller = AwesomeTimePickerController(
-      minTime: minTime,
-      maxTime: maxTime,
+    _controller = _createController(initialTime: initialTime);
+    _controller.addListener(_onControllerChanged);
+  }
+
+  @override
+  void didUpdateWidget(AwesomeTimePicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final configChanged = oldWidget.minTime != widget.minTime ||
+        oldWidget.maxTime != widget.maxTime ||
+        !listEquals(oldWidget.excludedHours, widget.excludedHours);
+    if (!configChanged) return;
+
+    // Rebuild the controller with the new rules, keeping the current
+    // selection (it is clamped into the new range if needed).
+    final previous = _controller.selectedTime;
+    _controller.removeListener(_onControllerChanged);
+    _controller.dispose();
+    _controller = _createController(initialTime: previous);
+    _controller.addListener(_onControllerChanged);
+
+    if (_controller.selectedTime != previous) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) widget.onChanged?.call(_controller.selectedTime);
+      });
+    }
+  }
+
+  AwesomeTimePickerController _createController(
+      {required AwesomeTime initialTime}) {
+    return AwesomeTimePickerController(
+      minTime: _minTime,
+      maxTime: _maxTime,
       initialTime: initialTime,
       excludedHours: widget.excludedHours,
     );
+  }
 
-    _controller.addListener(() {
-      widget.onChanged?.call(_controller.selectedTime);
-      setState(() {});
-    });
+  void _onControllerChanged() {
+    widget.onChanged?.call(_controller.selectedTime);
+    setState(() {});
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_onControllerChanged);
     _controller.dispose();
     super.dispose();
   }
@@ -180,7 +248,8 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
         return _buildItemPicker(
           items: _controller.amPm,
           initialValue: _controller.selectedAmPm,
-          theme: widget.theme?.hourTheme,
+          // Falls back to the hour theme so existing styling keeps applying.
+          theme: widget.theme?.ampmTheme ?? widget.theme?.hourTheme,
           onChanged: _controller.onSelectedAmPmChanged,
         );
       default:
@@ -195,12 +264,12 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
     required ItemTheme? theme,
     required ValueChanged<String> onChanged,
   }) {
-    return CustomItemPicker(
+    return buildPickerWheel(
       key: key,
       items: items,
-      initialIndex: items.indexOf(initialValue),
+      value: initialValue,
+      theme: theme,
       style: CustomItemPickerStyle(
-        theme: theme,
         backgroundColor: widget.backgroundColor,
         selectorColor: widget.selectorColor,
         fadeEffect: widget.fadeEffect,
@@ -210,7 +279,7 @@ class _AwesomeTimePickerState extends State<AwesomeTimePicker> {
         itemWidth: widget.itemWidth,
       ),
       visibleItemCount: widget.visibleItemCount,
-      onSelectedItemChanged: onChanged,
+      onChanged: onChanged,
     );
   }
 }

@@ -1,7 +1,14 @@
-import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/utils/awesome_date_utils.dart';
+// ignore_for_file: public_member_api_docs
+// Internal implementation file: it is not exported by the package, so its
+// members are documented at class level only.
+
+import 'package:awesome_datetime_picker/src/core/data/locale.dart';
+import 'package:awesome_datetime_picker/src/core/models/awesome_date.dart';
+import 'package:awesome_datetime_picker/src/core/utils/awesome_date_utils.dart';
 import 'package:flutter/material.dart';
 
+/// Logic behind [AwesomeDatePicker]: holds the selected date, clamps it to the
+/// min/max range, applies weekday exclusions and builds each wheel's items.
 class AwesomeDatePickerController extends ChangeNotifier {
   final AwesomeDate minDate;
   final AwesomeDate maxDate;
@@ -27,21 +34,23 @@ class AwesomeDatePickerController extends ChangeNotifier {
     required this.locale,
     AwesomeDate? initialDate,
     this.excludedWeekdays,
-  }) : _selectedDate = (initialDate != null &&
-                (initialDate.year > minDate.year ||
-                    (initialDate.year == minDate.year &&
-                        initialDate.month >= minDate.month &&
-                        initialDate.day >= minDate.day)) &&
-                (initialDate.year < maxDate.year ||
-                    (initialDate.year == maxDate.year &&
-                        initialDate.month <= maxDate.month &&
-                        initialDate.day <= maxDate.day)))
-            ? initialDate
-            : minDate {
+  }) : _selectedDate = _initialSelection(initialDate, minDate, maxDate) {
     // Ensure initial date is valid regarding exclusions
     if (_isDateExcluded(_selectedDate)) {
       _selectedDate = _findNextValidDate(_selectedDate);
     }
+  }
+
+  /// Uses [initialDate] (default: today), clamped into [min]..[max].
+  static AwesomeDate _initialSelection(
+      AwesomeDate? initialDate, AwesomeDate min, AwesomeDate max) {
+    final now = DateTime.now();
+    final date =
+        initialDate ?? AwesomeDate(year: now.year, month: now.month, day: now.day);
+    final dt = date.toDateTime();
+    if (dt.isBefore(min.toDateTime())) return min;
+    if (dt.isAfter(max.toDateTime())) return max;
+    return date;
   }
 
   bool _isDateExcluded(AwesomeDate date) {
@@ -92,6 +101,8 @@ class AwesomeDatePickerController extends ChangeNotifier {
 
     newDate = _clampDateToRange(newDate);
     newDate = _handleExclusions(newDate);
+
+    if (newDate == _selectedDate) return;
 
     _selectedDate = newDate;
 

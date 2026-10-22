@@ -1,6 +1,11 @@
-import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
+// ignore_for_file: public_member_api_docs
+// Internal implementation file: it is not exported by the package, so its
+// members are documented at class level only.
+
+import 'package:awesome_datetime_picker/src/core/data/locale.dart';
 import 'package:flutter/material.dart';
 
+/// Date helpers: localized month names and days-in-month lookups.
 class AwesomeDateUtils {
   static List<String> getMonthNames(LocaleType locale) {
     switch (locale) {

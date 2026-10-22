@@ -1,3 +1,8 @@
+// ignore_for_file: public_member_api_docs
+// Internal implementation file: it is not exported by the package, so its
+// members are documented at class level only.
+
+/// Time helpers: AM/PM and 12-hour/24-hour conversions.
 class AwesomeTimeUtils {
   static const List<String> amPm = ["AM", "PM"];
 

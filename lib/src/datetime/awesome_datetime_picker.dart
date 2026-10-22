@@ -1,8 +1,45 @@
 import 'package:awesome_datetime_picker/awesome_datetime_picker.dart';
-import 'package:awesome_datetime_picker/src/controllers/awesome_datetime_picker_controller.dart';
+import 'package:awesome_datetime_picker/src/datetime/awesome_datetime_picker_controller.dart';
 import 'package:flutter/material.dart';
 
+/// An iOS-style wheel picker for selecting a date and a time together.
+///
+/// ```dart
+/// AwesomeDateTimePicker(
+///   minDateTime: AwesomeDateTime(
+///     date: AwesomeDate(year: 2025, month: 12, day: 1),
+///     time: const AwesomeTime(hour: 8, minute: 0),
+///   ),
+///   maxDateTime: AwesomeDateTime(
+///     date: AwesomeDate(year: 2025, month: 12, day: 31),
+///     time: const AwesomeTime(hour: 18, minute: 0),
+///   ),
+///   dateFormat: AwesomeDateFormat.dMMy,
+///   timeFormat: AwesomeTimeFormat.hm,
+///   onChanged: (dateTime) => debugPrint('$dateTime'),
+/// )
+/// ```
+///
+/// The selectable times depend on the selected date: on the day of
+/// [minDateTime] only times from its time are offered, on the day of
+/// [maxDateTime] only times up to its time, and any time on days in between.
+///
+/// /// ## Styling
+///
+/// Colors and text styles follow the ambient [Theme] brightness (light or
+/// dark) unless overridden. Precedence, highest first: the per-wheel
+/// [ItemTheme] given through `theme`, then the options on this widget
+/// (`backgroundColor`, `selectorColor`, `selectedTextStyle`, ...), then the
+/// built-in defaults.
+///
+/// ## Changing properties after the first build
+///
+/// Changing [minDateTime] or [maxDateTime] rebuilds the picker's range and keeps the current selection, clamped into the new range. If the clamping changes the value, [onChanged] is called with the new one.
+///
+/// The `initial*` value is only read once; to move the selection later, give
+/// the picker a new [Key].
 class AwesomeDateTimePicker extends StatefulWidget {
+  /// Creates a date-time picker. All parameters are optional.
   const AwesomeDateTimePicker({
     super.key,
     this.minDateTime,
@@ -94,8 +131,37 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
   @override
   void initState() {
     super.initState();
+    _controller = _createController(initialDateTime: widget.initialDateTime);
+    _controller.addListener(_onControllerChanged);
+  }
 
-    _controller = AwesomeDateTimePickerController(
+  @override
+  void didUpdateWidget(AwesomeDateTimePicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.minDateTime == widget.minDateTime &&
+        oldWidget.maxDateTime == widget.maxDateTime) {
+      return;
+    }
+
+    // Rebuild the controller with the new range, keeping the current
+    // selection (it is clamped into the new range if needed).
+    final previous = _controller.selectedDateTime;
+    _controller.removeListener(_onControllerChanged);
+    _controller.dispose();
+    _controller = _createController(initialDateTime: previous);
+    _controller.addListener(_onControllerChanged);
+
+    if (_controller.selectedDateTime != previous) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) widget.onChanged?.call(_controller.selectedDateTime);
+      });
+    }
+  }
+
+  AwesomeDateTimePickerController _createController(
+      {AwesomeDateTime? initialDateTime}) {
+    return AwesomeDateTimePickerController(
       minDateTime: widget.minDateTime ??
           AwesomeDateTime(
               date: AwesomeDate(year: 1900, month: 1, day: 1),
@@ -104,17 +170,18 @@ class _AwesomeDateTimePickerState extends State<AwesomeDateTimePicker> {
           AwesomeDateTime(
               date: AwesomeDate(year: 2100, month: 12, day: 31),
               time: const AwesomeTime(hour: 23, minute: 59)),
-      initialDateTime: widget.initialDateTime,
+      initialDateTime: initialDateTime,
     );
+  }
 
-    _controller.addListener(() {
-      widget.onChanged?.call(_controller.selectedDateTime);
-      setState(() {});
-    });
+  void _onControllerChanged() {
+    widget.onChanged?.call(_controller.selectedDateTime);
+    setState(() {});
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_onControllerChanged);
     _controller.dispose();
     super.dispose();
   }

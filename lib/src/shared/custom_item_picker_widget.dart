@@ -1,6 +1,14 @@
-import 'package:awesome_datetime_picker/src/widgets/custom/custom_item_picker_style.dart';
+// ignore_for_file: public_member_api_docs
+// Internal implementation file: it is not exported by the package, so its
+// members are documented at class level only.
+
+import 'package:awesome_datetime_picker/src/shared/custom_item_picker_style.dart';
 import 'package:flutter/material.dart';
 
+/// A single iOS-style wheel listing [items] and reporting the selected one.
+///
+/// Colors and text styles fall back to light or dark defaults depending on
+/// the ambient theme brightness.
 class CustomItemPicker extends StatefulWidget {
   final List<String> items;
   final int initialIndex;
@@ -31,9 +39,10 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.initialIndex;
+    // indexOf returns -1 when the value is not in the list
+    _selectedIndex = widget.initialIndex < 0 ? 0 : widget.initialIndex;
     _scrollController = FixedExtentScrollController(
-      initialItem: widget.initialIndex,
+      initialItem: _selectedIndex,
     );
   }
 
@@ -74,24 +83,20 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
     final double pickerHeight =
         itemHeight * (widget.visibleItemCount ?? defaultVisibleItemCount);
 
-    const TextStyle defaultSelectedStyle = TextStyle(
-      color: Colors.black,
-      fontSize: 20,
-      fontWeight: FontWeight.w500,
-    );
-
-    const TextStyle defaultUnselectedStyle = TextStyle(
-      color: Colors.black54,
-      fontSize: 18,
-    );
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final defaults = _PickerDefaults(isDark: isDark);
 
     final selectedStyle = widget.style.theme?.selectedTextStyle ??
         widget.style.selectedTextStyle ??
-        defaultSelectedStyle;
+        defaults.selectedTextStyle;
 
     final unselectedStyle = widget.style.theme?.unselectedTextStyle ??
         widget.style.unselectedTextStyle ??
-        defaultUnselectedStyle;
+        defaults.unselectedTextStyle;
+
+    final backgroundColor = widget.style.theme?.backgroundColor ??
+        widget.style.backgroundColor ??
+        defaults.backgroundColor;
 
     return Column(
       children: [
@@ -104,9 +109,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
           margin: widget.style.theme?.margin,
           padding: widget.style.theme?.padding,
           decoration: BoxDecoration(
-            color: widget.style.theme?.backgroundColor ??
-                widget.style.backgroundColor ??
-                Colors.white,
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(0),
           ),
           child: Stack(
@@ -117,7 +120,7 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                   child: Container(
                     height: itemHeight,
                     decoration: BoxDecoration(
-                      color: widget.style.selectorColor ?? Colors.grey.shade100,
+                      color: widget.style.selectorColor ?? defaults.selectorColor,
                       borderRadius: BorderRadius.circular(0),
                     ),
                   ),
@@ -164,10 +167,12 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
                 _FadeGradient(
                   height: itemHeight,
                   isTop: true,
+                  color: backgroundColor,
                 ),
                 _FadeGradient(
                   height: itemHeight,
                   isTop: false,
+                  color: backgroundColor,
                 ),
               ],
             ],
@@ -178,14 +183,42 @@ class _CustomItemPickerState extends State<CustomItemPicker> {
   }
 }
 
+/// Brightness-aware fallbacks used when the user supplies no color or style.
+///
+/// The light values match the original iOS-like look; the dark values keep
+/// the same contrast relationships on a dark surface.
+class _PickerDefaults {
+  final bool isDark;
+
+  const _PickerDefaults({required this.isDark});
+
+  Color get backgroundColor => isDark ? const Color(0xFF1C1C1E) : Colors.white;
+
+  Color get selectorColor =>
+      isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100;
+
+  TextStyle get selectedTextStyle => TextStyle(
+        color: isDark ? Colors.white : Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+      );
+
+  TextStyle get unselectedTextStyle => TextStyle(
+        color: isDark ? Colors.white54 : Colors.black54,
+        fontSize: 18,
+      );
+}
+
 /// Optimized fade gradient widget - stateless and const-friendly
 class _FadeGradient extends StatelessWidget {
   final double height;
   final bool isTop;
+  final Color color;
 
   const _FadeGradient({
     required this.height,
     required this.isTop,
+    required this.color,
   });
 
   @override
@@ -202,9 +235,9 @@ class _FadeGradient extends StatelessWidget {
             gradient: LinearGradient(
               begin: isTop ? Alignment.topCenter : Alignment.bottomCenter,
               end: isTop ? Alignment.bottomCenter : Alignment.topCenter,
-              colors: const [
-                Colors.white,
-                Color(0x00FFFFFF),
+              colors: [
+                color,
+                color.withAlpha(0),
               ],
             ),
           ),
